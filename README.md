@@ -1,2 +1,2 @@
 # AILearn
-initial commit2
+initial commit
