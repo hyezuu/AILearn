@@ -5,12 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "comments")
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Comment extends BaseEntity {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,4 +27,7 @@ public class Comment extends BaseEntity {
 
     @Column(name = "content", nullable = false)
     private String content;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 }
