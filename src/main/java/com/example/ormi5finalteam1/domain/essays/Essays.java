@@ -1,13 +1,6 @@
 package com.example.ormi5finalteam1.domain.essays;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
-
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
