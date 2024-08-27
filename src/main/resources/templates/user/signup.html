@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원가입</title>
+  <style>
+    /* 이전 스타일 유지 */
+    .error-message {
+      color: red;
+      font-size: 0.8em;
+    }
+    .success-message {
+      color: green;
+      font-size: 0.8em;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="signup-form">
+    <h2>회원가입</h2>
+    <form id="signupForm" th:action="@{/user/signup}" th:object="${createUserRequestDto}" method="post">
+      <div class="form-group">
+        <label for="email">이메일</label>
+        <input type="email" class="form-control" id="email" name="email" th:field="*{email}" required>
+        <span id="emailResult"></span>
+      </div>
+      <div class="form-group">
+        <label for="nickname">닉네임</label>
+        <input type="text" class="form-control" id="nickname" name="nickname" th:field="*{nickname}" required>
+        <span id="nicknameResult"></span>
+      </div>
+      <div class="form-group">
+        <label for="password">비밀번호</label>
+        <input type="password" class="form-control" id="password" name="password" th:field="*{password}" required>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">가입하기</button>
+    </form>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    function checkDuplication(field, url, resultSpan) {
+      const value = $(field).val();
+      if (value) {
+        $.ajax({
+          url: url,
+          type: 'GET',
+          data: { [field.name]: value },
+          success: function(response) {
+            if (response) {
+              $(resultSpan).text('이미 사용중입니다.').removeClass('success-message').addClass('error-message');
+            } else {
+              $(resultSpan).text('사용 가능합니다.').removeClass('error-message').addClass('success-message');
+            }
+          },
+          error: function() {
+            $(resultSpan).text('확인 중 오류가 발생했습니다.').removeClass('success-message').addClass('error-message');
+          }
+        });
+      } else {
+        $(resultSpan).text('').removeClass('success-message error-message');
+      }
+    }
+
+    $('#email').on('blur', function() {
+      checkDuplication(this, '/api/email-duplication', '#emailResult');
+    });
+
+    $('#nickname').on('blur', function() {
+      checkDuplication(this, '/api/nickname-duplication', '#nicknameResult');
+    });
+  });
+</script>
+</body>
+</html>
