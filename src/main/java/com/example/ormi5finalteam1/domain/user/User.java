@@ -29,30 +29,49 @@ public class User extends BaseEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false, unique = true, updatable = false)
     private String email;
+
     @Column(nullable = false, length = 1000)
     private String password;
+
     @Column(nullable = false, length = 12, unique = true)
     private String nickname;
-    @Enumerated(EnumType.STRING)
-    private Grade grade;
-    @Column(nullable = false)
-    private int point;
-    @Column(nullable = false)
-    private int level;
-    @Column(nullable = false)
-    private int grammarExampleCount;
-    @Column(nullable = false)
-    private boolean isReadyForUpgrade = true;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role = Role.USER;
+
+    @Column(nullable = false)
+    private boolean isActive = true;
+
+    @Enumerated(EnumType.STRING)
+    private Grade grade;
+
+    @Column(nullable = false)
+    private int point;
+
+    @Column(nullable = false)
+    private int level;
+
+    @Column(nullable = false)
+    private int grammarExampleCount;
+
+    @Column(nullable = false)
+    private boolean isReadyForUpgrade = true;
+
     private LocalDateTime lastLoginAt;
 
     public User(Long id) {
         this.id = id;
     }
+
+    public Provider toProvider() {
+        return new Provider(id, email, nickname, role, grade);
+    }
+
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -63,6 +82,4 @@ public class User extends BaseEntity implements UserDetails {
     public String getUsername() {
         return email;
     }
-
-
 }
