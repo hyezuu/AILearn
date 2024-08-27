@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -71,7 +72,12 @@ public class User extends BaseEntity implements UserDetails {
         return new Provider(id, email, nickname, role, grade);
     }
 
-
+    @Builder
+    private User(String email, String password, String nickname) {
+        this.email = email;
+        this.password = password;
+        this.nickname = nickname;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
