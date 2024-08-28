@@ -3,6 +3,7 @@ package com.example.ormi5finalteam1.service;
 import com.example.ormi5finalteam1.domain.Grade;
 import com.example.ormi5finalteam1.domain.grammar_example.dto.GrammarExampleDto;
 import com.example.ormi5finalteam1.domain.grammar_example.dto.GrammarExampleGradingDto;
+import com.example.ormi5finalteam1.repository.GrammarExampleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +14,7 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class GrammarExampleService {
-//      private final GrammarExampleRepository grammarExampleRepository;
+  private final GrammarExampleRepository grammarExampleRepository;
 
   /** 문법 예문 조회 */
   public List<GrammarExampleDto> getGrammarExamples(Grade grade, int grammarExampleCount) {}
