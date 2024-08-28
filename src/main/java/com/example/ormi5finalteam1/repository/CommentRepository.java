@@ -1,10 +1,11 @@
 package com.example.ormi5finalteam1.repository;
 
-import com.example.ormi5finalteam1.domain.comments.dto.CommentDto;
+import com.example.ormi5finalteam1.domain.comments.Comments;
+import com.example.ormi5finalteam1.domain.posts.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface CommentRepository extends JpaRepository<CommentDto, Long> {
-    List<CommentDto> findByPostId(Long id);
+public interface CommentRepository extends JpaRepository<Comments, Long> {
+    List<Comments> findByPostId(Post postId);
 }
