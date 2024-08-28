@@ -70,8 +70,11 @@ public class GrammarExampleController {
 
   /** 문법 예문 추가 */
   @PostMapping("/grammar-examples/more")
-  public ResponseEntity<MultipleGrammarExampleResponseDto> createMoreGrammarExamples() {
-    // 현재 로그인된 유저 정보에서 grade, grammarExampleCount를 추출
-    // 해당 유저의 grammarExampleCount를 +5
+  public ResponseEntity<Void> createMoreGrammarExamples(
+      @AuthenticationPrincipal Provider provider) {
+    long userId = provider.id();
+    grammarExampleService.createMoreGrammarExamples(userId);
+
+    return new ResponseEntity<>(HttpStatusCode.valueOf(204));
   }
 }

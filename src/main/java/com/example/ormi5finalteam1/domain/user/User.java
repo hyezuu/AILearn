@@ -95,4 +95,11 @@ public class User extends BaseEntity implements UserDetails {
       this.point += point;
     }
   }
+
+  /**
+   * 비즈니스 메서드: 사용자 문법 예문 보유 개수 상승
+   */
+  public void addUserGrammarExampleCount() {
+    this.grammarExampleCount += 5; // todo: 상수관리
+  }
 }

@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 public class GrammarExampleService {
   private final GrammarExampleRepository grammarExampleRepository;
   private final UserPointService userPointService;
+  private final UserInfoService userInfoService;
 
   /** 문법 예문 조회 */
   public List<GrammarExampleDto> getGrammarExamples(
@@ -53,7 +54,7 @@ public class GrammarExampleService {
 
   /** 문법 예문 채점 */
   public GrammarExampleGradingDto gradeGrammarExample(Long id, Long userId, String answer) {
-    GrammarExampleGradingDto grammarExampleGradingDto;
+    GrammarExampleGradingDto grammarExampleGradingDto = new GrammarExampleGradingDto();
     GrammarExampleDto grammarExampleDto =
         grammarExampleRepository
             .findById(id)
@@ -64,6 +65,7 @@ public class GrammarExampleService {
       grammarExampleGradingDto.setCorrect(false);
     } else {
       grammarExampleGradingDto.setCorrect(true);
+
       // 정답일 경우 사용자 경험치 포인트 상승
       userPointService.addPointsToUser(userId, 1); // todo: 포인트 상수관리
     }
@@ -74,7 +76,10 @@ public class GrammarExampleService {
   }
 
   /** 문법 예문 추가 */
-  public List<GrammarExampleDto> createMoreGrammarExamples(Grade grade, int grammarExampleCount) {}
+  public void createMoreGrammarExamples(Long userId) {
+    // 해당 유저의 grammarExampleCount를 +5
+    userInfoService.modifyGrammarExampleCountToUser(userId);
+  }
 
   /**
    * dto -> entity
