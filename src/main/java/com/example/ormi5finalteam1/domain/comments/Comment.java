@@ -1,5 +1,7 @@
 package com.example.ormi5finalteam1.domain.comments;
 
+import com.example.ormi5finalteam1.domain.posts.Post;
+import com.example.ormi5finalteam1.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,6 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Comment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,4 +33,5 @@ public class Comment {
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
+
 }
