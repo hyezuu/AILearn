@@ -1,4 +1,4 @@
-package com.example.ormi5finalteam1.domain.exception;
+package com.example.ormi5finalteam1.common.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum ErrorCode {
-
     USER_NOT_FOUND(404, "User not found"),
     USER_DEACTIVATED(403, "User is deactivated"),
     USER_SUSPENDED(403, "User is suspended"),

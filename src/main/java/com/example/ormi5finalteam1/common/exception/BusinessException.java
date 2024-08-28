@@ -1,4 +1,4 @@
-package com.example.ormi5finalteam1.domain.exception;
+package com.example.ormi5finalteam1.common.exception;
 
 import lombok.Getter;
 
