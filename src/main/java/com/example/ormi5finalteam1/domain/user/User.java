@@ -69,7 +69,7 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     public Provider toProvider() {
-        return new Provider(id, email, nickname, role, grade);
+        return new Provider(id, email, nickname, role, grade, grammarExampleCount);
     }
 
     @Builder
