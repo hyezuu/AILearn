@@ -4,9 +4,9 @@ on:
     paths:
       - '.github/workflows/temp/*'
 
-  jobs:
-    path-filter:
-      runs-on: ubuntu-latest
-      steps:
-        - name: echo hello
-          run: echo hello
+jobs:
+  path-filter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo hello
+        run: echo hello
