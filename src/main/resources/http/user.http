@@ -1,0 +1,13 @@
+POST localhost:8080/api/signup
+content-type: application/json
+
+{
+  "email": "hyezuu@naver.com",
+  "password": "qweqwe123",
+  "nickname": "혜주"
+}
+
+
+### get me
+GET localhost:8080/api/me
+Authorization: Basic hyezuu@naver.com qweqwe123

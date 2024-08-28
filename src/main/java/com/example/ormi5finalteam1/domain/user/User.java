@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -29,29 +30,53 @@ public class User extends BaseEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false, unique = true, updatable = false)
     private String email;
+
     @Column(nullable = false, length = 1000)
     private String password;
+
     @Column(nullable = false, length = 12, unique = true)
     private String nickname;
-    @Enumerated(EnumType.STRING)
-    private Grade grade;
-    @Column(nullable = false)
-    private int point;
-    @Column(nullable = false)
-    private int level;
-    @Column(nullable = false)
-    private int grammarExampleCount;
-    @Column(nullable = false)
-    private boolean isReadyForUpgrade = true;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role = Role.USER;
+
+    @Column(nullable = false)
+    private boolean isActive = true;
+
+    @Enumerated(EnumType.STRING)
+    private Grade grade;
+
+    @Column(nullable = false)
+    private int point;
+
+    @Column(nullable = false)
+    private int level;
+
+    @Column(nullable = false)
+    private int grammarExampleCount;
+
+    @Column(nullable = false)
+    private boolean isReadyForUpgrade = true;
+
     private LocalDateTime lastLoginAt;
 
     public User(Long id) {
         this.id = id;
+    }
+
+    public Provider toProvider() {
+        return new Provider(id, email, nickname, role, grade);
+    }
+
+    @Builder
+    private User(String email, String password, String nickname) {
+        this.email = email;
+        this.password = password;
+        this.nickname = nickname;
     }
 
     @Override
@@ -63,6 +88,4 @@ public class User extends BaseEntity implements UserDetails {
     public String getUsername() {
         return email;
     }
-
-
 }
