@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 @RequiredArgsConstructor
-public class UserController {
+public class UserInfoController {
 
     private final UserService userService;
 
