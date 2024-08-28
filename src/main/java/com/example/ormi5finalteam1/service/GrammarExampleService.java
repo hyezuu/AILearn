@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class GrammarExampleService {
   private final GrammarExampleRepository grammarExampleRepository;
+  private final UserPointService userPointService;
 
   /** 문법 예문 조회 */
   public List<GrammarExampleDto> getGrammarExamples(
@@ -41,7 +42,7 @@ public class GrammarExampleService {
       grammarExamples = grammarExampleRepository.findByGrade(grade, pageRequest);
     }
 
-    if(grammarExamples.isEmpty()) {
+    if (grammarExamples.isEmpty()) {
       throw new BusinessException(ErrorCode.GRAMMAR_EXAMPLES_NOT_FOUND);
     }
 
@@ -51,7 +52,26 @@ public class GrammarExampleService {
   }
 
   /** 문법 예문 채점 */
-  public GrammarExampleGradingDto gradeGrammarExample(Long id, String answer) {}
+  public GrammarExampleGradingDto gradeGrammarExample(Long id, Long userId, String answer) {
+    GrammarExampleGradingDto grammarExampleGradingDto;
+    GrammarExampleDto grammarExampleDto =
+        grammarExampleRepository
+            .findById(id)
+            .map(GrammarExampleService::convertToDto)
+            .orElseThrow(() -> new IllegalArgumentException()); // todo: exception 교체
+
+    if (grammarExampleDto.getAnswer() != answer) {
+      grammarExampleGradingDto.setCorrect(false);
+    } else {
+      grammarExampleGradingDto.setCorrect(true);
+      // 정답일 경우 사용자 경험치 포인트 상승
+      userPointService.addPointsToUser(userId, 1); // todo: 포인트 상수관리
+    }
+
+    grammarExampleGradingDto.setData(grammarExampleDto);
+
+    return grammarExampleGradingDto;
+  }
 
   /** 문법 예문 추가 */
   public List<GrammarExampleDto> createMoreGrammarExamples(Grade grade, int grammarExampleCount) {}

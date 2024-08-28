@@ -3,13 +3,12 @@ package com.example.ormi5finalteam1.controller.rest_controller;
 import com.example.ormi5finalteam1.domain.Grade;
 import com.example.ormi5finalteam1.domain.grammar_example.dto.GrammarExampleDto;
 import com.example.ormi5finalteam1.domain.grammar_example.dto.GrammarExampleGradingDto;
-import com.example.ormi5finalteam1.domain.grammar_example.dto.GrammarExampleResponseDto;
-import com.example.ormi5finalteam1.domain.grammar_example.dto.MultipleGrammarExampleResponseDto;
+import com.example.ormi5finalteam1.domain.grammar_example.dto.request.GradeGrammarExampleRequestDto;
+import com.example.ormi5finalteam1.domain.grammar_example.dto.response.MultipleGrammarExampleResponseDto;
 import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.service.GrammarExampleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -57,8 +56,16 @@ public class GrammarExampleController {
 
   /** 문법 예문 채점 */
   @PostMapping("/grammar-examples/{id}/grading")
-  public ResponseEntity<GrammarExampleGradingDto> gradeGrammarExample(@PathVariable Long id) {
-    // 현재 로그인된 유저 정보에서 grade를 추출
+  public ResponseEntity<GrammarExampleGradingDto> gradeGrammarExample(
+      @PathVariable Long id,
+      @RequestParam GradeGrammarExampleRequestDto requestDto,
+      @AuthenticationPrincipal Provider provider) {
+    Long userId = provider.id();
+    String answer = requestDto.getAnswer();
+    GrammarExampleGradingDto grammarExampleGradingDto =
+        grammarExampleService.gradeGrammarExample(id, userId, answer);
+
+    return new ResponseEntity<>(grammarExampleGradingDto, HttpStatusCode.valueOf(200));
   }
 
   /** 문법 예문 추가 */
