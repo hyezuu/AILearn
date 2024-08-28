@@ -1,5 +1,6 @@
 package com.example.ormi5finalteam1.domain.comments;
 
+import com.example.ormi5finalteam1.domain.comments.dto.CommentsDto;
 import com.example.ormi5finalteam1.domain.posts.Post;
 import com.example.ormi5finalteam1.domain.user.User;
 import jakarta.persistence.*;
@@ -33,5 +34,9 @@ public class Comments {
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
+
+    public void setCreatedAt(LocalDateTime now) {
+        this.createdAt = LocalDateTime.now();
+    }
 
 }
