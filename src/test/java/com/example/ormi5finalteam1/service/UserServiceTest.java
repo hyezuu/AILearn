@@ -86,4 +86,24 @@ class UserServiceTest {
         assertThat(result).isFalse();
     }
 
+    @Test
+    void isDuplicateEmail_은_해당_nickname_이_있으면_true_를_반환한다() {
+        //given
+        when(repository.existsByNickname(anyString())).thenReturn(true);
+        //when
+        boolean result = userService.isDuplicateNickname("test");
+        //then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void isDuplicateEmail_은_해당_nickname_이_없으면_true_를_반환한다() {
+        //given
+        when(repository.existsByNickname(anyString())).thenReturn(true);
+        //when
+        boolean result = userService.isDuplicateNickname("test");
+        //then
+        assertThat(result).isTrue();
+    }
+
 }
