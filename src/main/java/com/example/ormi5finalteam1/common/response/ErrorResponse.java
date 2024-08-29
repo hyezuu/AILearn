@@ -33,9 +33,8 @@ public record ErrorResponse(
             Collections.emptyList());
     }
 
-    public static ErrorResponse of(HttpStatus httpStatus) {
-        return new ErrorResponse(httpStatus.value(), httpStatus.getReasonPhrase(),
-            Collections.emptyList());
+    public static ErrorResponse of(HttpStatus status, String message) {
+        return new ErrorResponse(status.value(), message, Collections.emptyList());
     }
 
     public record ValidationError(
