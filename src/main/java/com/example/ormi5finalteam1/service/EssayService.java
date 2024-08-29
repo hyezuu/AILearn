@@ -14,11 +14,24 @@ public class EssayService {
     private final EssayRepository essayRepository;
 
     public void createEssay(EssayRequestDto essayRequestDto) {
-        Essay essay = convertEssayDtoToEssay(essayRequestDto);
+        Essay essay = convertToEntity(essayRequestDto);
         essayRepository.save(essay);
     }
 
-    private Essay convertEssayDtoToEssay(EssayRequestDto essayRequestDto) {
+    public void updateEssay(Long id, EssayRequestDto essayRequestDto) {
+        Essay essay = essayRepository.findById(id).orElseThrow(() -> new RuntimeException("Essay not found!"));
+
+        Essay updatedEssay = essay.builder()
+                .id(id)
+                .user(essay.getUser())
+                .topic(essayRequestDto.topic())
+                .content(essayRequestDto.content())
+                .build();
+        essayRepository.save(updatedEssay);
+    }
+
+
+    private Essay convertToEntity(EssayRequestDto essayRequestDto) {
 
       return Essay.builder()
               .user(new User(essayRequestDto.userId()))
@@ -26,5 +39,4 @@ public class EssayService {
               .content(essayRequestDto.content())
               .build();
     }
-
 }
