@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -19,12 +20,12 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/email-duplication")
-    public boolean checkEmail(String email) {
+    public boolean checkEmail(@RequestParam String email) {
         return userService.isDuplicateEmail(email);
     }
 
     @GetMapping("/nickname-duplication")
-    public boolean checkNickname(String nickname) {
+    public boolean checkNickname(@RequestParam String nickname) {
         return userService.isDuplicateNickname(nickname);
     }
 
