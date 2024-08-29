@@ -3,6 +3,7 @@ package com.example.ormi5finalteam1.controller.rest_controller;
 import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.domain.user.dto.CreateUserRequestDto;
 import com.example.ormi5finalteam1.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +31,7 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public void signup(@RequestBody CreateUserRequestDto requestDto) {
+    public void signup(@Valid @RequestBody CreateUserRequestDto requestDto) {
         userService.createUser(requestDto);
     }
 
