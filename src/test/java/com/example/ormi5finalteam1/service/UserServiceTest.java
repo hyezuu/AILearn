@@ -19,8 +19,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
@@ -47,7 +50,7 @@ class UserServiceTest {
     }
 
     @Test
-    void createUser_은_중복된_email_이_존재할_시_예외를_던진다() {
+    void createUser_은_중복된_email_이_존재할_시_BusinessException을_던진다() {
         //given
         CreateUserRequestDto requestDto
             = new CreateUserRequestDto("test@test.com", "nickname", "password");
@@ -59,7 +62,7 @@ class UserServiceTest {
     }
 
     @Test
-    void createUser_은_중복된_nickname_이_존재할_시_예외를_던진다() {
+    void createUser_은_중복된_nickname_이_존재할_시_BusinessException을_던진다() {
         //given
         CreateUserRequestDto requestDto
             = new CreateUserRequestDto("test@test.com", "nickname", "password");
@@ -111,4 +114,55 @@ class UserServiceTest {
         assertThat(result).isTrue();
     }
 
+    @Test
+    void loadUserByUsername_은_email_로_유저_데이터를_찾아올_수_있다() {
+        //given
+        String email = "test@test.com";
+        User user = User.builder().email(email).build();
+        when(repository.findByEmail(email)).thenReturn(Optional.of(user));
+        //when
+        User result = userService.loadUserByUsername(email);
+        //then
+        assertThat(result).isEqualTo(user);
+        assertThat(result.getEmail()).isEqualTo(email);
+        assertThat(result.getLastLoginedAt()).isNotNull();
+        verify(repository).findByEmail(email);
+    }
+
+    @Test
+    void loadUserByUsername_은_유저가_존재하지_않는_경우_UsernameNotFoundException_을_던진다() {
+        //given
+        String email = "test@test.com";
+        when(repository.findByEmail(email)).thenReturn(Optional.empty());
+        //when & then
+        assertThatThrownBy(() -> userService.loadUserByUsername(email))
+            .isInstanceOf(UsernameNotFoundException.class)
+            .hasMessage("User not found with username");
+    }
+
+    @Test
+    void loadUserByUsername_은_유저가_deactive_인_경우_BusinessException_을_던진다() {
+        //given
+        String email = "test@test.com";
+        User user = User.builder().email(email).build();
+        user.deactivateUser();
+        when(repository.findByEmail(email)).thenReturn(Optional.of(user));
+        //when & then
+        assertThatThrownBy(() -> userService.loadUserByUsername(email)).isInstanceOf(
+                BusinessException.class)
+            .hasFieldOrPropertyWithValue("errorCode", ErrorCode.USER_SUSPENDED);
+    }
+
+    @Test
+    void loadUserByUsername_은_유저가_deleted_인_경우_BusinessException_을_던진다() {
+        //given
+        String email = "test@test.com";
+        User user = User.builder().email(email).build();
+        user.delete();
+        when(repository.findByEmail(email)).thenReturn(Optional.of(user));
+        //when & then
+        assertThatThrownBy(() -> userService.loadUserByUsername(email)).isInstanceOf(
+                BusinessException.class)
+            .hasFieldOrPropertyWithValue("errorCode", ErrorCode.USER_DEACTIVATED);
+    }
 }
