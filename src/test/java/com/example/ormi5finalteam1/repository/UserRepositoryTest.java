@@ -47,7 +47,7 @@ class UserRepositoryTest {
     }
 
     @Test
-    void existByEmail_은_중복된_이메일이_있으면_true_를_반환한다() {
+    void existByEmail_은_해당_이메일이_있으면_true_를_반환한다() {
         //given
         //when
         Boolean result = userRepository.existsByEmail("test@test.com");
@@ -56,7 +56,7 @@ class UserRepositoryTest {
     }
 
     @Test
-    void existByEmail_은_중복된_이메일이_없으면_false_를_반환한다() {
+    void existByEmail_은_해당_이메일이_없으면_false_를_반환한다() {
         //given
         //when
         Boolean result = userRepository.existsByEmail("none@test.com");
