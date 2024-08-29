@@ -38,9 +38,9 @@ public class GrammarExampleService {
     // 키워드 검색조건이 있을 때
     if (keyword != null) {
       grammarExamples =
-          grammarExampleRepository.findByQuestionContainingAndGrade(keyword, grade, pageRequest);
+          grammarExampleRepository.findByQuestionContainingAndGradeOrderByIdAsc(keyword, grade, pageRequest);
     } else {
-      grammarExamples = grammarExampleRepository.findByGrade(grade, pageRequest);
+      grammarExamples = grammarExampleRepository.findByGradeOrderByIdAsc(grade, pageRequest);
     }
 
     if (grammarExamples.isEmpty()) {

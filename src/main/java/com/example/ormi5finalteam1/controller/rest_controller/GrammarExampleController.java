@@ -32,15 +32,17 @@ public class GrammarExampleController {
       @RequestParam(required = false) String keyword) {
     // 현재 로그인된 유저 정보에서 grade, grammarExampleCount를 추출하여 조회
 
-    PageRequest pageRequest = PageRequest.of(page, pageSize);
-
     Grade grade = provider.grade();
     int grammarExampleCount = provider.grammarExampleCount();
 
     // 1페이지 외의 페이지 조회시
     if (page > 0) {
-      pageSize = grammarExampleCount % 10;
+      if (grammarExampleCount % 10 != 0) {
+        pageSize = grammarExampleCount % 10;
+      }
     }
+    PageRequest pageRequest = PageRequest.of(page, pageSize);
+
     List<GrammarExampleDto> grammarExamples =
         grammarExampleService.getGrammarExamples(grade, pageRequest, keyword);
 
