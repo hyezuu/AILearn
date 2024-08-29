@@ -1,5 +1,7 @@
-package com.example.ormi5finalteam1.domain.likes;
+package com.example.ormi5finalteam1.domain.like;
 
+import com.example.ormi5finalteam1.domain.post.Post;
+import com.example.ormi5finalteam1.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,7 +23,7 @@ public class Like {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 

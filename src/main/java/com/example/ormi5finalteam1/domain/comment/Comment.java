@@ -1,5 +1,7 @@
-package com.example.ormi5finalteam1.domain.comments;
+package com.example.ormi5finalteam1.domain.comment;
 
+import com.example.ormi5finalteam1.domain.post.Post;
+import com.example.ormi5finalteam1.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
