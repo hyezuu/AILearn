@@ -11,3 +11,9 @@ content-type: application/json
 ### get me
 GET localhost:8080/api/me
 Authorization: Basic hyezuu@naver.com qweqwe123
+
+### check email
+GET localhost:8080/api/email-duplication?email=hyezuu@naver.com
+
+### check nickname
+GET localhost:8080/api/nickname-duplication?nickname=혜주
