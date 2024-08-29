@@ -17,4 +17,8 @@ public class EssayController {
         essayService.createEssay(essayRequestDto);
     }
 
+    @PutMapping("/api/essays/{id}")
+    public void updateEssay(@PathVariable Long id, @Valid @RequestBody EssayRequestDto essayRequestDto) {
+        essayService.updateEssay(id, essayRequestDto);
+    }
 }
