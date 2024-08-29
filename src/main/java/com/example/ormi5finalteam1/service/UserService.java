@@ -22,10 +22,12 @@ public class UserService implements UserDetailsService {
     @Transactional
     public void createUser(CreateUserRequestDto requestDto) {
 
-        if(isDuplicateEmail(requestDto.email()))
+        if (isDuplicateEmail(requestDto.email())) {
             throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
-        if(isDuplicateNickname(requestDto.nickname()))
+        }
+        if (isDuplicateNickname(requestDto.nickname())) {
             throw new BusinessException(ErrorCode.DUPLICATE_NICKNAME);
+        }
 
         User user = User.builder()
             .email(requestDto.email())
@@ -49,10 +51,10 @@ public class UserService implements UserDetailsService {
     public User loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = repository.findByEmail(email)
             .orElseThrow(() -> new UsernameNotFoundException("User not found with username"));
-        if (user.getDeletedAt()!=null) {
+        if (user.getDeletedAt() != null) {
             throw new BusinessException(ErrorCode.USER_DEACTIVATED);
         }
-        if(!user.isActive()){
+        if (!user.isActive()) {
             throw new BusinessException(ErrorCode.USER_SUSPENDED);
         }
         user.updateLoginTime();
