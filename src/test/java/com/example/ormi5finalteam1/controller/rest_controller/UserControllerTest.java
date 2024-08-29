@@ -1,5 +1,6 @@
 package com.example.ormi5finalteam1.controller.rest_controller;
 
+import static com.example.ormi5finalteam1.util.TestSecurityContextFactory.authenticatedProvider;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -7,8 +8,13 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.example.ormi5finalteam1.domain.Grade;
+import com.example.ormi5finalteam1.domain.user.Provider;
+import com.example.ormi5finalteam1.domain.user.Role;
+import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.domain.user.dto.CreateUserRequestDto;
 import com.example.ormi5finalteam1.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -19,8 +25,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.TestingAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
 
 @SpringBootTest
@@ -126,9 +136,9 @@ class UserControllerTest {
         //when
         ResultActions actions
             = mockMvc.perform(
-                post("/api/signup")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(requestDto)));
+            post("/api/signup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(requestDto)));
         //then
         actions.andExpect(status().isOk());
         verify(userService).createUser(requestDto);
@@ -158,9 +168,9 @@ class UserControllerTest {
         //when
         ResultActions actions
             = mockMvc.perform(
-                post("/api/signup")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(requestDto)));
+            post("/api/signup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(requestDto)));
         //then
         actions.andExpect(status().isBadRequest());
         verify(userService, never()).createUser(requestDto);
@@ -182,5 +192,35 @@ class UserControllerTest {
         verify(userService, never()).createUser(requestDto);
     }
 
+    @Test
+    @WithMockUser(username = "test@email.com", roles = "USER")
+    void 인증된_사용자는_본인의_정보에_접근할_수_있다() throws Exception {
+        //given
+        Provider provider
+            = new Provider(1L, "test@email.com", "testuser", Role.USER, Grade.A1, 10);
+        //when
+        ResultActions actions
+            = mockMvc.perform(
+            get("/api/me")
+                .with(authenticatedProvider(provider))
+                .accept(MediaType.APPLICATION_JSON));
+        //then
+        actions.andExpect(status().isOk())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(1))
+            .andExpect(jsonPath("$.email").value("test@email.com"))
+            .andExpect(jsonPath("$.nickname").value("testuser"))
+            .andExpect(jsonPath("$.role").value("USER"))
+            .andExpect(jsonPath("$.grade").value("A1"))
+            .andExpect(jsonPath("$.grammarExampleCount").value(10));
+    }
 
+    @Test
+    void 인증되지_않은_사용자는_정보_조회에_실패한다() throws Exception {
+        //given
+        //when
+        //then
+        mockMvc.perform(get("/api/me"))
+            .andExpect(status().isUnauthorized());
+    }
 }
