@@ -1,4 +1,4 @@
-package com.example.ormi5finalteam1.domain.Tests;
+package com.example.ormi5finalteam1.domain.test;
 
 import com.example.ormi5finalteam1.domain.BaseEntity;
 import com.example.ormi5finalteam1.domain.Grade;
@@ -11,12 +11,13 @@ import lombok.*;
 @Table(name = "tests")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Tests extends BaseEntity {
+public class Test extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Grade grade;
 
