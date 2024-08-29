@@ -27,7 +27,7 @@ public class GrammarExampleController {
   @GetMapping("/me/grammar-examples")
   public ResponseEntity<MultipleGrammarExampleResponseDto> getGrammarExamples(
       @AuthenticationPrincipal Provider provider,
-      @RequestParam(defaultValue = "1") int page,
+      @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") int pageSize,
       @RequestParam(required = false) String keyword) {
     // 현재 로그인된 유저 정보에서 grade, grammarExampleCount를 추출하여 조회
@@ -42,7 +42,7 @@ public class GrammarExampleController {
     int grammarExampleCount = provider.grammarExampleCount();
 
     // 1페이지 외의 페이지 조회시
-    if (page > 1) {
+    if (page > 0) {
       pageSize = grammarExampleCount % 10;
     }
     List<GrammarExampleDto> grammarExamples =

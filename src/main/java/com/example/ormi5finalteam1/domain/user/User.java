@@ -27,66 +27,66 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Getter
 public class User extends BaseEntity implements UserDetails {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(nullable = false, unique = true, updatable = false)
-    private String email;
+  @Column(nullable = false, unique = true, updatable = false)
+  private String email;
 
-    @Column(nullable = false, length = 1000)
-    private String password;
+  @Column(nullable = false, length = 1000)
+  private String password;
 
-    @Column(nullable = false, length = 12, unique = true)
-    private String nickname;
+  @Column(nullable = false, length = 12, unique = true)
+  private String nickname;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role = Role.USER;
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private Role role = Role.USER;
 
-    @Column(nullable = false)
-    private boolean isActive = true;
+  @Column(nullable = false)
+  private boolean isActive = true;
 
-    @Enumerated(EnumType.STRING)
-    private Grade grade;
+  @Enumerated(EnumType.STRING)
+  private Grade grade;
 
-    @Column(nullable = false)
-    private int point;
+  @Column(nullable = false)
+  private int point;
 
-    @Column(nullable = false)
-    private int level;
+  @Column(nullable = false)
+  private int level;
 
-    @Column(nullable = false)
-    private int grammarExampleCount;
+  @Column(nullable = false)
+  private int grammarExampleCount = 10;
 
-    @Column(nullable = false)
-    private boolean isReadyForUpgrade = true;
+  @Column(nullable = false)
+  private boolean isReadyForUpgrade = true;
 
-    private LocalDateTime lastLoginedAt;
+  private LocalDateTime lastLoginedAt;
 
-    public User(Long id) {
-        this.id = id;
-    }
+  public User(Long id) {
+    this.id = id;
+  }
 
   public Provider toProvider() {
     return new Provider(id, email, nickname, role, grade, grammarExampleCount);
   }
 
-    public void updateLoginTime(){
-        this.lastLoginedAt = LocalDateTime.now();
-    }
+  public void updateLoginTime() {
+    this.lastLoginedAt = LocalDateTime.now();
+  }
 
-    @Builder
-    private User(String email, String password, String nickname) {
-        this.email = email;
-        this.password = password;
-        this.nickname = nickname;
-    }
+  @Builder
+  private User(String email, String password, String nickname) {
+    this.email = email;
+    this.password = password;
+    this.nickname = nickname;
+  }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(role.getAuthority()));
-    }
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return Collections.singletonList(new SimpleGrantedAuthority(role.getAuthority()));
+  }
 
   @Override
   public String getUsername() {
@@ -100,9 +100,7 @@ public class User extends BaseEntity implements UserDetails {
     }
   }
 
-  /**
-   * 비즈니스 메서드: 사용자 문법 예문 보유 개수 상승
-   */
+  /** 비즈니스 메서드: 사용자 문법 예문 보유 개수 상승 */
   public void addUserGrammarExampleCount() {
     this.grammarExampleCount += 5; // todo: 상수관리
   }
