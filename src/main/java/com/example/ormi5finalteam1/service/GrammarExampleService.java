@@ -38,9 +38,9 @@ public class GrammarExampleService {
     // 키워드 검색조건이 있을 때
     if (keyword != null) {
       grammarExamples =
-          grammarExampleRepository.findByQuestionContainingAndGrade(keyword, grade, pageRequest);
+          grammarExampleRepository.findByQuestionContainingAndGradeOrderByIdAsc(keyword, grade, pageRequest);
     } else {
-      grammarExamples = grammarExampleRepository.findByGrade(grade, pageRequest);
+      grammarExamples = grammarExampleRepository.findByGradeOrderByIdAsc(grade, pageRequest);
     }
 
     if (grammarExamples.isEmpty()) {
@@ -61,7 +61,7 @@ public class GrammarExampleService {
             .map(GrammarExampleService::convertToDto)
             .orElseThrow(() -> new IllegalArgumentException()); // todo: exception 교체
 
-    if (grammarExampleDto.getAnswer() != answer) {
+    if (!grammarExampleDto.getAnswer().equals(answer)) {
       grammarExampleGradingDto.setCorrect(false);
     } else {
       grammarExampleGradingDto.setCorrect(true);

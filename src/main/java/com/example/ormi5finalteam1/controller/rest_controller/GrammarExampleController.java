@@ -27,24 +27,22 @@ public class GrammarExampleController {
   @GetMapping("/me/grammar-examples")
   public ResponseEntity<MultipleGrammarExampleResponseDto> getGrammarExamples(
       @AuthenticationPrincipal Provider provider,
-      @RequestParam(defaultValue = "1") int page,
+      @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") int pageSize,
       @RequestParam(required = false) String keyword) {
     // 현재 로그인된 유저 정보에서 grade, grammarExampleCount를 추출하여 조회
-
-    PageRequest pageRequest = PageRequest.of(page, pageSize);
-
-    if (provider == null) {
-      // todo: 예외처리
-    }
 
     Grade grade = provider.grade();
     int grammarExampleCount = provider.grammarExampleCount();
 
     // 1페이지 외의 페이지 조회시
-    if (page > 1) {
-      pageSize = grammarExampleCount % 10;
+    if (page > 0) {
+      if (grammarExampleCount % 10 != 0) {
+        pageSize = grammarExampleCount % 10;
+      }
     }
+    PageRequest pageRequest = PageRequest.of(page, pageSize);
+
     List<GrammarExampleDto> grammarExamples =
         grammarExampleService.getGrammarExamples(grade, pageRequest, keyword);
 
@@ -58,7 +56,7 @@ public class GrammarExampleController {
   @PostMapping("/grammar-examples/{id}/grading")
   public ResponseEntity<GrammarExampleGradingDto> gradeGrammarExample(
       @PathVariable Long id,
-      @RequestParam GradeGrammarExampleRequestDto requestDto,
+      @RequestBody GradeGrammarExampleRequestDto requestDto,
       @AuthenticationPrincipal Provider provider) {
     Long userId = provider.id();
     String answer = requestDto.getAnswer();
