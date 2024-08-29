@@ -62,7 +62,7 @@ public class User extends BaseEntity implements UserDetails {
     @Column(nullable = false)
     private boolean isReadyForUpgrade = true;
 
-    private LocalDateTime lastLoginAt;
+    private LocalDateTime lastLoginedAt;
 
     public User(Long id) {
         this.id = id;
@@ -70,6 +70,10 @@ public class User extends BaseEntity implements UserDetails {
 
     public Provider toProvider() {
         return new Provider(id, email, nickname, role, grade);
+    }
+
+    public void updateLoginTime(){
+        this.lastLoginedAt = LocalDateTime.now();
     }
 
     @Builder
