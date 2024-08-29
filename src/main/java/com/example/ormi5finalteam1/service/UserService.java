@@ -1,11 +1,12 @@
 package com.example.ormi5finalteam1.service;
 
-import com.example.ormi5finalteam1.domain.exception.BusinessException;
-import com.example.ormi5finalteam1.domain.exception.ErrorCode;
+import com.example.ormi5finalteam1.common.exception.BusinessException;
+import com.example.ormi5finalteam1.common.exception.ErrorCode;
 import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.domain.user.dto.CreateUserRequestDto;
 import com.example.ormi5finalteam1.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -44,8 +45,8 @@ public class UserService implements UserDetailsService {
         return repository.existsByNickname(nickname);
     }
 
-
     @Override
+    @Transactional
     public User loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = repository.findByEmail(email)
             .orElseThrow(() -> new UsernameNotFoundException("User not found with username"));
@@ -55,6 +56,7 @@ public class UserService implements UserDetailsService {
         if(!user.isActive()){
             throw new BusinessException(ErrorCode.USER_SUSPENDED);
         }
+        user.updateLoginTime();
         return user;
     }
 }
