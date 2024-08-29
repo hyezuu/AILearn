@@ -68,11 +68,11 @@ public class User extends BaseEntity implements UserDetails {
         this.id = id;
     }
 
-  public Provider toProvider() {
-    return new Provider(id, email, nickname, role, grade, grammarExampleCount);
-  }
+    public Provider toProvider() {
+        return new Provider(id, email, nickname, role, grade, grammarExampleCount);
+    }
 
-    public void updateLoginTime(){
+    public void updateLoginTime() {
         this.lastLoginedAt = LocalDateTime.now();
     }
 
@@ -88,22 +88,28 @@ public class User extends BaseEntity implements UserDetails {
         return Collections.singletonList(new SimpleGrantedAuthority(role.getAuthority()));
     }
 
-  @Override
-  public String getUsername() {
-    return email;
-  }
-
-  /** 비즈니스 메서드: 사용자 경험치 상승 */
-  public void addUserPoint(int points) {
-    if (point > 0) { // 포인트가 음수일 경우를 방지
-      this.point += point;
+    @Override
+    public String getUsername() {
+        return email;
     }
-  }
 
-  /**
-   * 비즈니스 메서드: 사용자 문법 예문 보유 개수 상승
-   */
-  public void addUserGrammarExampleCount() {
-    this.grammarExampleCount += 5; // todo: 상수관리
-  }
+    /**
+     * 비즈니스 메서드: 사용자 경험치 상승
+     */
+    public void addUserPoint(int points) {
+        if (point > 0) { // 포인트가 음수일 경우를 방지
+            this.point += point;
+        }
+    }
+
+    /**
+     * 비즈니스 메서드: 사용자 문법 예문 보유 개수 상승
+     */
+    public void addUserGrammarExampleCount() {
+        this.grammarExampleCount += 5; // todo: 상수관리
+    }
+
+    public void deactivateUser() {
+        this.isActive = false;
+    }
 }
