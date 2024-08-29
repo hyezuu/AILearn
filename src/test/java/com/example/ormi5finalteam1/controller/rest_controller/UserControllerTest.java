@@ -52,7 +52,7 @@ class UserControllerTest {
         ResultActions actions
             = mockMvc.perform(
             get("/api/email-duplication")
-                .param("email", "email")
+                .param("email", "newEmail")
                 .accept(MediaType.APPLICATION_JSON));
         //then
         actions.andExpect(status().isOk())
