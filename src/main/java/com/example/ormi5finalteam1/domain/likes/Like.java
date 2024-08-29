@@ -1,4 +1,4 @@
-package com.example.ormi5finalteam1.domain.like;
+package com.example.ormi5finalteam1.domain.likes;
 
 import com.example.ormi5finalteam1.domain.post.Post;
 import com.example.ormi5finalteam1.domain.user.User;

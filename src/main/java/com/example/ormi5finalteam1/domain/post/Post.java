@@ -1,8 +1,8 @@
 package com.example.ormi5finalteam1.domain.post;
 
 import com.example.ormi5finalteam1.domain.BaseEntity;
-import com.example.ormi5finalteam1.domain.comment.Comment;
-import com.example.ormi5finalteam1.domain.like.Like;
+import com.example.ormi5finalteam1.domain.comments.Comment;
+import com.example.ormi5finalteam1.domain.likes.Like;
 import com.example.ormi5finalteam1.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
