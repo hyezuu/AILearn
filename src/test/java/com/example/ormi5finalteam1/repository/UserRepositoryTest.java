@@ -41,7 +41,7 @@ class UserRepositoryTest {
     void findByEmail_은_데이터가_없으면_Optional_Empty_를_내려준다() {
         //given
         //when
-        Optional<User> result = userRepository.findByEmail("");
+        Optional<User> result = userRepository.findByEmail("none@test.com");
         //then
         assertThat(result.isEmpty()).isTrue();
     }
@@ -81,8 +81,5 @@ class UserRepositoryTest {
         //then
         assertThat(result).isFalse();
     }
-
-
-
 
 }
