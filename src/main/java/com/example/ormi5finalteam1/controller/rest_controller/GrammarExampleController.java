@@ -34,10 +34,6 @@ public class GrammarExampleController {
 
     PageRequest pageRequest = PageRequest.of(page, pageSize);
 
-    if (provider == null) {
-      // todo: 예외처리
-    }
-
     Grade grade = provider.grade();
     int grammarExampleCount = provider.grammarExampleCount();
 
@@ -58,7 +54,7 @@ public class GrammarExampleController {
   @PostMapping("/grammar-examples/{id}/grading")
   public ResponseEntity<GrammarExampleGradingDto> gradeGrammarExample(
       @PathVariable Long id,
-      @RequestParam GradeGrammarExampleRequestDto requestDto,
+      @RequestBody GradeGrammarExampleRequestDto requestDto,
       @AuthenticationPrincipal Provider provider) {
     Long userId = provider.id();
     String answer = requestDto.getAnswer();

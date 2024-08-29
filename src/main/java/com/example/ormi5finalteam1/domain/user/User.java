@@ -95,8 +95,8 @@ public class User extends BaseEntity implements UserDetails {
 
   /** 비즈니스 메서드: 사용자 경험치 상승 */
   public void addUserPoint(int points) {
-    if (point > 0) { // 포인트가 음수일 경우를 방지
-      this.point += point;
+    if (points > 0) { // 포인트가 음수일 경우를 방지
+      this.point += points;
     }
   }
 

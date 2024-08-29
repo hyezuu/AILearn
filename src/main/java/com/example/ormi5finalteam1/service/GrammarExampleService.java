@@ -61,7 +61,7 @@ public class GrammarExampleService {
             .map(GrammarExampleService::convertToDto)
             .orElseThrow(() -> new IllegalArgumentException()); // todo: exception 교체
 
-    if (grammarExampleDto.getAnswer() != answer) {
+    if (!grammarExampleDto.getAnswer().equals(answer)) {
       grammarExampleGradingDto.setCorrect(false);
     } else {
       grammarExampleGradingDto.setCorrect(true);
