@@ -1,4 +1,4 @@
-package com.example.ormi5finalteam1.domain.essay.dto;
+package com.example.ormi5finalteam1.domain.essay.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
