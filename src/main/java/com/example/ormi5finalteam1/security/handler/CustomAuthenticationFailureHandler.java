@@ -1,6 +1,6 @@
 package com.example.ormi5finalteam1.security.handler;
 
-import com.example.ormi5finalteam1.domain.exception.BusinessException;
+import com.example.ormi5finalteam1.common.exception.BusinessException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

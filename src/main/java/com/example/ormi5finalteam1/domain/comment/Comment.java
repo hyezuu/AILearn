@@ -1,5 +1,6 @@
-package com.example.ormi5finalteam1.domain.comments;
+package com.example.ormi5finalteam1.domain.comment;
 
+import com.example.ormi5finalteam1.domain.post.Post;
 import com.example.ormi5finalteam1.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,9 +23,9 @@ public class Comment {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "post_id", nullable = false)
-//    private Post post;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id", nullable = false)
+    private Post post;
 
     @Column(name = "content", nullable = false)
     private String content;

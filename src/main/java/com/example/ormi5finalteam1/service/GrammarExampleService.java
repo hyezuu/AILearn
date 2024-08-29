@@ -1,8 +1,8 @@
 package com.example.ormi5finalteam1.service;
 
+import com.example.ormi5finalteam1.common.exception.BusinessException;
+import com.example.ormi5finalteam1.common.exception.ErrorCode;
 import com.example.ormi5finalteam1.domain.Grade;
-import com.example.ormi5finalteam1.domain.exception.BusinessException;
-import com.example.ormi5finalteam1.domain.exception.ErrorCode;
 import com.example.ormi5finalteam1.domain.grammar_example.GrammarExample;
 import com.example.ormi5finalteam1.domain.grammar_example.dto.GrammarExampleDto;
 import com.example.ormi5finalteam1.domain.grammar_example.dto.GrammarExampleGradingDto;
