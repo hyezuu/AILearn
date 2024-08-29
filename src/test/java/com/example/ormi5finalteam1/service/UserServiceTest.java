@@ -66,4 +66,24 @@ class UserServiceTest {
             .hasFieldOrPropertyWithValue("errorCode", ErrorCode.DUPLICATE_NICKNAME);
     }
 
+    @Test
+    void isDuplicateEmail_은_해당_email_이_있으면_true_를_반환한다() {
+        //given
+        when(repository.existsByEmail(anyString())).thenReturn(true);
+        //when
+        boolean result = userService.isDuplicateEmail("test@test.com");
+        //then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void isDuplicateEmail_은_해당_email_이_없으면_false_를_반환한다() {
+        //given
+        when(repository.existsByEmail(anyString())).thenReturn(false);
+        //when
+        boolean result = userService.isDuplicateEmail("test@test.com");
+        //then
+        assertThat(result).isFalse();
+    }
+
 }
