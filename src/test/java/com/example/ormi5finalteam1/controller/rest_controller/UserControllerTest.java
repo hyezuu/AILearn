@@ -70,4 +70,47 @@ class UserControllerTest {
         //then
         actions.andExpect(status().isBadRequest());
     }
+
+    @Test
+    void checkNickname_은_해당_nickname이_존재할_시_true_를_반환한다() throws Exception {
+        //given
+        when(userService.isDuplicateNickname(anyString())).thenReturn(true);
+        //when
+        ResultActions actions
+            = mockMvc.perform(
+            get("/api/nickname-duplication")
+                .param("nickname", "nickname")
+                .accept(MediaType.APPLICATION_JSON));
+        //then
+        actions.andExpect(status().isOk())
+            .andExpect(content().string("true"));
+    }
+
+    @Test
+    void checkEmail_은_해당_nickname이_존재하지_않을_시_false_를_반환한다() throws Exception {
+        //given
+        when(userService.isDuplicateNickname(anyString())).thenReturn(false);
+        //when
+        ResultActions actions
+            = mockMvc.perform(
+            get("/api/nickname-duplication")
+                .param("nickname", "newNickname")
+                .accept(MediaType.APPLICATION_JSON));
+        //then
+        actions.andExpect(status().isOk())
+            .andExpect(content().string("false"));
+    }
+
+    @Test
+    void checkNickname_은_nickname_파라미터를_누락할_시_400_에러를_반환한다() throws Exception {
+        //given
+        //when
+        ResultActions actions
+            = mockMvc.perform(
+            get("/api/nickname-duplication")
+                .accept(MediaType.APPLICATION_JSON));
+        //then
+        actions.andExpect(status().isBadRequest());
+    }
+
 }
