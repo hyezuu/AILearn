@@ -88,10 +88,14 @@ public class User extends BaseEntity implements UserDetails {
     return Collections.singletonList(new SimpleGrantedAuthority(role.getAuthority()));
   }
 
-  @Override
-  public String getUsername() {
-    return email;
-  }
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    public void deactivateUser() {
+        this.isActive = false;
+    }
 
   /** 비즈니스 메서드: 사용자 경험치 상승 */
   public void addUserPoint(int points) {
@@ -104,4 +108,5 @@ public class User extends BaseEntity implements UserDetails {
   public void addUserGrammarExampleCount() {
     this.grammarExampleCount += 5; // todo: 상수관리
   }
+  
 }
