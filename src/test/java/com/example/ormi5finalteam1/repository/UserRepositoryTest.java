@@ -64,5 +64,25 @@ class UserRepositoryTest {
         assertThat(result).isFalse();
     }
 
+    @Test
+    void existByNickname_은_해당_닉네임이_있으면_true_를_반환한다() {
+        //given
+        //when
+        Boolean result = userRepository.existsByNickname("test");
+        //then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void existByNickname_은_해당_닉네임이_없으면_False_를_반환한다() {
+        //given
+        //when
+        Boolean result = userRepository.existsByNickname("none");
+        //then
+        assertThat(result).isFalse();
+    }
+
+
+
 
 }
