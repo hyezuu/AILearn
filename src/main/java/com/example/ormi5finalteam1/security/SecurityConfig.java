@@ -5,12 +5,14 @@ import com.example.ormi5finalteam1.security.handler.CustomAuthenticationSuccessH
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
@@ -26,7 +28,12 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http)
         throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable).cors(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests(api -> api.requestMatchers("/**").permitAll())
+            .authorizeHttpRequests(api -> api
+                .requestMatchers("/signup", "/login").permitAll()
+                .requestMatchers("/*/signup","/*/login").permitAll()
+                .requestMatchers("/api/me").hasRole("USER")
+                .requestMatchers("/my").hasRole("USER")
+                .anyRequest().permitAll())
             .formLogin(form -> form
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
@@ -42,7 +49,14 @@ public class SecurityConfig {
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-            }).build();
+            })
+            .exceptionHandling(exceptions -> exceptions
+                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                .accessDeniedHandler((request, response, accessDeniedException) -> {
+                    response.setStatus(HttpStatus.FORBIDDEN.value());
+                    response.getWriter().write("접근 권한이 없습니다.");
+                })
+            ).build();
 
     }
 
