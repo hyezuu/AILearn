@@ -1,0 +1,14 @@
+POST localhost:8080/api/posts
+content-type: application/json
+
+### get me
+GET localhost:8080/api/posts/2
+
+### get all
+GET localhost:8080/api/posts
+
+### update
+PUT localhost:8080/api/posts/2
+
+### delete
+DELETE localhost:8080/api/posts/2
