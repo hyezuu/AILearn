@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #333;
+    }
+    .user-info {
+      margin-top: 20px;
+    }
+    .user-info p {
+      margin: 10px 0;
+    }
+    .label {
+      font-weight: bold;
+      display: inline-block;
+      width: 100px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>My Page</h1>
+  <div class="user-info" th:object="${user}">
+    <p><span class="label">ID:</span> <span th:text="${user.id}">user_id</span></p>
+    <p><span class="label">Email:</span> <span th:text="${user.email}">user@example.com</span></p>
+    <p><span class="label">Nickname:</span> <span th:text="${user.nickname}">User Nickname</span></p>
+  </div>
+</div>
+</body>
+</html>

@@ -1,19 +1,20 @@
 package com.example.ormi5finalteam1.controller.thymeleaf_controller;
 
+import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.domain.user.dto.CreateUserRequestDto;
 import com.example.ormi5finalteam1.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 @RequiredArgsConstructor
-public class UserController {
+public class UserInfoController {
 
     private final UserService userService;
 
@@ -25,8 +26,7 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public String processSignup(@Valid @ModelAttribute CreateUserRequestDto requestDto,
-        BindingResult result) {
+    public String processSignup(@Valid @ModelAttribute CreateUserRequestDto requestDto) {
         userService.createUser(requestDto);
         return "redirect:/login";
     }
@@ -34,5 +34,12 @@ public class UserController {
     @GetMapping("/login")
     public String login() {
         return "user/login";
+    }
+
+    @GetMapping("my")
+    public String me(Model model, @AuthenticationPrincipal Provider provider) {
+        if(provider==null) return "redirect:/login";
+        model.addAttribute("user", provider);
+        return "user/my";
     }
 }
