@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AILEARN</title>
+    <link rel="stylesheet" href="/css/home-page.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/main.js"></script>
+</head>
+<body>
+<div id="layout">
+    <header>
+        <h2><a href="/"><img src="/images/ailearn-logo.png" alt="AILEARN" style="width: 80%;"></a></h2>
+        <ul>
+            <li><a href="/login">LOG IN</a></li>
+            <li><a href="/signup">SIGN UP</a></li>
+            <li>
+                <a href="#" class="mainMenu">MENU v</a>
+                <nav>
+                    <a href="/my">마이페이지</a>
+                    <a href="/posts">커뮤니티</a>
+                    <a href="/vocabulary-list">단어장</a>
+                    <a href="/grammar-examples?keyword=">문법예문</a>
+                    <a href="/essays">에세이</a>
+                    <a href="/">LOG OUT</a>
+                </nav>
+            </li>
+        </ul>
+    </header>
+</div>
+<main>
+    <section id="sec1"> <!-- 홈 화면1 -->
+        <div>
+            <h1><i><b>AILEARN</b></i> 에<br>오신 것을 환영합니다.</h1>
+
+            <a href="/signup"><button>회원가입하고 내 실력 알아보기</button></a>
+
+            <div> <!-- AILEARN 설명-->
+                <p>AILEARN은 AI + LEARN의 합성어로 AI(Alan)를 이용한 학습에 도움을 주는 서비스 입니다.</p>
+
+            </div>
+    </section>
+
+    <section id="sec2"> <!-- 홈 화면2 -->
+        <div>
+            <h2></h2>
+        </div>
+    </section>
+
+    <section id="sec3"> <!-- 홈 화면2 -->
+        <div>
+            <h2></h2>
+        </div>
+    </section>
+
+</main>
+</body>
+</html>
