@@ -108,5 +108,10 @@ public class User extends BaseEntity implements UserDetails {
   public void addUserGrammarExampleCount() {
     this.grammarExampleCount += 5; // todo: 상수관리
   }
+
+  /** 비즈니스 메서드: 사용자 등급 변경 */
+  public void changeGrade(Grade grade) {
+    this.grade = grade;
+  }
   
 }
