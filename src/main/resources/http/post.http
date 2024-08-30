@@ -1,14 +1,27 @@
 POST localhost:8080/api/posts
 content-type: application/json
 
+{
+  "userId": 1,
+  "title": "Post 1",
+  "content": "Content 1"
+}
+
+
 ### get me
-GET localhost:8080/api/posts/2
+GET localhost:8080/api/posts/13
 
 ### get all
 GET localhost:8080/api/posts
 
 ### update
-PUT localhost:8080/api/posts/2
+PUT localhost:8080/api/posts/13
+content-type: application/json
+
+{
+    "title": "Post 1d",
+    "content": "Content d1"
+}
 
 ### delete
-DELETE localhost:8080/api/posts/2
+DELETE localhost:8080/api/posts/14
