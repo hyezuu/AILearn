@@ -47,7 +47,7 @@ public class GrammarExampleController {
         grammarExampleService.getGrammarExamples(grade, pageRequest, keyword);
 
     MultipleGrammarExampleResponseDto responseDto =
-        new MultipleGrammarExampleResponseDto(grammarExamples, grammarExamples.size());
+        new MultipleGrammarExampleResponseDto(grammarExamples, grammarExampleCount);
 
     return new ResponseEntity<>(responseDto, HttpStatusCode.valueOf(200));
   }
