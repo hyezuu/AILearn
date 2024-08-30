@@ -11,5 +11,5 @@ import java.util.List;
 @NoArgsConstructor
 public class MultipleResponseDto<T> {
   private List<T> data;
-  private int count;
+  private int totalCount;
 }
