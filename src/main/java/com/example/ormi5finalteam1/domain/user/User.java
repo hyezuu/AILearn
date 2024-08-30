@@ -112,12 +112,15 @@ public class User extends BaseEntity implements UserDetails {
         }
     }
 
-    /**
-     * 비즈니스 메서드: 사용자 문법 예문 보유 개수 상승
-     */
-    public void addUserGrammarExampleCount() {
-        this.grammarExampleCount += 5; // todo: 상수관리
-    }
+  /** 비즈니스 메서드: 사용자 문법 예문 보유 개수 상승 */
+  public void addUserGrammarExampleCount() {
+    this.grammarExampleCount += 5; // todo: 상수관리
+  }
+
+  /** 비즈니스 메서드: 사용자 등급 변경 */
+  public void changeGrade(Grade grade) {
+    this.grade = grade;
+  }
 
     public void setVocabularyList(VocabularyList vocabularyList) {
         if (this.vocabularyList != null) {
