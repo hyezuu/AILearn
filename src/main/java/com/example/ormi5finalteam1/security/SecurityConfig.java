@@ -1,4 +1,4 @@
-package com.example.ormi5finalteam1.common.config;
+package com.example.ormi5finalteam1.security;
 
 import com.example.ormi5finalteam1.security.CustomAuthenticationProvider;
 import com.example.ormi5finalteam1.security.ProviderBasicAuthenticationFilter;
