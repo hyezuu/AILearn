@@ -1,5 +1,7 @@
-package com.example.ormi5finalteam1.security;
+package com.example.ormi5finalteam1.common.config;
 
+import com.example.ormi5finalteam1.security.CustomAuthenticationProvider;
+import com.example.ormi5finalteam1.security.ProviderBasicAuthenticationFilter;
 import com.example.ormi5finalteam1.security.handler.CustomAuthenticationFailureHandler;
 import com.example.ormi5finalteam1.security.handler.CustomAuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
@@ -52,7 +54,11 @@ public class SecurityConfig {
             })
             .exceptionHandling(exceptions -> exceptions
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.sendRedirect("/login");
+                })
                 .accessDeniedHandler((request, response, accessDeniedException) -> {
+                    //todo : 에러페이지 redirect
                     response.setStatus(HttpStatus.FORBIDDEN.value());
                     response.getWriter().write("접근 권한이 없습니다.");
                 })
