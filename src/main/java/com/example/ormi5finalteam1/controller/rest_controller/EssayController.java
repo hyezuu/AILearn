@@ -2,6 +2,8 @@ package com.example.ormi5finalteam1.controller.rest_controller;
 
 import com.example.ormi5finalteam1.domain.essay.dto.request.EssayRequestDto;
 import com.example.ormi5finalteam1.domain.essay.dto.response.EssayGuideResponseDto;
+import com.example.ormi5finalteam1.domain.essay.dto.response.ReviewedEssaysResponseDto;
+import com.example.ormi5finalteam1.service.EssayProcessingService;
 import com.example.ormi5finalteam1.service.EssayService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import java.util.List;
 public class EssayController {
 
     private final EssayService essayService;
+    private final EssayProcessingService essayProcessingService;
 
     /** 에세이 생성 */
     @PostMapping("/essays")
@@ -32,11 +35,12 @@ public class EssayController {
         return new ResponseEntity<>(HttpStatusCode.valueOf(204));
     }
 
-//    /** 에세이 첨삭 */
-//    @PutMapping("/essays/{id}/review")
-//    public void reviewEssay(@PathVariable Long id) {
-//        essayService.reviewEssay(id);
-//    }
+    /** 에세이 첨삭 */
+    @PutMapping("/essays/{id}/review")
+    public ResponseEntity<ReviewedEssaysResponseDto> reviewEssay(@PathVariable Long id) {
+        ReviewedEssaysResponseDto reviewedEssay = essayProcessingService.processEssay(id);
+        return new ResponseEntity<>(reviewedEssay, HttpStatusCode.valueOf(200));
+    }
 
     /** 에세이 작성 가이드 조회 */
     @GetMapping("/essay-guides")
