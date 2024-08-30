@@ -13,7 +13,8 @@ public enum ErrorCode {
     DUPLICATE_NICKNAME(409, "Nickname is already in use"),
     GRAMMAR_EXAMPLES_NOT_FOUND(404,"No grammar examples found"),
     ESSAY_NOT_FOUND(404,"Essay not found"),
-    TEST_NOT_FOUND(404, "Test not found");
+    TEST_NOT_FOUND(404, "Test not found"),
+    CANNOT_TAKE_TEST(400, "Cannot take test");
 
     private final int status;
     private final String message;

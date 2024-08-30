@@ -41,7 +41,7 @@ public class TestTest {
         questions.add(new Test(2L, Grade.A2, "바나나는 영어로?", "banana"));
         when(testRepository.findByGrade(Grade.A2)).thenReturn(questions);
 
-        List<TestQuestionResponseDto> results = testService.getTests(Grade.A1, Grade.A2);
+        List<TestQuestionResponseDto> results = testService.getLevelTests(Grade.A2);
         assertThat(results.get(0).getQuestion()).isEqualTo("파인애플은 영어로?");
         assertThat(results.get(0).getGrade()).isEqualTo(Grade.A2);
     }

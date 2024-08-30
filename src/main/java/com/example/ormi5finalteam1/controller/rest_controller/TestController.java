@@ -18,10 +18,15 @@ public class TestController {
 
     private final TestService testService;
 
-    @GetMapping("/tests")
-    public List<TestQuestionResponseDto> getTests(@AuthenticationPrincipal Provider provider,
-                                                  @RequestParam Grade grade) {
-        return testService.getTests(provider.grade(), grade);
+    @GetMapping("/level-tests")
+    public List<TestQuestionResponseDto> getLevelTests(@AuthenticationPrincipal Provider provider,
+                                                  @RequestParam("grade") Grade selectedGrade) {
+        return testService.getLevelTests(selectedGrade);
+    }
+
+    @GetMapping("/upgrade-tests")
+    public List<TestQuestionResponseDto> getUpgradeTests(@AuthenticationPrincipal Provider provider) {
+        return testService.getUpgradeTests(provider);
     }
 
     @PostMapping("/grade")
