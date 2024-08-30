@@ -1,4 +1,4 @@
-package com.example.ormi5finalteam1.external.alanai.constants;
+package com.example.ormi5finalteam1.external.constants;
 
 import lombok.Getter;
 
