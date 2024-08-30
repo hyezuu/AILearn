@@ -3,6 +3,7 @@ package com.example.ormi5finalteam1.external.api.client;
 import com.example.ormi5finalteam1.common.exception.AlanAIClientException;
 import com.example.ormi5finalteam1.external.api.dto.BaseRequest;
 import com.example.ormi5finalteam1.external.api.dto.BaseResponse;
+import com.example.ormi5finalteam1.external.constants.AlanAIRequestPrompt;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -27,14 +28,19 @@ public class AlanAIClient {
   @Value("${alanai.api.question_url}")
   private String alanAiApiKey;
 
-  public BaseResponse sendRequestToOpenAI(String prompt) {
+  public BaseResponse sendRequestToAlanAI(AlanAIRequestPrompt prompt, String... variables) {
     try {
+      String promptForRequest = prompt.getPromptTemplate();
+
       // HTTP 헤더 설정
       HttpHeaders headers = new HttpHeaders();
       headers.set("Content-Type", "application/json");
 
       // BaseRequest 객체 생성
-      BaseRequest request = new BaseRequest(prompt, alanAiApiKey);
+      if(variables != null) {
+        promptForRequest = prompt.applyVariables(variables);
+      }
+      BaseRequest request = new BaseRequest(promptForRequest, alanAiApiKey);
 
       // URI 생성 - client_id를 쿼리 파라미터로 추가
       URI uri = UriComponentsBuilder.fromHttpUrl(alanAiApiUrl)

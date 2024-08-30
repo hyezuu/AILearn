@@ -19,7 +19,7 @@ public enum AlanAIRequestPrompt {
   }
 
   // 변수를 삽입한 프롬프트를 반환하는 메소드
-  public String getPrompt(String... variables) {
+  public String applyVariables(String... variables) {
     String prompt = promptTemplate;
     for (int i = 0; i < variables.length; i++) {
       prompt = prompt.replace("{" + i + "}", variables[i]);
