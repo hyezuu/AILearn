@@ -41,11 +41,6 @@ public class EssayService {
         essayRepository.save(updatedEssay);
     }
 
-//    /** 에세이 첨삭 */
-//    public void reviewEssay(Long id) {
-//
-//    }
-
     /** 에세이 작성 가이드 조회 */
     public List<EssayGuideResponseDto> showEssayGuide() {
         return essayGuideRepository.findAll()
@@ -53,6 +48,7 @@ public class EssayService {
                 .map(this::convertGuideResponseToDto).collect(Collectors.toList());
     }
 
+    /** DTO-Entity 변환 */
     private Essay convertRequestToEntity(EssayRequestDto essayRequestDto) {
 
       return Essay.builder()
@@ -67,6 +63,12 @@ public class EssayService {
                essayGuide.getGrade(),
                essayGuide.getContent()
        );
+    }
+
+    /** id로 에세이 조회 */
+    public Essay getEssayById(Long id) {
+        return essayRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Essay not found with id: " + id));
     }
 
 }
