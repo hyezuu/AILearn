@@ -13,5 +13,6 @@ public interface TestRepository extends JpaRepository<Test, Long> {
 
     List<Test> findByGrade(@Param("grade") Grade grade);
 
+    Boolean existsByAnswer(String answer);
 
 }

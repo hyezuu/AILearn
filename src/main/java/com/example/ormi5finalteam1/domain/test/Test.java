@@ -26,4 +26,10 @@ public class Test extends BaseEntity {
 
     @Column(nullable = false)
     private String answer;
+
+    public Test(Grade grade, String question, String answer) {
+        this.grade = grade;
+        this.question = question;
+        this.answer = answer;
+    }
 }

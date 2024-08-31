@@ -1,5 +1,6 @@
 package com.example.ormi5finalteam1.domain;
 
+import java.util.Arrays;
 import lombok.Getter;
 
 @Getter
@@ -21,6 +22,12 @@ public enum Grade {
 
     public int getIndex() {
         return index;
+    }
+
+    public static String[] getGrades() {
+        return Arrays.stream(Grade.values())
+            .map(Enum::name)
+            .toArray(String[]::new);
     }
 
 }
