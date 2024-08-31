@@ -11,12 +11,14 @@ import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.repository.TestRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TestService {
@@ -160,5 +162,12 @@ public class TestService {
         }
 
         return count;
+    }
+
+    @Transactional
+    public void saveTests(List<Test> tests) {
+        tests.removeIf(test -> testRepository.existsByAnswer(test.getAnswer()));
+        testRepository.saveAll(tests);
+        log.info("Saved {} new tests", tests.size());
     }
 }
