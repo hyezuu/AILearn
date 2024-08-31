@@ -37,8 +37,7 @@ public class Vocabulary extends BaseEntity {
     @Column(nullable = false)
     private Grade grade;
 
-    @Builder
-    private Vocabulary(String word, String meaning, Grade grade, String exampleSentence) {
+    public Vocabulary(String word, String meaning, Grade grade, String exampleSentence) {
         this.word = word;
         this.meaning = meaning;
         this.exampleSentence = exampleSentence;
