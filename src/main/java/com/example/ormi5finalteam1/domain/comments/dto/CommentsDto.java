@@ -1,7 +1,7 @@
 package com.example.ormi5finalteam1.domain.comments.dto;
 
 import com.example.ormi5finalteam1.domain.comments.Comments;
-import com.example.ormi5finalteam1.domain.posts.Post;
+import com.example.ormi5finalteam1.domain.post.Post;
 import com.example.ormi5finalteam1.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
