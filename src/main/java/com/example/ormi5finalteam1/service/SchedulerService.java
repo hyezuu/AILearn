@@ -23,7 +23,7 @@ public class SchedulerService {
     private final ContentParser contentParser;
 
     @Async
-    @Scheduled(cron = "10 19 20 * * *")
+    @Scheduled(cron = "10 24 22 * * *")
     public void getVocabulary() {
         for (String gradeStr : Grade.getGrades()) {
             try {
@@ -31,13 +31,17 @@ public class SchedulerService {
                 String content = alanAIService.getVocabularyResponseForGrade(gradeStr);
 
                 List<Vocabulary> vocabularies = contentParser.parseVocabularies(content, grade);
-                List<Test> tests = contentParser.parseTests(content, grade);
-
                 vocabularyService.saveVocabularies(vocabularies);
-                testService.saveTests(tests);
 
-                log.info("Processed {} vocabularies and {} tests for grade {}",
-                    vocabularies.size(), tests.size(), gradeStr);
+                if (!gradeStr.equals("A1")) {
+                    List<Test> tests = contentParser.parseTests(content, grade);
+                    testService.saveTests(tests);
+                    log.info("Processed {} vocabularies and {} tests for grade {}",
+                        vocabularies.size(), tests.size(), gradeStr);
+                } else {
+                    log.info("Processed {} vocabularies for grade A1 (skipped tests)",
+                        vocabularies.size());
+                }
             } catch (Exception e) {
                 log.error("Error processing grade {}: ", gradeStr, e);
             }
