@@ -1,5 +1,10 @@
 package com.example.ormi5finalteam1.external.api.util;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
 public class ContentParser {
 
   public String parseGrammarExamplesQueryResponse(String contentValue) {
