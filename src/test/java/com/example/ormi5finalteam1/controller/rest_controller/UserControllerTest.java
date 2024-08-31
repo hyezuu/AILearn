@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -216,11 +217,12 @@ class UserControllerTest {
     }
 
     @Test
-    void 인증되지_않은_사용자는_정보_조회에_실패한다() throws Exception {
+    void 인증되지_않은_사용자는_로그인_페이지로_리다이렉트된다() throws Exception {
         //given
         //when
         //then
         mockMvc.perform(get("/api/me"))
-            .andExpect(status().isUnauthorized());
+            .andExpect(status().isFound())
+            .andExpect(header().string("Location", "/login"));
     }
 }
