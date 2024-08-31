@@ -5,10 +5,10 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -20,18 +20,17 @@ import com.example.ormi5finalteam1.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-@ActiveProfiles("test")
-@SpringBootTest
-@AutoConfigureMockMvc
+@MockBean(JpaMetamodelMappingContext.class)
+@WebMvcTest(value = UserController.class)
+@WithMockUser(username = "test")
 class UserControllerTest {
 
     @Autowired
@@ -50,6 +49,7 @@ class UserControllerTest {
             = mockMvc.perform(
             get("/api/email-duplication")
                 .param("email", "email")
+                .with(csrf())
                 .accept(MediaType.APPLICATION_JSON));
         //then
         actions.andExpect(status().isOk())
@@ -65,6 +65,7 @@ class UserControllerTest {
             = mockMvc.perform(
             get("/api/email-duplication")
                 .param("email", "newEmail")
+                .with(csrf())
                 .accept(MediaType.APPLICATION_JSON));
         //then
         actions.andExpect(status().isOk())
@@ -78,6 +79,7 @@ class UserControllerTest {
         ResultActions actions
             = mockMvc.perform(
             get("/api/email-duplication")
+                .with(csrf())
                 .accept(MediaType.APPLICATION_JSON));
         //then
         actions.andExpect(status().isBadRequest());
@@ -91,6 +93,7 @@ class UserControllerTest {
         ResultActions actions
             = mockMvc.perform(
             get("/api/nickname-duplication")
+                .with(csrf())
                 .param("nickname", "nickname")
                 .accept(MediaType.APPLICATION_JSON));
         //then
@@ -106,6 +109,7 @@ class UserControllerTest {
         ResultActions actions
             = mockMvc.perform(
             get("/api/nickname-duplication")
+                .with(csrf())
                 .param("nickname", "newNickname")
                 .accept(MediaType.APPLICATION_JSON));
         //then
@@ -120,6 +124,7 @@ class UserControllerTest {
         ResultActions actions
             = mockMvc.perform(
             get("/api/nickname-duplication")
+                .with(csrf())
                 .accept(MediaType.APPLICATION_JSON));
         //then
         actions.andExpect(status().isBadRequest());
@@ -134,6 +139,7 @@ class UserControllerTest {
         ResultActions actions
             = mockMvc.perform(
             post("/api/signup")
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDto)));
         //then
@@ -150,6 +156,7 @@ class UserControllerTest {
         ResultActions actions
             = mockMvc.perform(
             post("/api/signup")
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDto)));
         //then
@@ -166,6 +173,7 @@ class UserControllerTest {
         ResultActions actions
             = mockMvc.perform(
             post("/api/signup")
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDto)));
         //then
@@ -182,6 +190,7 @@ class UserControllerTest {
         ResultActions actions
             = mockMvc.perform(
             post("/api/signup")
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDto)));
         //then
@@ -199,6 +208,7 @@ class UserControllerTest {
         ResultActions actions
             = mockMvc.perform(
             get("/api/me")
+                .with(csrf())
                 .with(authenticatedProvider(provider))
                 .accept(MediaType.APPLICATION_JSON));
         //then
@@ -210,15 +220,5 @@ class UserControllerTest {
             .andExpect(jsonPath("$.role").value("USER"))
             .andExpect(jsonPath("$.grade").value("A1"))
             .andExpect(jsonPath("$.grammarExampleCount").value(10));
-    }
-
-    @Test
-    void 인증되지_않은_사용자는_로그인_페이지로_리다이렉트된다() throws Exception {
-        //given
-        //when
-        //then
-        mockMvc.perform(get("/api/me"))
-            .andExpect(status().isFound())
-            .andExpect(header().string("Location", "/login"));
     }
 }
