@@ -17,34 +17,51 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SchedulerService {
 
-    private final AlanAIService alanAIService;
-    private final VocabularyService vocabularyService;
-    private final TestService testService;
-    private final ContentParser contentParser;
+  private final AlanAIService alanAIService;
+  private final VocabularyService vocabularyService;
+  private final TestService testService;
+  private final ContentParser contentParser;
 
-    @Async
-    @Scheduled(cron = "10 00 00 * * *")
-    public void getVocabulary() {
-        for (String gradeStr : Grade.getGrades()) {
-            try {
-                Grade grade = Grade.valueOf(gradeStr);
-                String content = alanAIService.getVocabularyResponseForGrade(gradeStr);
+  @Async
+  @Scheduled(cron = "10 00 00 * * *")
+  public void getVocabulary() {
+    for (String gradeStr : Grade.getGrades()) {
+      try {
+        Grade grade = Grade.valueOf(gradeStr);
+        String content = alanAIService.getVocabularyResponseForGrade(gradeStr);
 
-                List<Vocabulary> vocabularies = contentParser.parseVocabularies(content, grade);
-                vocabularyService.saveVocabularies(vocabularies);
+        List<Vocabulary> vocabularies = contentParser.parseVocabularies(content, grade);
+        vocabularyService.saveVocabularies(vocabularies);
 
-                if (!gradeStr.equals("A1")) {
-                    List<Test> tests = contentParser.parseTests(content, grade);
-                    testService.saveTests(tests);
-                    log.info("Processed {} vocabularies and {} tests for grade {}",
-                        vocabularies.size(), tests.size(), gradeStr);
-                } else {
-                    log.info("Processed {} vocabularies for grade A1 (skipped tests)",
-                        vocabularies.size());
-                }
-            } catch (Exception e) {
-                log.error("Error processing grade {}: ", gradeStr, e);
-            }
+        if (!gradeStr.equals("A1")) {
+          List<Test> tests = contentParser.parseTests(content, grade);
+          testService.saveTests(tests);
+          log.info(
+              "Processed {} vocabularies and {} tests for grade {}",
+              vocabularies.size(),
+              tests.size(),
+              gradeStr);
+        } else {
+          log.info("Processed {} vocabularies for grade A1 (skipped tests)", vocabularies.size());
         }
+      } catch (Exception e) {
+        log.error("Error processing grade {}: ", gradeStr, e);
+      }
     }
+  }
+
+  @Async
+  @Scheduled(cron = "00 20 00 * * *")
+  public void getGrammarExamplesQuery() {
+    for (String gradeStr : Grade.getGrades()) {
+      try {
+        alanAIService.getGrammarExamplesQuery(gradeStr);
+
+        log.info("Processed {} save success");
+
+      } catch (Exception e) {
+        log.error("Error processing grade {}: ", gradeStr, e);
+      }
+    }
+  }
 }
