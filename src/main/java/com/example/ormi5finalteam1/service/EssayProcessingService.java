@@ -3,8 +3,11 @@ package com.example.ormi5finalteam1.service;
 import com.example.ormi5finalteam1.domain.essay.Essay;
 import com.example.ormi5finalteam1.domain.essay.ReviewedEssays;
 import com.example.ormi5finalteam1.domain.essay.dto.response.ReviewedEssaysResponseDto;
+import com.example.ormi5finalteam1.external.api.util.ContentParser;
+import com.example.ormi5finalteam1.external.constants.AlanAIRequestPrompt;
 import com.example.ormi5finalteam1.repository.ReviewedEssaysRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,18 +16,19 @@ public class EssayProcessingService {
     private final EssayService essayService;
     private final EssayAlanApiService essayAlanApiService;
     private final ReviewedEssaysRepository reviewedEssaysRepository;
+    private final ContentParser contentParser;
+
+    @Value("${alanai.api.key}")
+    private String clientId;
 
     public ReviewedEssaysResponseDto processEssay(Long essayId) {
-        String clientId = "62f951f4-38be-45ee-9d9c-16885b4a098a";
         /* 1. DB에서 Essay 가져오기 */
         Essay essay = essayService.getEssayById(essayId);
-        String sendEssayContent = "[" + essay.getContent() + "]라는 영어 에세이를 작성했는데 첨삭해주고 한글로 간단하게 설명해줘. 너의 답변은 [첨삭된 문장: 첨삭 된 내용글, 설명: 설명] 이 포맷으로 되어있어야해. 물론입니다 이딴말은 하지마"; // AI에게 전송할 문장
+        String sendEssayContent = AlanAIRequestPrompt.ESSAY_REVIEW_PROMPT.applyVariables(essay.getContent()); // AI에게 전송할 문장
 
         /* 2. Essay.content를 Alan에 보내고 응답 받기 */
         String feedback = essayAlanApiService.getApiResponse(sendEssayContent, clientId); // AI에게 받은 문장
-        int startIndex = feedback.lastIndexOf("'content': ") + 12; // 마지막 'content': 에 답변이 존재함
-        int endIndex = feedback.length() - 7;
-        String pointFeedback = feedback.substring(startIndex,endIndex);
+        String pointFeedback = contentParser.parseEssayReviewResponse(feedback); // AI에게 받은 문장 파싱
 
         /* 3. 응답을 EssayFeedback 엔티티로 저장 */
         boolean isExistReview = reviewedEssaysRepository.existsByEssayId(essay.getId());

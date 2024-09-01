@@ -60,4 +60,13 @@ public class ContentParser {
         return tests;
     }
 
+    public String parseEssayReviewResponse(String contentValue) {
+        int startIndex = contentValue.lastIndexOf("'content': ") + 12; // 마지막 'content': 에 답변이 존재함
+        int endIndex = contentValue.length() - 7; // 마지막 괄호들 제거
+        String parsedContent = contentValue.substring(startIndex,endIndex);
+        parsedContent = parsedContent.replace("\\n", "");
+        parsedContent = parsedContent.replace("\\\"", "\"");
+        return parsedContent;
+    }
+
 }
