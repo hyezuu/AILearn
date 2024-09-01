@@ -4,12 +4,16 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.example.ormi5finalteam1.common.exception.BusinessException;
 import com.example.ormi5finalteam1.common.exception.ErrorCode;
+import com.example.ormi5finalteam1.domain.Grade;
+import com.example.ormi5finalteam1.domain.user.Provider;
+import com.example.ormi5finalteam1.domain.user.Role;
 import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.domain.user.dto.CreateUserRequestDto;
 import com.example.ormi5finalteam1.repository.UserRepository;
@@ -110,6 +114,19 @@ class UserServiceTest {
         boolean result = userService.isDuplicateNickname("test");
         //then
         assertThat(result).isTrue();
+    }
+
+    @Test
+    void delete_는_유저의_deleted_at_을_설정할_수_있다() {
+        //given
+        Provider provider
+            = new Provider(1L, "test@test.com", "test", Role.USER, Grade.A1, 0);
+        User user = new User(1L);
+        when(repository.findById(anyLong())).thenReturn(Optional.of(user));
+        //when
+        userService.delete(provider);
+        //then
+        assertThat(user.getDeletedAt()).isNotNull();
     }
 
     @Test

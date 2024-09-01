@@ -6,6 +6,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -199,7 +200,6 @@ class UserControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "test@email.com", roles = "USER")
     void 인증된_사용자는_본인의_정보에_접근할_수_있다() throws Exception {
         //given
         Provider provider
@@ -220,5 +220,22 @@ class UserControllerTest {
             .andExpect(jsonPath("$.role").value("USER"))
             .andExpect(jsonPath("$.grade").value("A1"))
             .andExpect(jsonPath("$.grammarExampleCount").value(10));
+    }
+
+    @Test
+    void 인증된_사용자는_회원_탈퇴를_할_수_있다() throws Exception {
+        //given
+        Provider provider
+            = new Provider(1L, "test@email.com", "testuser", Role.USER, Grade.A1, 10);
+        //when
+        ResultActions actions
+            = mockMvc.perform(
+            delete("/api/withdrawal")
+                .with(csrf())
+                .with(authenticatedProvider(provider))
+                .accept(MediaType.APPLICATION_JSON));
+        //then
+        verify(userService).delete(provider);
+        actions.andExpect(status().isNoContent());
     }
 }
