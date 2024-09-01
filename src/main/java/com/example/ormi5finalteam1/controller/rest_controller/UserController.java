@@ -5,7 +5,9 @@ import com.example.ormi5finalteam1.domain.user.dto.CreateUserRequestDto;
 import com.example.ormi5finalteam1.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,5 +40,11 @@ public class UserController {
     @GetMapping("/me")
     public Provider getMe(@AuthenticationPrincipal Provider provider){
         return provider;
+    }
+
+    @DeleteMapping("/withdrawal")
+    public ResponseEntity<Void> withdrawal(@AuthenticationPrincipal Provider provider){
+        userService.delete(provider);
+        return ResponseEntity.noContent().build();
     }
 }

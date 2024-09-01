@@ -17,3 +17,7 @@ GET localhost:8080/api/email-duplication?email=hyezuu@naver.com
 
 ### check nickname
 GET localhost:8080/api/nickname-duplication?nickname=혜주
+
+### delete me
+DELETE localhost:8080/api/withdrawal
+Authorization: Basic hyezuu@naver.com qweqwe123

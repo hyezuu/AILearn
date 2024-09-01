@@ -2,6 +2,7 @@ package com.example.ormi5finalteam1.service;
 
 import com.example.ormi5finalteam1.common.exception.BusinessException;
 import com.example.ormi5finalteam1.common.exception.ErrorCode;
+import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.domain.user.dto.CreateUserRequestDto;
 import com.example.ormi5finalteam1.repository.UserRepository;
@@ -44,6 +45,14 @@ public class UserService implements UserDetailsService {
 
     public boolean isDuplicateNickname(String nickname) {
         return repository.existsByNickname(nickname);
+    }
+
+    @Transactional
+    public void delete(Provider provider) {
+        User user = repository.findById(provider.id())
+            .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        user.delete();
     }
 
     @Override
