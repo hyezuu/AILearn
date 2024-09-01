@@ -15,38 +15,38 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AlanAIService {
 
-    private final AlanAIClient alanAIClient;
-    private final ContentParser contentParser;
-    private final GrammarExampleRepository grammarExampleRepository;
-    private final ObjectMapper objectMapper;
+  private final AlanAIClient alanAIClient;
+  private final ContentParser contentParser;
+  private final GrammarExampleRepository grammarExampleRepository;
+  private final ObjectMapper objectMapper;
 
-    public void getGrammarExamplesQuery(AlanAIRequestPrompt prompt, String... grades) {
-        // 레벨별로 요청
-        BaseResponse response =
-            alanAIClient.sendRequestToAlanAI(prompt.GRAMMAR_EXAMPLES_INSERT_QUERY, grades);
+  public void getGrammarExamplesQuery(String... grades) {
+    // 레벨별로 요청
+    BaseResponse response =
+        alanAIClient.sendRequestToAlanAI(AlanAIRequestPrompt.GRAMMAR_EXAMPLES_INSERT_QUERY, grades);
 
-        // 응답 파싱
-        String rawQuery = contentParser.parseGrammarExamplesQueryResponse(response.getContent());
+    // 응답 파싱
+    String rawQuery = contentParser.parseGrammarExamplesQueryResponse(response.getContent());
 
-        // 결과 출력
-        if (rawQuery != null) {
-            // todo: 예외처리
-        } else {
-            // todo: 예외처리
-        }
-
-        // grammar_examples 테이블에 raw query 날려서 데이터 생성
-        grammarExampleRepository.insertGrammarExampleWithRawQuery(rawQuery);
+    // 결과 출력
+    if (rawQuery != null) {
+      // todo: 예외처리
+    } else {
+      // todo: 예외처리
     }
 
-    public String getVocabularyResponseForGrade(String grade) throws IOException {
-        String jsonResponse = alanAIClient.sendRequestToAlanAI(
-            AlanAIRequestPrompt.VOCABULARY_DEFAULT_PROMPT, grade);
-        return extractContent(jsonResponse);
-    }
+    // grammar_examples 테이블에 raw query 날려서 데이터 생성
+    grammarExampleRepository.insertGrammarExampleWithRawQuery(rawQuery);
+  }
 
-    private String extractContent(String json) throws IOException {
-        JsonNode rootNode = objectMapper.readTree(json);
-        return rootNode.path("content").asText();
-    }
+  public String getVocabularyResponseForGrade(String grade) throws IOException {
+    String jsonResponse =
+        alanAIClient.sendRequestToAlanAI(AlanAIRequestPrompt.VOCABULARY_DEFAULT_PROMPT, grade);
+    return extractContent(jsonResponse);
+  }
+
+  private String extractContent(String json) throws IOException {
+    JsonNode rootNode = objectMapper.readTree(json);
+    return rootNode.path("content").asText();
+  }
 }

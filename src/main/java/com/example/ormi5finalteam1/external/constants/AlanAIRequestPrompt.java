@@ -4,12 +4,12 @@ import lombok.Getter;
 
 @Getter
 public enum AlanAIRequestPrompt {
-    // 문법 연습용 예문 단계별 문제 + insert query 요청
-    GRAMMAR_EXAMPLES_INSERT_QUERY(
-        "문법 연습용 예문 단계별 문제 insert query 요청",
-        "영어 문법 예문 연습용 문제가 필요한데, {grade}단계 10문항 문제, 해답, 해설을 포함해서 만들고 insert 쿼리로 만들어줘. 테이블명은 "
-            + "grammar_examples이고 각 필드는 grade, question, answer, commentary 이렇게 있어"
-    ),
+  // 문법 연습용 예문 단계별 문제 + insert query 요청
+  GRAMMAR_EXAMPLES_INSERT_QUERY(
+      "문법 연습용 예문 단계별 문제 insert query 요청",
+      "영어 문법 예문 연습용 문제가 필요한데, %s 단계 10문항 문제, 해답, 해설을 포함해서 만들고 insert 쿼리로 만들어줘. 테이블명은 "
+          + "grammar_examples이고 각 필드는 grade, question, answer, commentary, created_at 이렇게 존재하고, created_at은 timestamp 타입으로 현재 응답 시점을 기준으로 생성해줘")
+  
     VOCABULARY_DEFAULT_PROMPT(
         "단어 및 단어 문제 응답 요청",
 //        "일년 전 오늘 날짜의 기사들 중에서"+
@@ -61,21 +61,22 @@ public enum AlanAIRequestPrompt {
             + "위의 형식과 주의사항을 정확히 따라서 작성된 영어 문장을 첨삭해 주세요. 제발"
     );
 
-    private final String description; // 요청의 목적을 설명하는 필드
-    private final String promptTemplate; // 실제 프롬프트로 사용될 텍스트 템플릿 필드
 
-    // 생성자
-    AlanAIRequestPrompt(String description, String promptTemplate) {
-        this.description = description;
-        this.promptTemplate = promptTemplate;
-    }
+  private final String description; // 요청의 목적을 설명하는 필드
+  private final String promptTemplate; // 실제 프롬프트로 사용될 텍스트 템플릿 필드
 
-    // 변수를 삽입한 프롬프트를 반환하는 메소드
-    public String applyVariables(String... variables) {
-        String prompt = promptTemplate;
-        for (int i = 0; i < variables.length; i++) {
-            prompt = prompt.replace("{" + i + "}", variables[i]);
-        }
-        return prompt;
+  // 생성자
+  AlanAIRequestPrompt(String description, String promptTemplate) {
+    this.description = description;
+    this.promptTemplate = promptTemplate;
+  }
+
+  // 변수를 삽입한 프롬프트를 반환하는 메소드
+  public String applyVariables(String... variables) {
+    String prompt = promptTemplate;
+    for (int i = 0; i < variables.length; i++) {
+      prompt = prompt.replace("{" + i + "}", variables[i]);
     }
+    return prompt;
+  }
 }
