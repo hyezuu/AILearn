@@ -122,14 +122,5 @@ public class User extends BaseEntity implements UserDetails {
     this.grade = grade;
   }
 
-    public void setVocabularyList(VocabularyList vocabularyList) {
-        if (this.vocabularyList != null) {
-            this.vocabularyList.setUser(null);
-        }
-        this.vocabularyList = vocabularyList;
-        if (vocabularyList != null) {
-            vocabularyList.setUser(this);
-        }
-    }
 
 }

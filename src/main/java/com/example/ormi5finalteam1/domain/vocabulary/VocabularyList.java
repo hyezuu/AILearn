@@ -35,13 +35,7 @@ public class VocabularyList extends BaseEntity {
     @OneToMany(mappedBy = "vocabularyList", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<VocabularyListVocabulary> vocabularyEntries = new HashSet<>();
 
-    public void setUser(User user) {
-        if (this.user != null) {
-            this.user.setVocabularyList(null);
-        }
+    public VocabularyList(User user) {
         this.user = user;
-        if (user != null && user.getVocabularyList() != this) {
-            user.setVocabularyList(this);
-        }
     }
 }
