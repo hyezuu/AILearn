@@ -19,63 +19,72 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class AlanAIClient {
 
-    private final RestTemplate restTemplate;
+  private final RestTemplate restTemplate;
 
-    @Value("${alanai.api.question_url}")
-    private String alanAiApiUrl;
+  @Value("${alanai.api.question_url}")
+  private String alanAiApiUrl;
 
-    @Value("${alanai.api.key}")
-    private String alanAiApiKey;
+  @Value("${alanai.api.key}")
+  private String alanAiApiKey;
 
-    public BaseResponse sendRequestToAlanAI(AlanAIRequestPrompt prompt, String... variables) {
-        try {
-            String promptForRequest = prompt.getPromptTemplate();
+  public BaseResponse sendRequestToAlanAI(AlanAIRequestPrompt prompt, String... variables) {
+    try {
+      String content = prompt.getPromptTemplate();
 
-            // HTTP 헤더 설정
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Content-Type", "application/json");
+      // HTTP 헤더 설정
+      HttpHeaders headers = new HttpHeaders();
+      headers.set("Content-Type", "application/json");
 
-            // BaseRequest 객체 생성
-            if (variables != null) {
-                promptForRequest = prompt.applyVariables(variables);
-            }
-            BaseRequest request = new BaseRequest(promptForRequest, alanAiApiKey);
+      // BaseRequest 객체 생성
+      if (variables != null) {
+        content = String.format(prompt.getPromptTemplate(), variables[0]); // todo: 로직 수정 필요
+      }
+
+      BaseRequest request = new BaseRequest(content, alanAiApiKey);
 
       // URI 생성 - client_id를 쿼리 파라미터로 추가
-      URI uri = UriComponentsBuilder.fromHttpUrl(alanAiApiUrl)
+      URI uri =
+          UriComponentsBuilder.fromHttpUrl(alanAiApiUrl)
               .queryParam("client_id", request.getClient_id())
               .queryParam("content", request.getContent())
+              .encode()
               .build()
               .toUri();
 
-            // GET 요청 보내고 응답 받기(getForObject 방식)
-            BaseResponse response = restTemplate.getForObject(uri, BaseResponse.class);
+      log.info("Calling API: {}", uri);
 
-            return response;
+      // GET 요청 보내고 응답 받기(getForObject 방식)
+      BaseResponse response = restTemplate.getForObject(uri, BaseResponse.class);
 
-            // GET 요청 보내고 응답 받기(getForEntity 방식)
-//      ResponseEntity<BaseResponse> responseEntity = restTemplate.getForEntity(uri, BaseResponse
-//      .class);
-//
-//      return responseEntity.getBody();
+      log.info("API response received");
+      log.info("Response: {}", response);
+      return response;
 
-        } catch (HttpClientErrorException e) {
-            // 오류 처리
-            throw new AlanAIClientException("AlanAI API 요청 실패: " + e.getMessage(), e);
-        }
+      // GET 요청 보내고 응답 받기(getForEntity 방식)
+      //      ResponseEntity<BaseResponse> responseEntity = restTemplate.getForEntity(uri,
+      // BaseResponse
+      //      .class);
+      //
+      //      return responseEntity.getBody();
+
+    } catch (HttpClientErrorException e) {
+      log.info(e.getResponseBodyAsString());
+      // 오류 처리
+      throw new AlanAIClientException("AlanAI API 요청 실패: " + e.getMessage(), e);
     }
+  }
 
-    public String sendRequestToAlanAI(AlanAIRequestPrompt prompt, String grade) {
-        try {
-            String content = String.format(prompt.getPromptTemplate(), grade);
-            String uri = String.format("%s?content=%s&client_id=%s", alanAiApiUrl, content, alanAiApiKey);
-            log.info("Calling API: {}", uri);
-            String response = restTemplate.getForObject(uri, String.class);
-            log.info("API response received");
-            log.info("Response: {}", response);
-            return response;
-        } catch (HttpClientErrorException e) {
-            throw new AlanAIClientException("AlanAI API 요청 실패: " + e.getMessage(), e);
-        }
+  public String sendRequestToAlanAI(AlanAIRequestPrompt prompt, String grade) {
+    try {
+      String content = String.format(prompt.getPromptTemplate(), grade);
+      String uri = String.format("%s?content=%s&client_id=%s", alanAiApiUrl, content, alanAiApiKey);
+      log.info("Calling API: {}", uri);
+      String response = restTemplate.getForObject(uri, String.class);
+      log.info("API response received");
+      log.info("Response: {}", response);
+      return response;
+    } catch (HttpClientErrorException e) {
+      throw new AlanAIClientException("AlanAI API 요청 실패: " + e.getMessage(), e);
     }
+  }
 }
