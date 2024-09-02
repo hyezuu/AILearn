@@ -6,11 +6,15 @@ import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.domain.vocabulary.Vocabulary;
 import com.example.ormi5finalteam1.domain.vocabulary.VocabularyList;
+import com.example.ormi5finalteam1.domain.vocabulary.VocabularyListVocabulary;
+import com.example.ormi5finalteam1.domain.vocabulary.dto.MyVocabularyListResponseDto;
 import com.example.ormi5finalteam1.repository.VocabularyListRepository;
 import com.example.ormi5finalteam1.repository.VocabularyListVocabularyRepository;
 import com.example.ormi5finalteam1.repository.VocabularyRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,4 +64,11 @@ public class VocabularyListService {
         return newVocabularies;
     }
 
+    public Page<MyVocabularyListResponseDto> getMyVocabularies(Provider provider,
+        Pageable pageable) {
+        Page<VocabularyListVocabulary> vocabularyPage =
+            vocabularyListRepository.findByUserIdOrderByCreatedAtDesc(provider.id(), pageable);
+
+        return vocabularyPage.map(MyVocabularyListResponseDto::from);
+    }
 }
