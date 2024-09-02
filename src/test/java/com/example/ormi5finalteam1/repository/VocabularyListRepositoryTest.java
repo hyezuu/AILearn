@@ -40,10 +40,12 @@ class VocabularyListRepositoryTest {
     @Test
     void findByUserId_는_유저_id_로_단어장을_찾아올_수_있다() {
         //given
+        User user = entityManager.find(User.class, 1L);
+        Long userId = user.getId();
         //when
-        Optional<VocabularyList> result = vocabularyListRepository.findByUserId(1L);
+        Optional<VocabularyList> result = vocabularyListRepository.findByUserId(userId);
         //then
         assertThat(result.isPresent()).isTrue();
-        assertThat(result.get().getUser().getId()).isEqualTo(1L);
+        assertThat(result.get().getUser().getId()).isEqualTo(userId);
     }
 }
