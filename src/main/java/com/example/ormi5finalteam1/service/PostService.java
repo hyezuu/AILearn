@@ -2,17 +2,16 @@ package com.example.ormi5finalteam1.service;
 
 import com.example.ormi5finalteam1.domain.post.Post;
 import com.example.ormi5finalteam1.domain.post.dto.PostDto;
-import com.example.ormi5finalteam1.domain.post.dto.PostRequestDto;
-import com.example.ormi5finalteam1.domain.post.dto.PostResponseDto;
 import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.repository.PostRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static org.springframework.http.RequestEntity.post;
 
 @Service
 public class PostService {
@@ -20,6 +19,12 @@ public class PostService {
 
     public PostService(PostRepository postRepository) {
         this.postRepository = postRepository;
+    }
+
+    public Page<PostDto> getAllPosts(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return postRepository.findAllByDeletedAtIsNullOrderByCreatedAtDesc(pageable)
+                .map(this::convertToDto);
     }
 
     public List<PostDto> getAllPosts() {
@@ -57,7 +62,8 @@ public class PostService {
     public void deletePost(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
-        postRepository.delete(post);
+        post.delete();
+        postRepository.save(post);
     }
 
     private PostDto convertToDto(Post post) {
@@ -69,50 +75,4 @@ public class PostService {
                 post.getViewCount()
         );
     }
-//
-//    private final PostRepository postRepository;
-//
-//    public PostService(PostRepository postRepository) {
-//        this.postRepository = postRepository;
-//    }
-//
-//    @Transactional
-//    public PostResponseDto createPost(PostRequestDto postRequestDto) {
-//        Post post = new Post(postRequestDto.getUserId(), postRequestDto.getTitle(), postRequestDto.getContent());
-//        postRepository.save(post);
-//        return convertToDto(post);
-//    }
-//
-//    @Transactional(readOnly = true)
-//    public List<PostResponseDto> getAllPosts() {
-//        return postRepository.findAll().stream()
-//                .map(this::convertToDto)
-//                .collect(Collectors.toList());
-//    }
-//
-//    @Transactional(readOnly = true)
-//    public PostResponseDto getPostById(Long id) {
-//        Post post = postRepository.findById(id)
-//                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
-//        return convertToDto(post);
-//    }
-//
-//    @Transactional
-//    public PostResponseDto updatePost(Long id, PostRequestDto postRequestDto) {
-//        Post post = postRepository.findById(id)
-//                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
-//        post(postRequestDto.getTitle(), postRequestDto.getContent());
-//        return convertToDto(post);
-//    }
-//
-//    @Transactional
-//    public void deletePost(Long id) {
-//        Post post = postRepository.findById(id)
-//                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
-//        postRepository.delete(post);
-//    }
-//
-//    private PostResponseDto convertToDto(Post post) {
-//        return new PostResponseDto(post);
-//    }
 }
