@@ -2,7 +2,7 @@
 POST localhost:8080/api/vocabulary-list
 Authorization: Basic hyezuu@naver.com qweqwe123
 
-### post vocabularyList
+### post add vocabularyList
 POST localhost:8080/api/vocabulary-list/me/vocabularies
 Authorization: Basic hyezuu@naver.com qweqwe123
 
