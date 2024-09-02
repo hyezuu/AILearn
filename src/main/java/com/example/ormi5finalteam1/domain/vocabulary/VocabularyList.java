@@ -1,6 +1,7 @@
 package com.example.ormi5finalteam1.domain.vocabulary;
 
 import com.example.ormi5finalteam1.domain.BaseEntity;
+import com.example.ormi5finalteam1.domain.Grade;
 import com.example.ormi5finalteam1.domain.user.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -13,6 +14,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -37,5 +39,14 @@ public class VocabularyList extends BaseEntity {
 
     public VocabularyList(User user) {
         this.user = user;
+    }
+
+    public void addVocabulary(Vocabulary vocabulary) {
+        VocabularyListVocabulary newEntry = new VocabularyListVocabulary(this, vocabulary, vocabulary.getGrade());
+        this.vocabularyEntries.add(newEntry);
+    }
+
+    public void addVocabularies(List<Vocabulary> vocabularies) {
+        vocabularies.forEach(this::addVocabulary);
     }
 }
