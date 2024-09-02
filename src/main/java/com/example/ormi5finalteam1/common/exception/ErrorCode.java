@@ -14,7 +14,9 @@ public enum ErrorCode {
     GRAMMAR_EXAMPLES_NOT_FOUND(404,"No grammar examples found"),
     ESSAY_NOT_FOUND(404,"Essay not found"),
     TEST_NOT_FOUND(404, "Test not found"),
-    CANNOT_TAKE_TEST(400, "Cannot take test");
+    CANNOT_TAKE_TEST(400, "Cannot take test"),
+    VOCABULARY_LIST_NOT_FOUND(404,"No vocabulary list found"),
+    NEW_VOCABULARIES_NOT_FOUND(404,"No new vocabulary found");
 
     private final int status;
     private final String message;
