@@ -6,10 +6,15 @@ import com.example.ormi5finalteam1.domain.essay.dto.request.EssayRequestDto;
 import com.example.ormi5finalteam1.domain.essay.dto.response.EssayGuideResponseDto;
 import com.example.ormi5finalteam1.common.exception.BusinessException;
 import com.example.ormi5finalteam1.common.exception.ErrorCode;
+import com.example.ormi5finalteam1.domain.essay.dto.response.EssayResponseDto;
+import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.repository.EssayGuideRepository;
 import com.example.ormi5finalteam1.repository.EssayRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,6 +53,19 @@ public class EssayService {
                 .map(this::convertGuideResponseToDto).collect(Collectors.toList());
     }
 
+    /** 내 에세이 목록 조회 */
+    public Page<EssayResponseDto> showMyEssays(Provider provider, int page, int pageSize) {
+            Pageable pageable = PageRequest.of(page,pageSize);
+            Page<Essay> essayByUserId = essayRepository.findByUserId(provider.id(), pageable);
+            return essayByUserId.map(this::convertResponseToDto);
+    }
+
+    /** id로 에세이 조회 */
+    public Essay getEssayById(Long id) {
+        return essayRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Essay not found with id: " + id));
+    }
+
     /** DTO-Entity 변환 */
     private Essay convertRequestToEntity(EssayRequestDto essayRequestDto) {
 
@@ -65,10 +83,11 @@ public class EssayService {
        );
     }
 
-    /** id로 에세이 조회 */
-    public Essay getEssayById(Long id) {
-        return essayRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Essay not found with id: " + id));
+    private EssayResponseDto convertResponseToDto(Essay essay) {
+        return EssayResponseDto.builder()
+                .topic(essay.getTopic())
+                .content(essay.getContent())
+                .createdAt(essay.getCreatedAt())
+                .build();
     }
-
 }

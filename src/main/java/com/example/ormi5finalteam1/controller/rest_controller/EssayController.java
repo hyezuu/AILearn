@@ -2,13 +2,17 @@ package com.example.ormi5finalteam1.controller.rest_controller;
 
 import com.example.ormi5finalteam1.domain.essay.dto.request.EssayRequestDto;
 import com.example.ormi5finalteam1.domain.essay.dto.response.EssayGuideResponseDto;
+import com.example.ormi5finalteam1.domain.essay.dto.response.EssayResponseDto;
 import com.example.ormi5finalteam1.domain.essay.dto.response.ReviewedEssaysResponseDto;
+import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.service.EssayProcessingService;
 import com.example.ormi5finalteam1.service.EssayService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,5 +51,16 @@ public class EssayController {
     public ResponseEntity<List<EssayGuideResponseDto>> showEssayGuide() {
         List<EssayGuideResponseDto> essayGuideResponseDtoList = essayService.showEssayGuide();
         return new ResponseEntity<>(essayGuideResponseDtoList, HttpStatusCode.valueOf(200));
+    }
+
+    /** 내 에세이 조회 */
+    @GetMapping("/me/essays")
+    public ResponseEntity<Page<EssayResponseDto>> showMyEssays(
+            @AuthenticationPrincipal Provider provider,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int pageSize
+    ) {
+        Page<EssayResponseDto> essayResponseDtoPages = essayService.showMyEssays(provider, page, pageSize);
+        return new ResponseEntity<>(essayResponseDtoPages, HttpStatusCode.valueOf(200));
     }
 }
