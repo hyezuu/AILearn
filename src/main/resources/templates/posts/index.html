@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자유게시판-새 글 작성</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/posts_new.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/main.js"></script>
+</head>
+<body>
+<div id="layout">
+    <!-- 메뉴 부분 -->
+    <header>
+        <h2><a href="#"><img src="/images/ailearn-logo.png" alt="AILEARN" style="width: 80%;"></a></h2>
+        <ul>
+            <li><a href="/login">LOG OUT</a></li>
+            <li>
+                <a href="#" class="mainMenu">MENU v</a>
+                <nav>
+                    <a href="/my">마이페이지</a>
+                    <a href="/posts">커뮤니티</a>
+                    <a href="/vocabulary-list">단어장</a>
+                    <a href="/grammar-examples?keyword=">문법예문</a>
+                    <a href="/essays">에세이</a>
+                </nav>
+            </li>
+        </ul>
+    </header>
+
+    <h1>목록</h1>
+    <!-- 게시글 작성 폼-->
+    <form>
+        <label for="title">제목</label>
+        <input type="text" id="title" name="title" required placeholder="제목을 입력해주세요.">
+
+        <label for="content">내용</label>
+        <textarea id="content" name="content" required placeholder="내용을 입력해주세요."></textarea>
+
+        <div class="buttons">
+            <a href="/posts" id="back-to-list"><span>&#60;</span> 뒤로가기</a>
+            <button type="submit">등록</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>
