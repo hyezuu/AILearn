@@ -9,14 +9,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/vocabulary-list")
 @RequiredArgsConstructor
 public class VocabularyListController {
 
     private final VocabularyListService vocabularyListService;
 
-    @PostMapping("/vocabulary-list")
+    @PostMapping
     public void create(@AuthenticationPrincipal Provider provider) {
         vocabularyListService.create(provider);
+    }
+
+    @PostMapping("/me/vocabularies")
+    public void addVocabularies(@AuthenticationPrincipal Provider provider) {
+        vocabularyListService.addVocabulary(provider);
     }
 }
