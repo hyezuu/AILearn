@@ -49,10 +49,14 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void delete(Provider provider) {
-        User user = repository.findById(provider.id())
-            .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
-
+        User user = getUser(provider.id());
         user.delete();
+    }
+
+    @Transactional(readOnly = true)
+    public User getUser(long id) {
+        return  repository.findById(id)
+            .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
     }
 
     @Override

@@ -38,4 +38,10 @@ public class VocabularyListVocabulary extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Grade grade;
 
+    public VocabularyListVocabulary(VocabularyList vocabularyList, Vocabulary vocabulary,
+        Grade grade) {
+        this.vocabularyList = vocabularyList;
+        this.vocabulary = vocabulary;
+        this.grade = grade;
+    }
 }
