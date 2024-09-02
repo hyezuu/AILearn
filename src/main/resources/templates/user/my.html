@@ -44,6 +44,35 @@
     <p><span class="label">Email:</span> <span th:text="${user.email}">user@example.com</span></p>
     <p><span class="label">Nickname:</span> <span th:text="${user.nickname}">User Nickname</span></p>
   </div>
+
+  <div>
+    <h2>내 에세이</h2>
+    <table border="1">
+      <thead>
+      <tr>
+        <th>Topic</th>
+        <th>Created At</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="essay : ${essays}">
+        <td th:text="${essay.topic}"></td>
+        <td th:text="${#temporals.format(essay.createdAt, 'yy-MM-dd HH:mm')}"></td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div>
+      <span>Page <span th:text="${currentPage}"></span> of <span th:text="${totalPages}"></span></span>
+      <div th:if="${currentPage > 1}">
+        <a th:href="@{/my(page=(${currentPage}-2), size=${pageSize})}">Previous</a>
+      </div>
+      <div th:if="${currentPage < totalPages}">
+        <a th:href="@{/my(page=${currentPage}, size=${pageSize})}">Next</a>
+      </div>
+    </div>
+  </div>
+
 </div>
 </body>
 </html>

@@ -36,10 +36,4 @@ public class UserInfoController {
         return "user/login";
     }
 
-    @GetMapping("my")
-    public String me(Model model, @AuthenticationPrincipal Provider provider) {
-        if(provider==null) return "redirect:/login";
-        model.addAttribute("user", provider);
-        return "user/my";
-    }
 }
