@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -44,6 +45,9 @@ class VocabularyListServiceTest {
     @Mock
     private VocabularyRepository vocabularyRepository;
 
+    @Mock
+    private UserService userService;
+
     @InjectMocks
     private VocabularyListService vocabularyListService;
 
@@ -68,14 +72,18 @@ class VocabularyListServiceTest {
     @Test
     void addVocabulary_로_유저의_단어장에_단어를_추가할_수_있다() {
         //given
-        when(vocabularyListRepository.findByUserId(anyLong())).thenReturn(
-            Optional.of(vocabularyList));
-        when(vocabularyListVocabularyRepository.findMaxVocabularyIdByVocabularyListIdAndGrade(
-            any(), any())).thenReturn(Optional.of(0L));
+        User user = mock(User.class);
+        VocabularyList vocabularyList = mock(VocabularyList.class);
         List<Vocabulary> newVocabularies = Arrays.asList(
             new Vocabulary("word1", "meaning1", Grade.A1, "example1"),
             new Vocabulary("word2", "meaning2", Grade.A1, "example2")
         );
+
+        when(userService.getUser(anyLong())).thenReturn(user);
+        when(vocabularyListRepository.findByUserId(anyLong())).thenReturn(
+            Optional.of(vocabularyList));
+        when(vocabularyListVocabularyRepository.findMaxVocabularyIdByVocabularyListIdAndGrade(
+            any(), any())).thenReturn(Optional.of(0L));
         when(vocabularyRepository.findTop10ByGradeAndIdGreaterThanOrderById(any(Grade.class),
             anyLong())).thenReturn(newVocabularies);
         //when
@@ -85,22 +93,29 @@ class VocabularyListServiceTest {
         verify(vocabularyListVocabularyRepository)
             .findMaxVocabularyIdByVocabularyListIdAndGrade(any(), any());
         verify(vocabularyRepository).findTop10ByGradeAndIdGreaterThanOrderById(any(), anyLong());
+        verify(vocabularyList).addVocabularies(newVocabularies);
+        verify(user).addWordToVocabularyPoint();
     }
 
     @Test
     void addVocabulary_는_단어장을_찾을_수_없을_시_BusinessException을_던진다() {
         //given
+        User user = mock(User.class);
         when(vocabularyListRepository.findByUserId(anyLong())).thenReturn(Optional.empty());
         //when & then
         assertThatThrownBy(()-> vocabularyListService.addVocabulary(provider)).isInstanceOf(
             BusinessException.class).hasFieldOrPropertyWithValue("errorCode", ErrorCode.VOCABULARY_LIST_NOT_FOUND);
+        verify(userService).getUser(anyLong());
         verify(vocabularyListVocabularyRepository,never()).findMaxVocabularyIdByVocabularyListIdAndGrade(any(),any());
         verify(vocabularyRepository,never()).findTop10ByGradeAndIdGreaterThanOrderById(any(), anyLong());
+        verify(user, never()).addWordToVocabularyPoint();
     }
 
     @Test
     void addVocabulary_는_새로운_단어를_찾을_수_없는경우_BusinessException을_던진다() {
         //given
+        User user = mock(User.class);
+        VocabularyList vocabularyList = mock(VocabularyList.class);
         when(vocabularyListRepository.findByUserId(anyLong())).thenReturn(
             Optional.of(vocabularyList));
         when(vocabularyListVocabularyRepository.findMaxVocabularyIdByVocabularyListIdAndGrade(
@@ -108,10 +123,14 @@ class VocabularyListServiceTest {
         when(vocabularyRepository.findTop10ByGradeAndIdGreaterThanOrderById(any(Grade.class),
             anyLong())).thenReturn(new ArrayList<>());
         //when & then
-        assertThatThrownBy(()-> vocabularyListService.addVocabulary(provider)).isInstanceOf(
-            BusinessException.class).hasFieldOrPropertyWithValue("errorCode", ErrorCode.NEW_VOCABULARIES_NOT_FOUND);
+        assertThatThrownBy(()-> vocabularyListService.addVocabulary(provider))
+            .isInstanceOf(BusinessException.class)
+            .hasFieldOrPropertyWithValue("errorCode", ErrorCode.NEW_VOCABULARIES_NOT_FOUND);
+        verify(userService).getUser(anyLong());
         verify(vocabularyListRepository).findByUserId(provider.id());
         verify(vocabularyListVocabularyRepository).findMaxVocabularyIdByVocabularyListIdAndGrade(any(), any());
+        verify(vocabularyList, never()).addVocabularies(any());
+        verify(user, never()).addWordToVocabularyPoint();
     }
 
     @Test
@@ -133,11 +152,4 @@ class VocabularyListServiceTest {
             .isInstanceOf(BusinessException.class)
             .hasFieldOrPropertyWithValue("errorCode", ErrorCode.VOCABULARY_LIST_NOT_FOUND);
     }
-
-
-
-
-
-
-
 }
