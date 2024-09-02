@@ -7,9 +7,17 @@ content-type: application/json
   "nickname": "혜주"
 }
 
-
 ### get me
 GET localhost:8080/api/me
+Authorization: Basic hyezuu@naver.com qweqwe123
+
+//default size = 20, page=0 부터 시작입니다 기본적으로 최신순 조회입니다 (최근에 추가된게 앞으로나와요!)
+### get my voca
+GET localhost:8080/api/me/vocabulary-list
+Authorization: Basic hyezuu@naver.com qweqwe123
+
+### get my voca (페이지네이션)
+GET localhost:8080/api/me/vocabulary-list?page=0&size=10
 Authorization: Basic hyezuu@naver.com qweqwe123
 
 ### check email
