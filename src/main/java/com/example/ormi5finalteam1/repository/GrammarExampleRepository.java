@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface GrammarExampleRepository extends JpaRepository<GrammarExample, Long> {
+public interface GrammarExampleRepository extends JpaRepository<GrammarExample, Long>, GrammarExampleCustomRepository {
   Page<GrammarExample> findByQuestionContainingAndGradeOrderByIdAsc(
       String question, Grade grade, Pageable pageable);
 
