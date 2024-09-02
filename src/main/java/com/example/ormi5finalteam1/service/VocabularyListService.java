@@ -37,7 +37,7 @@ public class VocabularyListService {
     }
 
     //내 단어장 가져오기
-    private VocabularyList getMyVocabularyList(Provider provider) {
+    public VocabularyList getMyVocabularyList(Provider provider) {
         return vocabularyListRepository.findByUserId(provider.id())
             .orElseThrow(() -> new BusinessException(ErrorCode.VOCABULARY_LIST_NOT_FOUND));
     }
