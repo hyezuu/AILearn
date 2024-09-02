@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>자유게시판-새 글 작성</title>
+    <title>자유게시판-게시글 수정</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="/css/posts_new.css">
+    <link rel="stylesheet" href="/css/posts_edit.css">
     <link rel="stylesheet" href="/css/header.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/js/main.js"></script>
@@ -33,19 +33,20 @@
             </li>
         </ul>
     </header>
-
-    <h1>수정</h1>
-    <!-- 게시글 작성 폼-->
+    <!-- 메뉴 부분 끝 -->
+    <h1>게시글 수정</h1>
+    <br>
+    <a href="/posts" id="back-to-list"><span>&#60;</span> 뒤로가기</a>
+    <!-- 게시글 수정 폼-->
     <form>
-        <label for="title">제목</label>
-        <input type="text" id="title" name="title" required placeholder="제목을 입력해주세요.">
-
-        <label for="content">내용</label>
+        <div class="input-container">
+            <input type="text" aria-label="제목" name="title" required placeholder="제목을 입력해주세요.">
+        </div>
         <textarea id="content" name="content" required placeholder="내용을 입력해주세요."></textarea>
 
         <div class="buttons">
-            <a href="/posts" id="back-to-list"><span>&#60;</span> 뒤로가기</a>
-            <button type="submit">등록</button>
+            <button type="submit" class="delete-button">삭제하기</button>
+            <button type="submit" class="edit-button">수정</button>
         </div>
     </form>
 </div>
