@@ -28,22 +28,34 @@ public class VocabularyListService {
 
     @Transactional
     public void addVocabulary(Provider provider) {
-        //내 단어장 가져오기
-        VocabularyList myVocabularyList = vocabularyListRepository.findByUserId(provider.id())
+
+        VocabularyList myVocabularyList = getMyVocabularyList(provider);
+        Long lastVocabularyId = getLastVocabularyId(provider, myVocabularyList);
+        List<Vocabulary> newVocabularies = getNewVocabularies(provider, lastVocabularyId);
+
+        myVocabularyList.addVocabularies(newVocabularies);
+    }
+
+    //내 단어장 가져오기
+    private VocabularyList getMyVocabularyList(Provider provider) {
+        return vocabularyListRepository.findByUserId(provider.id())
             .orElseThrow(() -> new BusinessException(ErrorCode.VOCABULARY_LIST_NOT_FOUND));
+    }
 
-        //브릿지 테이블에서 마지막 단어 id 가져오기
-        Long lastVocabularyId =
-            vocabularyListVocabularyRepository.findMaxVocabularyIdByVocabularyListIdAndGrade(
-                myVocabularyList.getId(), provider.grade()).orElse(0L);
+    //브릿지 테이블에서 마지막 단어 id 가져오기
+    private Long getLastVocabularyId(Provider provider, VocabularyList myVocabularyList) {
+        return vocabularyListVocabularyRepository.findMaxVocabularyIdByVocabularyListIdAndGrade(
+            myVocabularyList.getId(), provider.grade()).orElse(0L);
+    }
 
-        //마지막 단어 id 보다 큰 값중에서 조건에 맞는 단어 가지고오기
+    //마지막 단어 id 보다 큰 값중에서 조건에 맞는 단어 가지고오기
+    private List<Vocabulary> getNewVocabularies(Provider provider, Long lastVocabularyId) {
         List<Vocabulary> newVocabularies = vocabularyRepository
             .findTop10ByGradeAndIdGreaterThanOrderById(provider.grade(), lastVocabularyId);
         if (newVocabularies.isEmpty()) {
             throw new BusinessException(ErrorCode.NEW_VOCABULARIES_NOT_FOUND);
         }
-
-        myVocabularyList.addVocabularies(newVocabularies);
+        return newVocabularies;
     }
+
 }
