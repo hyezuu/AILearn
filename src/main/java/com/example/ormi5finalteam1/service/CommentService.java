@@ -16,12 +16,12 @@ import java.util.stream.Collectors;
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final UserService userService;
+    private final UserPostService userService;
     private final PostService postService;
 
 
     @Autowired
-    public CommentService(CommentRepository commentRepository, UserService userService, PostService postService) {
+    public CommentService(CommentRepository commentRepository, UserPostService userService, PostService postService) {
         this.commentRepository = commentRepository;
         this.userService = userService;
         this.postService = postService;
