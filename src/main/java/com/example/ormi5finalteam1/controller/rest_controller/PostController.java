@@ -1,5 +1,6 @@
 package com.example.ormi5finalteam1.controller.rest_controller;
 
+import com.example.ormi5finalteam1.domain.post.Post;
 import com.example.ormi5finalteam1.domain.post.dto.PostDto;
 import com.example.ormi5finalteam1.domain.post.dto.PostRequestDto;
 import com.example.ormi5finalteam1.domain.post.dto.PostResponseDto;
@@ -26,8 +27,8 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PostDto> getPostById(@PathVariable Long id) {
-        PostDto post = postService.getPostById(id);
+    public ResponseEntity<Post> getPostById(@PathVariable Long id) {
+        Post post = postService.getPostById(id);
         return ResponseEntity.ok(post);
     }
 

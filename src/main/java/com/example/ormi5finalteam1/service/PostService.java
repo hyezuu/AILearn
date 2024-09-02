@@ -28,10 +28,10 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
-    public PostDto getPostById(Long id) {
-        Post post = postRepository.findById(id)
+    public Post getPostById(Long id) {
+        Post newPost = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
-        return convertToDto(post);
+        return newPost;
     }
 
     @Transactional
@@ -69,7 +69,6 @@ public class PostService {
                 post.getViewCount()
         );
     }
-
 //
 //    private final PostRepository postRepository;
 //
