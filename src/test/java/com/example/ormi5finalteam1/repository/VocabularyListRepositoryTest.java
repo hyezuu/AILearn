@@ -19,8 +19,9 @@ class VocabularyListRepositoryTest {
     @Autowired
     private VocabularyListRepository vocabularyListRepository;
 
-    @Autowired
-    private TestEntityManager entityManager;
+    @Autowired UserRepository userRepository;
+
+    private long userId;
 
     @BeforeEach
     void setUp() {
@@ -29,26 +30,19 @@ class VocabularyListRepositoryTest {
             .password("password")
             .nickname("test")
             .build();
-        entityManager.persist(user);
+        User savedUser = userRepository.save(user);
+        userId = savedUser.getId();
 
-        VocabularyList vocabularyList = new VocabularyList(user);
-        entityManager.persist(vocabularyList);
-
-        entityManager.flush();
+        VocabularyList vocabularyList = new VocabularyList(savedUser);
+        vocabularyListRepository.save(vocabularyList);
     }
 
     @Test
     void findByUserId_는_유저_id_로_단어장을_찾아올_수_있다() {
         //given
-        User user = entityManager.find(User.class, 1L);
-        if (user == null) {
-            throw new AssertionError("User with ID 1 not found");
-        }
-        Long userId = user.getId();
-
+        assertThat(userId).isNotNull();
         //when
         Optional<VocabularyList> result = vocabularyListRepository.findByUserId(userId);
-
         //then
         assertThat(result).isPresent();
         assertThat(result.get().getUser().getId()).isEqualTo(userId);
