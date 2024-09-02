@@ -21,6 +21,7 @@ public class VocabularyListService {
     private final VocabularyListRepository vocabularyListRepository;
     private final VocabularyListVocabularyRepository vocabularyListVocabularyRepository;
     private final VocabularyRepository vocabularyRepository;
+    private final UserService userService;
 
     public void create(Provider provider) {
         vocabularyListRepository.save(new VocabularyList(new User(provider.id())));
@@ -28,12 +29,13 @@ public class VocabularyListService {
 
     @Transactional
     public void addVocabulary(Provider provider) {
-
+        User user = userService.getUser(provider.id());
         VocabularyList myVocabularyList = getMyVocabularyList(provider);
         Long lastVocabularyId = getLastVocabularyId(provider, myVocabularyList);
         List<Vocabulary> newVocabularies = getNewVocabularies(provider, lastVocabularyId);
 
         myVocabularyList.addVocabularies(newVocabularies);
+        user.addWordToVocabularyPoint();
     }
 
     //내 단어장 가져오기
