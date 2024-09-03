@@ -32,7 +32,7 @@ public class CommentService {
     @Transactional
     public CommentDto createComment(CommentDto commentDto, Provider provider) {
         User user = userService.getUser(provider.id());
-        Post post = postService.getPostById(commentDto.getPostId(), provider);
+        Post post = postService.getPostById(commentDto.getPostId());
         Comment comment = new Comment(user, post, commentDto.getContent());
         commentRepository.save(comment);
         return convertToDto(comment);

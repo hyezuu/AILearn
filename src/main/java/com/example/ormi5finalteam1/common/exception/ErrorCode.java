@@ -17,7 +17,9 @@ public enum ErrorCode {
     CANNOT_TAKE_TEST(400, "Cannot take test"),
     VOCABULARY_LIST_NOT_FOUND(404,"No vocabulary list found"),
     NEW_VOCABULARIES_NOT_FOUND(404,"No new vocabulary found"),
-    VOCABULARY_NOT_FOUND(404,"No vocabulary found");
+    VOCABULARY_NOT_FOUND(404,"No vocabulary found"),
+    POST_NOT_FOUND(404, "Post not found"),
+    COMMENT_NOT_FOUND(404, "Comment not found");
 
     private final int status;
     private final String message;

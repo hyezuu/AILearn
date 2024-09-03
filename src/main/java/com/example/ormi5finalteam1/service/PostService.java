@@ -1,5 +1,7 @@
 package com.example.ormi5finalteam1.service;
 
+import com.example.ormi5finalteam1.common.exception.BusinessException;
+import com.example.ormi5finalteam1.common.exception.ErrorCode;
 import com.example.ormi5finalteam1.domain.post.Post;
 import com.example.ormi5finalteam1.domain.post.dto.PostDto;
 import com.example.ormi5finalteam1.domain.user.Provider;
@@ -21,17 +23,15 @@ public class PostService {
         this.userService = userService;
     }
 
-    public Page<PostDto> getAllPosts(int page, int size, Provider provider) {
-        validateSession(provider);
+    public Page<PostDto> getAllPosts(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return postRepository.findAllByDeletedAtIsNullOrderByCreatedAtDesc(pageable)
                 .map(this::convertToDto);
     }
 
-    public Post getPostById(Long id, Provider provider) {
-        validateSession(provider);
+    public Post getPostById(Long id) {
         return postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.POST_NOT_FOUND));
     }
 
     @Transactional
@@ -49,9 +49,9 @@ public class PostService {
     @Transactional
     public PostDto updatePost(Long id, PostDto postDto, Provider provider) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.POST_NOT_FOUND));
         if (!post.getUser().getId().equals(provider.id())) {
-            throw new SecurityException("해당 게시글을 수정할 권한이 없습니다.");
+            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
         }
         post.update(postDto.getTitle(), postDto.getContent());
         postRepository.save(post);
@@ -61,9 +61,9 @@ public class PostService {
     @Transactional
     public void deletePost(Long id, Provider provider) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.POST_NOT_FOUND));
         if (!post.getUser().getId().equals(provider.id())) {
-            throw new SecurityException("해당 게시글을 삭제할 권한이 없습니다.");
+            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
         }
         post.delete();
         postRepository.save(post);
@@ -77,11 +77,5 @@ public class PostService {
                 post.getContent(),
                 post.getViewCount()
         );
-    }
-
-    private void validateSession(Provider provider) {
-        if (provider == null) {
-            throw new SecurityException("인증된 사용자가 아닙니다.");
-        }
     }
 }
