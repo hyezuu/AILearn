@@ -70,6 +70,7 @@ public class UserService implements UserDetailsService {
         if (!user.isActive()) {
             throw new BusinessException(ErrorCode.USER_SUSPENDED);
         }
+        user.checkAndAddAttendancePoint();
         user.updateLoginTime();
         return user;
     }
