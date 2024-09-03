@@ -1,0 +1,19 @@
+### essay create
+POST localhost:8080/api/essays
+content-type: application/json
+
+{
+  "userId": 1,
+  "topic": "topicNew",
+  "content": "One of my favorite pastime activities is watching late night movies. I hate going to the movie between 8 and 11 in the evening. All I want is a wide screen with silence."
+}
+
+### essay review
+PUT localhost:8080/api/essays/1/review
+content-type: application/json
+
+{
+}
+
+###
+GET localhost:8080/api/me/essays

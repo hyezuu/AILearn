@@ -1,0 +1,128 @@
+* {
+    margin: auto 0;
+    padding: 0;
+}
+
+#layout {
+    width: 100%;
+    height: 100%;
+    font-family: "IBM Plex Sans KR", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+h1 {
+    margin: 80px;
+    margin-bottom: 0;
+    display: inline-block;
+    text-align: center;
+}
+
+/* 게시글 폼 */
+form {
+    margin: 70px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 라벨 */
+label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    font-size: 18pt;
+    font-weight: 600;
+}
+label>a {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 10px;
+}
+/* 제목과 내용 공통 */
+input[type="text"], textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+}
+label[for="content"], label[for="title"] {
+    margin-top: 30px;
+}
+
+label[for="content"] {
+    font-weight: 400;
+}
+
+/* 제목 */
+.input-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%; /* 컨테이너의 전체 너비를 사용 */
+
+}
+
+input[name="title"] {
+    border: none;
+    border-bottom: 2px solid #ccc;
+    height: 30px;
+    flex-grow: 1; /* 입력 필드가 가능한 많은 공간을 차지하도록 함 */
+    margin-right: 10px; /* 입력 필드와 버튼 사이의 간격 */
+}
+
+/* 삭제 + 수정 버튼 */
+.button-container {
+    display: flex;
+    align-items: center;
+}
+
+.button-container a {
+    margin-left: 20px; /* 버튼 사이의 간격 */
+}
+
+.button-container img {
+    width: 25px; /* 이미지 크기 조정 */
+    height: 25px; /* 이미지 크기 조정 */
+    vertical-align: middle;
+    margin-top: 20px;
+    opacity: 50%;
+}
+.button-container img:hover {
+    opacity: 100%;
+}
+
+/* 내용 */
+textarea {
+    margin: 20px 0;
+    height: 300px;
+    border: none;
+    color: black;
+    border-bottom: 2px solid #ccc;
+}
+
+/* 수정 + 첨삭 버튼 */
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 40px;
+    gap: 20px;
+}
+
+.buttons button {
+    padding : 6px 30px;
+    background-color: #2e5dbd;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+}
+.buttons button:hover {
+    background-color: #103889;
+}
+

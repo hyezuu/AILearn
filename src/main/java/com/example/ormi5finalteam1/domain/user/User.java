@@ -110,6 +110,31 @@ public class User extends BaseEntity implements UserDetails {
         if (points > 0) { // 포인트가 음수일 경우를 방지
             this.point += points;
         }
+        updateLevel();
+    }
+
+    private void updateLevel() {
+        int newLevel = this.point / UserLevelConstants.POINTS_PER_LEVEL;
+        if (newLevel > this.level) {
+            this.level = newLevel;
+            this.isReadyForUpgrade = (this.level % UserLevelConstants.LEVELS_FOR_UPGRADE_READY == 0);
+        }
+    }
+
+    public void addAttendancePoint() {
+        addUserPoint(UserLevelConstants.EXP_ATTENDANCE);
+    }
+
+    public void addEssayWriteAndReviewPoint() {
+        addUserPoint(UserLevelConstants.EXP_ESSAY_WRITE_AND_REVIEW);
+    }
+
+    public void addGrammarProblemCorrectPoint() {
+        addUserPoint(UserLevelConstants.EXP_GRAMMAR_PROBLEM_CORRECT);
+    }
+
+    public void addWordToVocabularyPoint() {
+        addUserPoint(UserLevelConstants.EXP_WORD_ADD);
     }
 
   /** 비즈니스 메서드: 사용자 문법 예문 보유 개수 상승 */
@@ -122,14 +147,5 @@ public class User extends BaseEntity implements UserDetails {
     this.grade = grade;
   }
 
-    public void setVocabularyList(VocabularyList vocabularyList) {
-        if (this.vocabularyList != null) {
-            this.vocabularyList.setUser(null);
-        }
-        this.vocabularyList = vocabularyList;
-        if (vocabularyList != null) {
-            vocabularyList.setUser(this);
-        }
-    }
 
 }

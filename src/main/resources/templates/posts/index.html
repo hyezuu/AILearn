@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/posts_list.css">
+    <title>자유게시판 리스트</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/header.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/main.js"></script>
+</head>
+<body>
+<div id="layout">
+    <!-- 메뉴 부분 -->
+    <header>
+        <h2><a href="#"><img src="/images/ailearn-logo.png" alt="AILEARN" style="width: 80%;"></a></h2>
+        <ul>
+            <li><a href="/login">LOG OUT</a></li>
+            <li>
+                <a href="#" class="mainMenu">MENU v</a>
+                <nav>
+                    <a href="/my">마이페이지</a>
+                    <a href="/posts">커뮤니티</a>
+                    <a href="/vocabulary-list">단어장</a>
+                    <a href="/grammar-examples?keyword=">문법예문</a>
+                    <a href="/essays">에세이</a>
+                </nav>
+            </li>
+        </ul>
+    </header>
+    <h1>게시글 리스트</h1>
+    <div class="search-container">
+        <input type="text" class="search-input" placeholder="search">
+        <button class="search-button">search</button>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성일</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>제목</td>
+            <td>작성자</td>
+            <td>작성일</td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="buttons">
+        <button type="submit" class="edit-button">작성하기</button>
+    </div>
+
+    <!-- 페이지 네비게이션 -->
+    <nav aria-label="Page navigation" class="pagination-container">
+        <!--표에 사용될 변수값 초기화 -->
+        <ul class="pagination" th:with="start=${T(java.lang.Math).floor(postSummaryResponseList.number / 10) * 10 + 1}, last=(${start + 9 < postSummaryResponseList.totalPages ? start + 9 : postSummaryResponseList.totalPages})">
+            <th:block th:with="
+        firstAddr=@{/post/list(page=1)},
+        prevAddr=@{/post/list(page=${postSummaryResponseList.number})},
+        nextAddr=@{/post/list(page=${postSummaryResponseList.number + 2})},
+        lastAddr=@{/post/list(page=${postSummaryResponseList.totalPages})}">
+                <li class="page-item">
+                    <a class="page-link" th:href="${firstAddr}" aria-label="First">
+                        <span aria-hidden="true"> << </span>
+                    </a>
+                </li>
+                <!-- 이전 페이지로 가기 버튼 -->
+                <li class="page-item" th:class="${postSummaryResponseList.first} ? 'disabled'">
+                    <a class="page-link" th:href="${postSummaryResponseList.first} ? '#' :${prevAddr}"
+                       aria-label="Previous">
+                        <span aria-hidden="true">&lt;</span>
+                    </a>
+                </li>
+                <!--1,2,3,4,.. 등 페이지-->
+                <li class="page-item" th:each="page: ${#numbers.sequence(start, last)}"
+                    th:class="${page == postSummaryResponseList.number + 1} ? 'active'">
+                    <a class="page-link" th:text="${page}" th:href="@{/post/list(page=${page})}"></a>
+                </li>
+                <!--다음 페이지로 -->
+                <li class="page-item" th:class="${postSummaryResponseList.last} ? 'disabled'">
+                    <a class="page-link" th:href="${postSummaryResponseList.last} ? '#' : ${nextAddr}"
+                       aria-label="Next">
+                        <span aria-hidden="true">&gt;</span>
+                    </a>
+                </li>
+                <!--맨 마지막 페이지로 이동 -->
+                <li class="page-item">
+                    <a class="page-link" th:href="${lastAddr}" aria-label="Last">
+                        <span aria-hidden="true"> >> </span>
+                    </a>
+                </li>
+            </th:block>
+        </ul>
+    </nav>
+</div>
+</body>
+</html>

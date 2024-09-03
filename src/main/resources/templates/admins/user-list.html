@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/user-list.css">
+    <title>user-list</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/header.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<body>
+
+<!-- 메뉴 부분 -->
+<header>
+    <h2><a href="#"><img src="/images/ailearn-logo.png" alt="AILEARN" style="width: 80%;"></a></h2>
+    <ul>
+        <li><a href="/login">LOG OUT</a></li>
+        <li>
+            <a href="#" class="mainMenu">MENU v</a>
+            <nav>
+                <a href="/my">마이페이지</a>
+                <a href="/posts">커뮤니티</a>
+                <a href="/vocabulary-list">단어장</a>
+                <a href="/grammar-examples?keyword=">문법예문</a>
+                <a href="/essays">에세이</a>
+            </nav>
+        </li>
+    </ul>
+</header>
+
+<div>
+    <strong>전체 유저 리스트</strong>
+<!--</div>-->
+<div class="search-container">
+    <input type="text" class="search-input" placeholder="search">
+    <button class="search-button">search</button>
+</div>
+
+<table class="table">
+    <tr class="header">
+        <th class="num">번호</th>
+        <th class="user-email">유저 이메일</th>
+        <th>닉네임</th>
+        <th>레벨</th>
+        <th>테스트 응시 자격</th>
+        <th>상태</th>
+        <th>가입일</th>
+        <th>마지막 로그인</th>
+    </tr>
+<!--</table>-->
+
+<tbody id="post-list" class="post-list"></tbody>
+</table>
+<div id="pagination" class="pagination"></div>
+</div>
+<script>
+
+    //헤더
+    $(document).ready(function() {
+        $("a.mainMenu").mouseenter(function () {
+            $("header nav").stop().slideDown();
+        });
+        $("header nav a").mouseenter(function () {
+            $("a.mainMenu").removeClass('act');
+            $(this).parent().prev().addClass('act');
+        });
+        $("header ul").mouseleave(function () {
+            $("a.mainMenu").removeClass('act');
+            $("header nav").stop().slideUp();
+        });
+
+        //휠(스크롤) 위치에 따라 왼쪽메뉴 활성화.
+        $(document).scroll(function(){
+            //브라우저높이
+            const h2 = $(window).height();
+
+            const t1 = $(document).scrollTop();
+
+            const ht = Math.floor(t1/h1);
+
+            //모든클래스 삭제
+            $("a").removeClass();
+            //해당 메뉴만 클래스 추가
+            $("li").eq(ht).children().addClass("menuOver "+"m"+(ht+1));
+        });
+    });
+
+    //페이지
+    const posts = Array.from({ length: 100 }, (_, i) => ({
+        number: i + 1,
+        email: `user${i + 1}@example.com`,
+        nickname: `닉네임 ${i + 1}`,
+        level: `레벨 ${Math.ceil((i + 1) / 10)}`,
+        eligibility: i % 2 === 0 ? '응시 자격 있음' : '응시 자격 없음',
+        status: i % 2 === 0 ? '활성' : '비활성',
+        joinDate: new Date(new Date().setDate(new Date().getDate() - i)).toLocaleDateString(),
+        lastLogin: new Date().toLocaleDateString()
+    }));
+
+    const postsPerPage = 10;
+    const pageButtonCount = 5; // 항상 표시할 페이지 번호 버튼 개수
+    let currentPage = 1;
+
+    function renderPosts() {
+        const postList = document.getElementById('post-list');
+        postList.innerHTML = '';
+        const start = (currentPage - 1) * postsPerPage;
+        const end = start + postsPerPage;
+        posts.slice(start, end).forEach(post => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+            <td class="number">${post.number}</td>
+            <td>${post.email}</td>
+            <td>${post.nickname}</td>
+            <td>${post.level}</td>
+            <td>${post.eligibility}</td>
+            <td>${post.status}</td>
+            <td>${post.joinDate}</td>
+            <td>${post.lastLogin}</td>
+        `;
+            postList.appendChild(tr);
+        });
+    }
+
+    function renderPagination() {
+        const pagination = document.getElementById('pagination');
+        pagination.innerHTML = '';
+        const totalPages = Math.ceil(posts.length / postsPerPage);
+
+        const createButton = (page, text, disabled = false, isActive = false) => {
+            const button = document.createElement('button');
+            button.textContent = text;
+            button.disabled = disabled;
+            button.className = disabled ? 'disabled' : (isActive ? 'active' : '');
+            button.addEventListener('click', () => {
+                if (!disabled) {
+                    currentPage = page;
+                    update();
+                }
+            });
+            return button;
+        };
+
+        // Add First and Previous Buttons
+        pagination.appendChild(createButton(1, '<<', currentPage === 1));
+        pagination.appendChild(createButton(currentPage - 1, '<', currentPage === 1));
+
+        // Add Page Number Buttons
+        const halfRange = Math.floor(pageButtonCount / 2);
+        let startPage = Math.max(1, currentPage - halfRange);
+        let endPage = Math.min(totalPages, currentPage + halfRange);
+
+        // Adjust range if there are not enough pages before or after the current page
+        if (currentPage - halfRange < 1) {
+            endPage = Math.min(totalPages, endPage + (halfRange - (currentPage - 1)));
+        }
+        if (currentPage + halfRange > totalPages) {
+            startPage = Math.max(1, startPage - ((currentPage + halfRange) - totalPages));
+        }
+
+        for (let page = startPage; page <= endPage; page++) {
+            pagination.appendChild(createButton(page, page, false, page === currentPage));
+        }
+
+        // Add Next and Last Buttons
+        pagination.appendChild(createButton(currentPage + 1, '>', currentPage === totalPages));
+        pagination.appendChild(createButton(totalPages, '>>', currentPage === totalPages));
+    }
+
+    function update() {
+        renderPosts();
+        renderPagination();
+    }
+
+    update();
+
+</script>
+
+</body>
+</html>

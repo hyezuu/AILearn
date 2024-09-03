@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자유게시판-게시글 상세보기</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/posts_detail.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/main.js"></script>
+</head>
+<body>
+<div id="layout">
+
+    <!-- 메뉴 부분 -->
+    <header>
+        <h2><a href="#"><img src="/images/ailearn-logo.png" alt="AILEARN" style="width: 80%;"></a></h2>
+        <ul>
+            <li><a href="/login">LOG OUT</a></li>
+            <li>
+                <a href="#" class="mainMenu">MENU v</a>
+                <nav>
+                    <a href="/my">마이페이지</a>
+                    <a href="/posts">커뮤니티</a>
+                    <a href="/vocabulary-list">단어장</a>
+                    <a href="/grammar-examples?keyword=">문법예문</a>
+                    <a href="/essays">에세이</a>
+                </nav>
+            </li>
+        </ul>
+    </header>
+    <!-- 메뉴 부분 끝 -->
+
+    <h1>커뮤니티</h1>
+    <!-- 게시글 상세 부분-->
+    <form>
+        <div class="input-container">
+            <input type="text" aria-label="제목" name="title" placeholder="제목">
+            <div class="button-container">
+                <a href="/posts/list"><img src="/images/delete.png" alt="삭제버튼"></a>
+                <a href="/posts/{id}/edit"><img src="/images/edit.png" alt="수정버튼"></a>
+            </div>
+        </div>
+        <textarea id="content" name="content"></textarea>
+    </form>
+    <!-- 댓글부분 -->
+    <div class="comment-section">
+        <!-- 댓글 입력 폼 -->
+        <div class="comment-form">
+            <h3>댓글 작성</h3>
+            <form>
+                <input type="text" placeholder="댓글을 입력하세요.">
+                <button type="submit" >등록</button>
+            </form>
+            <div th:each="comment : ${comments}" class="comment">
+                <div class="comment-header">
+                    <p class="comment-author" th:text="${comment.author}">작성자 이름</p>
+                    <a href="#" class="delete-comment"><img src="/images/x-mark.png" alt="댓글삭제버튼"></a>
+                </div>
+                <p class="comment-content" th:text="${comment.content}">댓글 내용</p>
+                <small class="comment-date" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}">작성 날짜</small>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

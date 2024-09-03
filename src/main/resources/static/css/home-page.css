@@ -47,6 +47,14 @@ header li:nth-child(2) a {
     font-weight: 600;
     color: #777;
 }
+header li:first-child a:hover {
+    font-weight: bold;
+    color: #000000;
+}
+header li:nth-child(2) a:hover {
+    font-weight: bold;
+    color: #000000;
+}
 /* 메뉴 화살표 */
 header li span {
     margin-bottom: 5px;

@@ -1,0 +1,157 @@
+* {
+    margin: auto 0;
+    padding: 0;
+}
+
+#layout {
+    width: 100%;
+    height: 100%;
+    font-family: "IBM Plex Sans KR", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+h1 {
+    margin: 80px;
+    margin-bottom: 60px;
+    display: inline-block;
+    text-align: center;
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    font-size: 30px;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+}
+.search-input {
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #666666;
+    border-radius: 10px;
+    width: 300px;
+    margin-right: 10px;
+}
+.search-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #103889;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.search-button:hover {
+    background-color: #0f246c;
+    filter: drop-shadow(0px 0px 2px #103889 );
+    border: 1px solid white;
+}
+
+table {
+    margin: auto;
+    width: 700px;
+    border-radius: 5px;
+    border-collapse: collapse;
+    border-top: none;
+}
+thead {
+    background-color: #F2F2F2;
+    text-align: center;
+    border: 1px solid #ABABAB;
+    border-right: none;
+    border-left: none;
+}
+
+th {
+    border-bottom: 1px lightgray solid;
+    height: 30px;
+    font-size: 14px;
+}
+td {
+    border-bottom: 1px lightgray solid;
+    text-align: center;
+    height: 30px;
+    font-size: 14px;
+}
+
+/* 작성하기 버튼 */
+.edit-button {
+    margin: 60px;
+    float: right;
+    padding : 6px 30px;
+    background-color: #2e5dbd;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+}
+.edit-button:hover {
+    background-color: #103889;
+}
+
+
+
+/* 페이지 네비게이션 */
+.pagination-container {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.pagination-container .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.pagination-container .page-item {
+    width: 20px;
+    height: 20px;
+    margin: 0 5px;
+}
+
+.pagination-container .page-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    font-size: 10px;
+    text-decoration: none;
+    border: 1px solid #dee2e6;
+}
+
+.pagination-container .page-item.active .page-link {
+    background-color: #007bff;
+    color: white;
+}
+
+/* 화살표 아이콘을 위한 추가 스타일 */
+.pagination-container .page-link[aria-label] {
+    font-size: 8px;
+}

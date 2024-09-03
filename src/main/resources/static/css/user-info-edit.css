@@ -1,0 +1,63 @@
+.user-info-body {
+    font-family: "IBM Plex Sans KR", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-weight: 400;
+    font-style: normal;
+
+    width: 100%;
+}
+
+.my-page-list {
+    list-style: none;
+    display: flex;
+}
+
+.user-info-form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+
+}
+
+.user-info-form h1 {
+    text-align: center;
+    color: #333;
+}
+.user-info-form input {
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.user-info-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #103889;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 50px;
+}
+
+.user-info-form button:hover {
+    background-color: #0f246c;
+    filter: drop-shadow(0px 0px 2px #103889 );
+
+}
+
+.hr{
+    color: #B9B9B9;
+}
+
+a {
+    color: #103889;
+    text-decoration-line: none;
+}
