@@ -148,4 +148,9 @@ public class User extends BaseEntity implements UserDetails {
   }
 
 
+    /** 비즈니스 메서드: 승급 가능 상태 변경*/
+    public void changeReadyStatus(boolean b) {
+        this.isReadyForUpgrade = b;
+    }
+
 }
