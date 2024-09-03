@@ -10,8 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/posts")
 public class PostController {
@@ -21,35 +19,40 @@ public class PostController {
         this.postService = postService;
     }
 
+    // 게시글 전체 조회
     @GetMapping
     public ResponseEntity<Page<PostDto>> getAllPosts(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "12") int size,
-            @AuthenticationPrincipal Provider provider) {
-        Page<PostDto> posts = postService.getAllPosts(page, size, provider);
-        return ResponseEntity.ok(posts);
+            @RequestParam(defaultValue = "12") int size) {
+        Page<PostDto> posts = postService.getAllPosts(page, size);
+        return new ResponseEntity<>(posts, HttpStatus.valueOf(200));
     }
 
+    // 게시글 상세 조회
     @GetMapping("/{id}")
-    public ResponseEntity<Post> getPostById(@PathVariable Long id, @AuthenticationPrincipal Provider provider) {
-        Post post = postService.getPostById(id, provider);
-        return ResponseEntity.ok(post);
+    public ResponseEntity<Post> getPostById(@PathVariable Long id) {
+        Post post = postService.getPostById(id);
+        return new ResponseEntity<>(post, HttpStatus.valueOf(200));
     }
 
+    // 게시글 생성
     @PostMapping
     public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto, @AuthenticationPrincipal Provider provider) {
-        return new ResponseEntity<>(postService.createPost(postDto, provider), HttpStatus.CREATED);
+        PostDto createdPost = postService.createPost(postDto, provider);
+        return new ResponseEntity<>(createdPost, HttpStatus.valueOf(201));
     }
 
+    // 게시글 수정
     @PutMapping("/{id}")
     public ResponseEntity<PostDto> updatePost(@PathVariable Long id, @RequestBody PostDto postDto, @AuthenticationPrincipal Provider provider) {
         PostDto updatedPost = postService.updatePost(id, postDto, provider);
-        return ResponseEntity.ok(updatedPost);
+        return new ResponseEntity<>(updatedPost, HttpStatus.valueOf(200));
     }
 
+    // 게시글 삭제
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePost(@PathVariable Long id, @AuthenticationPrincipal Provider provider) {
         postService.deletePost(id, provider);
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<>(HttpStatus.valueOf(204));
     }
 }
