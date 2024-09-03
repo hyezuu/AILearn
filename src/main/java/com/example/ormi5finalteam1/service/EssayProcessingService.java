@@ -3,6 +3,7 @@ package com.example.ormi5finalteam1.service;
 import com.example.ormi5finalteam1.domain.essay.Essay;
 import com.example.ormi5finalteam1.domain.essay.ReviewedEssays;
 import com.example.ormi5finalteam1.domain.essay.dto.response.ReviewedEssaysResponseDto;
+import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.external.api.util.ContentParser;
 import com.example.ormi5finalteam1.external.constants.AlanAIRequestPrompt;
 import com.example.ormi5finalteam1.repository.ReviewedEssaysRepository;
@@ -35,11 +36,15 @@ public class EssayProcessingService {
         ReviewedEssays reviewedEssays = saveReviewedEssays(isExistReview, essay, pointFeedback);
         reviewedEssaysRepository.save(reviewedEssays);
 
-        /* 4. ReviewedEssaysResponseDto로 첨삭된 데이터, 기존에세이 데이터 반환 */
+        /* 4. 해당 user의 포인트 3증가 */
+        essay.getUser().addEssayWriteAndReviewPoint();
+
+        /* 5. ReviewedEssaysResponseDto로 첨삭된 데이터, 기존에세이 데이터 반환 */
         return ReviewedEssaysResponseDto.builder()
                 .essayContent(reviewedEssays.getEssay().getContent())
                 .reviewedContent(reviewedEssays.getContent())
                 .build();
+
     }
 
     private ReviewedEssays saveReviewedEssays(boolean isExistReview, Essay essay, String pointFeedback) {
