@@ -43,6 +43,7 @@ public class VocabularyListService {
     }
 
     //내 단어장 가져오기
+    @Transactional(readOnly = true)
     public VocabularyList getMyVocabularyList(Provider provider) {
         return vocabularyListRepository.findByUserId(provider.id())
             .orElseThrow(() -> new BusinessException(ErrorCode.VOCABULARY_LIST_NOT_FOUND));
@@ -64,11 +65,20 @@ public class VocabularyListService {
         return newVocabularies;
     }
 
+    @Transactional(readOnly = true)
     public Page<MyVocabularyListResponseDto> getMyVocabularies(Provider provider,
         Pageable pageable) {
         Page<VocabularyListVocabulary> vocabularyPage =
             vocabularyListRepository.findByUserIdOrderByCreatedAtDesc(provider.id(), pageable);
 
         return vocabularyPage.map(MyVocabularyListResponseDto::from);
+    }
+
+    @Transactional
+    public void delete(Provider provider, long id) {
+        VocabularyListVocabulary vlv =
+            vocabularyListVocabularyRepository.findByIdAndVocabularyListUserId(provider.id(), id)
+                .orElseThrow(()-> new BusinessException(ErrorCode.VOCABULARY_NOT_FOUND));
+        vlv.delete();
     }
 }
