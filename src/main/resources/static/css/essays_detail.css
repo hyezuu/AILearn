@@ -105,41 +105,15 @@ textarea {
     border-bottom: 2px solid #ccc;
 }
 
-/* 뒤로가기와 등록 버튼 */
+/* 수정 + 첨삭 버튼 */
 .buttons {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: flex-end;
     margin-top: 40px;
+    gap: 20px;
 }
 
-/* 등록 버튼 */
-.buttons {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 40px;
-}
-
-
-/* 댓글 부분 */
-
-.comment-section {
-    margin: 70px;
-}
-
-.comment-form form {
-    display: flex;
-    flex-flow: row;
-    width: inherit;
-    margin: 20px 0;
-}
-
-.buttons {
-    padding-left: 400px;
-}
-
-button {
+.buttons button {
     padding : 6px 30px;
     background-color: #2e5dbd;
     color: white;
@@ -147,8 +121,8 @@ button {
     font-weight: 600;
     border: none;
     border-radius: 10px;
-    margin-left: 20px;
 }
-button:hover {
+.buttons button:hover {
     background-color: #103889;
 }
+
