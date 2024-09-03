@@ -13,11 +13,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/posts/{postId}/comments")
-public class CommentsController {
+public class CommentController {
     private final CommentService commentService;
 
     @Autowired
-    public CommentsController(CommentService commentService) {
+    public CommentController(CommentService commentService) {
         this.commentService = commentService;
     }
 
