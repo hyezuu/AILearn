@@ -13,4 +13,8 @@ public interface VocabularyListVocabularyRepository extends JpaRepository<Vocabu
     Optional<Long> findMaxVocabularyIdByVocabularyListIdAndGrade(
         @Param("vocabularyListId") Long vocabularyListId,
         @Param("grade") Grade grade);
+
+    @Query("SELECT vlv FROM VocabularyListVocabulary vlv " +
+        "WHERE vlv.id = :id AND vlv.vocabularyList.user.id = :userId AND vlv.deletedAt IS NULL")
+    Optional<VocabularyListVocabulary> findByIdAndVocabularyListUserId(Long userId, Long id);
 }
