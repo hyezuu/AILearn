@@ -23,8 +23,9 @@ public class SchedulerService {
   private final ContentParser contentParser;
 
   @Async
-  @Scheduled(cron = "00 35 02 * * *")
+  @Scheduled(cron = "00 51 02 * * *")
   public void getVocabulary() {
+    log.info("vocabulary scheduler running");
     for (String gradeStr : Grade.getGrades()) {
       try {
         Grade grade = Grade.valueOf(gradeStr);
