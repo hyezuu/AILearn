@@ -23,7 +23,7 @@ public class SchedulerService {
   private final ContentParser contentParser;
 
   @Async
-  @Scheduled(cron = "00 21 02 * * *")
+  @Scheduled(cron = "00 35 02 * * *")
   public void getVocabulary() {
     for (String gradeStr : Grade.getGrades()) {
       try {
@@ -51,7 +51,7 @@ public class SchedulerService {
   }
 
   @Async
-  @Scheduled(cron = "00 40 02 * * *")
+  @Scheduled(cron = "00 45 02 * * *")
   public void getGrammarExamplesQuery() {
     for (String gradeStr : Grade.getGrades()) {
       try {
