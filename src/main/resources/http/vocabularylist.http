@@ -6,3 +6,7 @@ Authorization: Basic hyezuu@naver.com qweqwe123
 POST localhost:8080/api/vocabulary-list/me/vocabularies
 Authorization: Basic hyezuu@naver.com qweqwe123
 
+//id 는 myvoca 요청시 제공되는 Id입니다 !
+### delete vocabulary
+DELETE localhost:8080/api/vocabulary-list/me/vocabularies/{id}
+Authorization: Basic hyezuu@naver.com qweqwe123
