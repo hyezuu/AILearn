@@ -5,6 +5,11 @@ import lombok.Getter;
 
 @Getter
 public class SubmitRequestDto {
-    private Long testId;
-    private String answer;
+    private final Long testId;
+    private final String answer;
+
+    public SubmitRequestDto(long i, String s) {
+        this.testId = i;
+        this.answer = s;
+    }
 }
