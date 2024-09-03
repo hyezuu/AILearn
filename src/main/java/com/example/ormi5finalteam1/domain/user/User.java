@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
@@ -117,11 +118,19 @@ public class User extends BaseEntity implements UserDetails {
         int newLevel = this.point / UserLevelConstants.POINTS_PER_LEVEL;
         if (newLevel > this.level) {
             this.level = newLevel;
-            this.isReadyForUpgrade = (this.level % UserLevelConstants.LEVELS_FOR_UPGRADE_READY == 0);
+            this.isReadyForUpgrade = (this.level % UserLevelConstants.LEVELS_FOR_UPGRADE_READY
+                == 0);
         }
     }
 
-    public void addAttendancePoint() {
+    public void checkAndAddAttendancePoint() {
+        LocalDate today = LocalDate.now();
+        if (this.getLastLoginedAt() == null || !today.equals(this.getLastLoginedAt().toLocalDate())) {
+            this.addAttendancePoint();
+        }
+    }
+
+    private void addAttendancePoint() {
         addUserPoint(UserLevelConstants.EXP_ATTENDANCE);
     }
 
@@ -137,15 +146,19 @@ public class User extends BaseEntity implements UserDetails {
         addUserPoint(UserLevelConstants.EXP_WORD_ADD);
     }
 
-  /** 비즈니스 메서드: 사용자 문법 예문 보유 개수 상승 */
-  public void addUserGrammarExampleCount() {
-    this.grammarExampleCount += 5; // todo: 상수관리
-  }
+    /**
+     * 비즈니스 메서드: 사용자 문법 예문 보유 개수 상승
+     */
+    public void addUserGrammarExampleCount() {
+        this.grammarExampleCount += 5; // todo: 상수관리
+    }
 
-  /** 비즈니스 메서드: 사용자 등급 변경 */
-  public void changeGrade(Grade grade) {
-    this.grade = grade;
-  }
+    /**
+     * 비즈니스 메서드: 사용자 등급 변경
+     */
+    public void changeGrade(Grade grade) {
+        this.grade = grade;
+    }
 
 
 }
