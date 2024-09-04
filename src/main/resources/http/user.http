@@ -2,9 +2,9 @@ POST localhost:8080/api/signup
 content-type: application/json
 
 {
-  "email": "hyezuu@naver.com",
+  "email": "duudu0704@gmail.com",
   "password": "qweqwe123",
-  "nickname": "혜주"
+  "nickname": "혜주2"
 }
 
 ### get me
@@ -19,6 +19,12 @@ Authorization: Basic hyezuu@naver.com qweqwe123
 ### get my voca (페이지네이션)
 GET localhost:8080/api/me/vocabulary-list?page=0&size=10
 Authorization: Basic hyezuu@naver.com qweqwe123
+
+### post email verification (이메일 전송!)
+POST localhost:8080/api/email/send-verification?email=duudu0704@naver.com
+
+### post email verification code (이메일, 인증코드 다시 응답하기)
+POST localhost:8080/api/email/verify-email?email=duudu0704@gmail.com&code=253312
 
 ### check email
 GET localhost:8080/api/email-duplication?email=hyezuu@naver.com
