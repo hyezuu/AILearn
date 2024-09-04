@@ -1,5 +1,6 @@
 POST localhost:8080/api/posts
 content-type: application/json
+Authorization: Basic hyezuu@naver.com qweqwe123
 
 {
   "userId": 1,
@@ -8,8 +9,8 @@ content-type: application/json
 }
 
 
-### get me
-GET localhost:8080/api/posts/13
+### get id
+GET localhost:8080/api/posts/17
 
 ### get all
 GET localhost:8080/api/posts
@@ -17,11 +18,17 @@ GET localhost:8080/api/posts
 ### update
 PUT localhost:8080/api/posts/13
 content-type: application/json
+Authorization: Basic hyezuu@naver.com qweqwe123
 
 {
-    "title": "Post 1d",
+    "title": "Post 1",
     "content": "Content d1"
 }
 
 ### delete
-DELETE localhost:8080/api/posts/14
+DELETE localhost:8080/api/posts/17
+Authorization: Basic hyezuu@naver.com qweqwe123
+
+### get my posts
+GET localhost:8080/api/me/posts
+Authorization: Basic hyezuu@naver.com qweqwe123

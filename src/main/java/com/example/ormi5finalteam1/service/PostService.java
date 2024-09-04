@@ -23,17 +23,20 @@ public class PostService {
         this.userService = userService;
     }
 
+    // 게시글 전체 조회
     public Page<PostDto> getAllPosts(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return postRepository.findAllByDeletedAtIsNullOrderByCreatedAtDesc(pageable)
                 .map(this::convertToDto);
     }
 
+    // 게시글 상세 조회
     public Post getPostById(Long id) {
         return postRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.POST_NOT_FOUND));
     }
 
+    // 게시글 생성
     @Transactional
     public PostDto createPost(PostDto postDto, Provider provider) {
         User user = userService.getUser(provider.id());
@@ -46,6 +49,7 @@ public class PostService {
         return convertToDto(post);
     }
 
+    // 게시글 수정
     @Transactional
     public PostDto updatePost(Long id, PostDto postDto, Provider provider) {
         Post post = postRepository.findById(id)
@@ -58,6 +62,7 @@ public class PostService {
         return convertToDto(post);
     }
 
+    // 게시글 삭제
     @Transactional
     public void deletePost(Long id, Provider provider) {
         Post post = postRepository.findById(id)
@@ -67,6 +72,14 @@ public class PostService {
         }
         post.delete();
         postRepository.save(post);
+    }
+
+    // 마이페이지 내 게시글 조회
+    public Page<PostDto> getPostsByUserId(int page, int size, Provider provider) {
+        Long userId = provider.id();
+        Pageable pageable = PageRequest.of(page, size);
+        return postRepository.findAllByUserIdAndDeletedAtIsNullOrderByCreatedAtDesc(userId, pageable)
+                .map(this::convertToDto);
     }
 
     private PostDto convertToDto(Post post) {
