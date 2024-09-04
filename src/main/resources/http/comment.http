@@ -1,0 +1,20 @@
+POST localhost:8080/api/posts/19/comments
+content-type: application/json
+Authorization: Basic hyezuu@naver.com qweqwe123
+
+{
+  "userId": 1,
+  "postId": 19,
+  "content": "Comment 1"
+}
+
+### get comments
+GET localhost:8080/api/posts/19/comments
+
+### delete
+DELETE localhost:8080/api/posts/19/comments/9
+Authorization: Basic hyezuu@naver.com qweqwe123
+
+### get my posts
+GET localhost:8080/api/me/comments
+Authorization: Basic hyezuu@naver.com qweqwe123
