@@ -6,6 +6,7 @@ import com.example.ormi5finalteam1.domain.like.Like;
 import com.example.ormi5finalteam1.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @Entity
 @Table(name = "posts")
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Post extends BaseEntity {
@@ -32,6 +34,7 @@ public class Post extends BaseEntity {
     private String content;
 
     @Column(name= "view_count", nullable = false)
+    @Builder.Default
     private int viewCount = 0;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
