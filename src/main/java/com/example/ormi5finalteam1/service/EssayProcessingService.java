@@ -25,7 +25,7 @@ public class EssayProcessingService {
     public ReviewedEssaysResponseDto processEssay(Long essayId) {
         /* 1. DB에서 Essay 가져오기 */
         Essay essay = essayService.getEssayById(essayId);
-        String sendEssayContent = AlanAIRequestPrompt.ESSAY_REVIEW_PROMPT.applyVariables(essay.getContent()); // AI에게 전송할 문장
+        String sendEssayContent = essay.getContent() + AlanAIRequestPrompt.ESSAY_REVIEW_PROMPT.getPromptTemplate(); // AI에게 전송할 문장
 
         /* 2. Essay.content를 Alan에 보내고 응답 받기 */
         String feedback = essayAlanApiService.getApiResponse(sendEssayContent, clientId); // AI에게 받은 문장

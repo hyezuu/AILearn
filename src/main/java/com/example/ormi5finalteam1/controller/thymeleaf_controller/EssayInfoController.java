@@ -24,7 +24,7 @@ public class EssayInfoController {
     public String getEssayEdit(Model model) {
         return "essays/edit";
     }
-    @GetMapping("/review")
+    @GetMapping("/{id}/review")
     public String getEssayReview(Model model) {
         return "essays/review";
     }

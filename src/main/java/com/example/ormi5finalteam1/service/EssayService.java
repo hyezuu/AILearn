@@ -67,6 +67,12 @@ public class EssayService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.ESSAY_NOT_FOUND));
     }
 
+    /** 에세이 상세 조회 */
+    public EssayResponseDto showEssay(Long id) {
+        Essay essayById = getEssayById(id);
+        return convertResponseToDto(essayById);
+    }
+
     /** DTO-Entity 변환 */
     private Essay convertRequestToEntity(EssayRequestDto essayRequestDto) {
 
@@ -83,9 +89,9 @@ public class EssayService {
                essayGuide.getContent()
        );
     }
-
     private EssayResponseDto convertResponseToDto(Essay essay) {
         return EssayResponseDto.builder()
+                .id(essay.getId())
                 .topic(essay.getTopic())
                 .content(essay.getContent())
                 .createdAt(essay.getCreatedAt())

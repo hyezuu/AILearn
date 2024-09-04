@@ -64,7 +64,8 @@ textarea {
     font-weight: 600;
     padding-bottom: 5px;
     float: right;
-    margin-right: 80px;
+    margin-right: 60px;
+    cursor: pointer;
 }
 #back-to-list span {
     font-size: 1.6rem;
@@ -75,6 +76,7 @@ textarea {
     display: flex;
     justify-content: space-between;
     margin-top: 40px;
+    width: 102%;
 }
 /* 삭제 버튼 */
 .delete-button {
@@ -85,7 +87,6 @@ textarea {
     font-weight: 600;
     border: none;
     border-radius: 10px;
-    margin-left: 20px;
 }
 .delete-button:hover {
     background-color: #c61515;

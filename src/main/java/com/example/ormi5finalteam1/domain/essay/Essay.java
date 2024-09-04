@@ -24,7 +24,7 @@ public class Essay extends BaseEntity {
     @Column(nullable = false)
     private String topic;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 5000)
     private String content;
 
 }
