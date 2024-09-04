@@ -1,63 +1,99 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/signup.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/header.css">
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
   <title>회원가입</title>
-  <style>
-    /* 이전 스타일 유지 */
-    .error-message {
-      color: red;
-      font-size: 0.8em;
-    }
-    .success-message {
-      color: green;
-      font-size: 0.8em;
-    }
-  </style>
+
 </head>
 <body>
+<!-- 메뉴 부분 -->
+<header>
+  <h2><a href="#"><img src="/images/ailearn-logo.png" alt="AILEARN" style="width: 80%;"></a></h2>
+  <ul>
+    <li><a href="/login">LOG OUT</a></li>
+    <li>
+      <a href="#" class="mainMenu">MENU v</a>
+      <nav>
+        <a href="/my">마이페이지</a>
+        <a href="/posts">커뮤니티</a>
+        <a href="/vocabulary-list">단어장</a>
+        <a href="/grammar-examples?keyword=">문법예문</a>
+        <a href="/essays">에세이</a>
+      </nav>
+    </li>
+  </ul>
+</header>
+
 <div class="container">
+  <h2>회원가입</h2>
   <div class="signup-form">
-    <h2>회원가입</h2>
-    <form id="signupForm" th:action="@{/signup}" th:object="${createUserRequestDto}" method="post">
-      <div class="form-group">
+    <form id="signupForm" th:action="@{/signup}" th:object="${createUserRequestDto}" method="post"
+          class="signup-form">
+      <div class="form-group-email">
         <label for="email">이메일</label>
         <input type="email" class="form-control" id="email" name="email" th:field="*{email}" required>
         <span id="emailResult"></span>
       </div>
-      <div class="form-group">
+      <button type="submit" class="btn btn-primary btn-block">메일 인증</button>
+      <div class="form-group-nickname">
         <label for="nickname">닉네임</label>
-        <input type="text" class="form-control" id="nickname" name="nickname" th:field="*{nickname}" required>
+        <input type="text" class="form-control" id="nickname" name="nickname" th:field="*{nickname}"
+               required>
         <span id="nicknameResult"></span>
       </div>
+      <button type="submit" class="btn btn-primary btn-block">중복확인</button>
       <div class="form-group">
         <label for="password">비밀번호</label>
-        <input type="password" class="form-control" id="password" name="password" th:field="*{password}" required>
+        <input type="password" class="form-control" id="password" name="password" th:field="*{password}"
+               required>
       </div>
-      <button type="submit" class="btn btn-primary btn-block">가입하기</button>
+      <div class="form-group">
+        <label for="password">비밀번호 확인</label>
+        <input type="password" class="form-control" name="password" th:field="*{password}" required>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">회원가입</button>
+
     </form>
   </div>
+  </form>
+</div>
+<div class="hr-a">
+  <hr/>
+  <a href="" class="login-a">로그인하기</a>
+  <a href="" class="password-a">비밀번호 찾기</a>
+</div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-  $(document).ready(function() {
+  $(document).ready(function () {
     function checkDuplication(field, url, resultSpan) {
       const value = $(field).val();
       if (value) {
         $.ajax({
           url: url,
           type: 'GET',
-          data: { [field.name]: value },
-          success: function(response) {
+          data: {[field.name]: value},
+          success: function (response) {
             if (response) {
               $(resultSpan).text('이미 사용중입니다.').removeClass('success-message').addClass('error-message');
             } else {
               $(resultSpan).text('사용 가능합니다.').removeClass('error-message').addClass('success-message');
             }
           },
-          error: function() {
+          error: function () {
             $(resultSpan).text('확인 중 오류가 발생했습니다.').removeClass('success-message').addClass('error-message');
           }
         });
@@ -66,14 +102,45 @@
       }
     }
 
-    $('#email').on('blur', function() {
+    $('#email').on('blur', function () {
       checkDuplication(this, '/api/email-duplication', '#emailResult');
     });
 
-    $('#nickname').on('blur', function() {
+    $('#nickname').on('blur', function () {
       checkDuplication(this, '/api/nickname-duplication', '#nicknameResult');
     });
   });
 </script>
+<script>
+  $(document).ready(function () {
+    $("a.mainMenu").mouseenter(function () {
+      $("header nav").stop().slideDown();
+    });
+    $("header nav a").mouseenter(function () {
+      $("a.mainMenu").removeClass('act');
+      $(this).parent().prev().addClass('act');
+    });
+    $("header ul").mouseleave(function () {
+      $("a.mainMenu").removeClass('act');
+      $("header nav").stop().slideUp();
+    });
+
+    //휠(스크롤) 위치에 따라 왼쪽메뉴 활성화.
+    $(document).scroll(function () {
+      //브라우저높이
+      const h2 = $(window).height();
+
+      const t1 = $(document).scrollTop();
+
+      const ht = Math.floor(t1 / h1);
+
+      //모든클래스 삭제
+      $("a").removeClass();
+      //해당 메뉴만 클래스 추가
+      $("li").eq(ht).children().addClass("menuOver " + "m" + (ht + 1));
+    });
+  });
+</script>
+
 </body>
 </html>
