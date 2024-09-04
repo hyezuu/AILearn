@@ -23,8 +23,8 @@ h1 {
     text-align: center;
 }
 
-/* 게시글 폼 */
-form {
+/* 에세이 폼 */
+.essay {
     margin: 70px;
     display: flex;
     flex-direction: column;
@@ -62,9 +62,8 @@ label[for="content"] {
 .input-container {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    width: 100%; /* 컨테이너의 전체 너비를 사용 */
-
+    align-items: flex-end;
+    padding: 0 10px;
 }
 
 input[name="title"] {
@@ -126,3 +125,18 @@ textarea {
     background-color: #103889;
 }
 
+#essay-content {
+    border-top: 1px solid #a8a8a8;
+    margin-top: 20px;
+    padding: 50px 10px;
+}
+
+/* 뒤로가기 */
+#back-to-list {
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding-bottom: 5px;
+}
+#back-to-list span {
+    font-size: 1.6rem;
+}

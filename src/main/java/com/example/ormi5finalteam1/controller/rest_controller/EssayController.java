@@ -1,5 +1,6 @@
 package com.example.ormi5finalteam1.controller.rest_controller;
 
+import com.example.ormi5finalteam1.domain.essay.Essay;
 import com.example.ormi5finalteam1.domain.essay.dto.request.EssayRequestDto;
 import com.example.ormi5finalteam1.domain.essay.dto.response.EssayGuideResponseDto;
 import com.example.ormi5finalteam1.domain.essay.dto.response.EssayResponseDto;
@@ -58,9 +59,17 @@ public class EssayController {
     public ResponseEntity<Page<EssayResponseDto>> showMyEssays(
             @AuthenticationPrincipal Provider provider,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "3") int pageSize
+            @RequestParam(defaultValue = "10") int pageSize
     ) {
         Page<EssayResponseDto> essayResponseDtoPages = essayService.showMyEssays(provider, page, pageSize);
         return new ResponseEntity<>(essayResponseDtoPages, HttpStatusCode.valueOf(200));
+    }
+
+    /** 내 에세이 상세 조회 */
+    @GetMapping("/essays/{id}")
+    public ResponseEntity<EssayResponseDto> showEssay(
+            @PathVariable Long id) {
+        EssayResponseDto essayResponseDto = essayService.showEssay(id);
+        return new ResponseEntity<>(essayResponseDto, HttpStatusCode.valueOf(200));
     }
 }

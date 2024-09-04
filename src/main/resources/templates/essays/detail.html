@@ -35,18 +35,21 @@
         </ul>
     </header>
     <!-- 메뉴 부분 끝 -->
-    <h1>에세이</h1>
+    <a href="/essays"><h1>내 에세이</h1></a>
     <!-- 게시글 상세 부분-->
-    <form>
+    <div class="essay">
         <div class="input-container">
-            <input type="text" aria-label="제목" name="title" placeholder="제목">
+            <h2 id="essay-topic">에세이 제목</h2>
+            <p id="essay-date">작성일</p>
         </div>
-        <textarea id="content" name="content"></textarea>
+            <p id="essay-content">에세이 내용</p>
         <div class="buttons">
-            <button>수정하기</button>
-            <button>에세이 첨삭받기</button>
+            <button id="edit">수정하기</button>
+            <button id="review">에세이 첨삭받기</button>
         </div>
-    </form>
+    </div>
 </div>
+
+<script src="/js/essays/detail.js"></script>
 </body>
 </html>

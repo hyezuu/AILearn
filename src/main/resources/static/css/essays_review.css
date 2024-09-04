@@ -56,3 +56,13 @@ section div {
 .edit-button:hover {
     background-color: #103889;
 }
+
+/* 뒤로가기 */
+#back-to-list {
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding-bottom: 5px;
+}
+#back-to-list span {
+    font-size: 1.6rem;
+}

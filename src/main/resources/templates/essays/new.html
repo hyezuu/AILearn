@@ -35,19 +35,22 @@
     </header>
 
     <h1>에세이 작성</h1>
+    <a class="essay-guide" href="/essays/guide">에세이 작성 가이드</a>
     <!-- 에세이 작성 폼-->
-    <form>
-        <label for="title">제목</label>
-        <input type="text" id="title" name="title" required placeholder="제목을 입력해주세요.">
+    <form id="essay-form">
+        <label for="topic">토픽</label>
+        <input type="text" id="topic" name="topic" required placeholder="토픽을 입력해주세요.">
 
         <label for="content">내용</label>
         <textarea id="content" name="content" required placeholder="내용을 입력해주세요."></textarea>
 
         <div class="buttons">
-            <a href="/posts" id="back-to-list"><span>&#60;</span> 뒤로가기</a>
+            <a href="/essays" id="back-to-list"><span>&#60;</span> 에세이 목록</a>
             <button type="submit">등록</button>
         </div>
     </form>
 </div>
+
+<script src="/js/essays/new.js"></script>
 </body>
 </html>

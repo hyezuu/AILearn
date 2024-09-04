@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 public class EssayResponseDto {
+    private Long id;
     private String topic;
     private String content;
     private LocalDateTime createdAt;
