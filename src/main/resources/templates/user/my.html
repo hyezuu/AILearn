@@ -10,13 +10,13 @@
     <link rel="stylesheet" href="/css/my.css">
 <!--    <link rel="stylesheet" href="/css/header.css">-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="/static/js/my.js"></script>
+    <script src="/js/my.js"></script>
 </head>
 <body>
 <div id="layout">
     <!-- 메뉴 부분 -->
     <header>
-        <h2><a href="#"><img src="/images/ailearn-logo.png" alt="AILEARN" style="width: 80%;"></a></h2>
+        <h2><a href="/"><img src="/images/ailearn-logo.png" alt="AILEARN" style="width: 80%;"></a></h2>
         <ul>
             <li id="login-button" style="display: none;"><a href="/login">LOG IN</a></li>
             <li id="signup-button" style="display: none;"><a href="/signup">SIGN UP</a></li>
@@ -129,43 +129,8 @@
         </div>
     </main>
 
-    <script>
-        window.onload = function () {
-            fetch('/api/me')
-                .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    } else {
-                        throw new Error('Network response was not ok');
-                    }
-                })
-                .then(user => {
-                    document.getElementById('logout-button').style.display = 'block';
-                })
-                .catch(error => {
-                    document.getElementById('login-button').style.display = 'block';
-                    document.getElementById('signup-button').style.display = 'block';
-                });
-        };
+<script>
 
-        // 프로필 경험치 바
-        document.addEventListener("DOMContentLoaded", function () {
-            const pointValue = document.getElementById("point-text").textContent;
-            const point = parseInt(pointValue, 10); // point 값을 정수로 변환
-            const progressBar = document.getElementById("progress-bar");
-            const pointDisplay = document.getElementById("point-display");
-
-            // 포인트에 따른 진행 바의 너비를 계산 (포인트가 0에서 10 사이이므로 10%씩 증가)
-            const progressPercentage = (point / 10) * 100;
-
-            // 진행 바 업데이트
-            progressBar.style.width = progressPercentage + "%";
-
-            // point 값을 progress-bar의 오른쪽 끝 부분에 표시
-            pointDisplay.style.left = progressPercentage + "%";
-            pointDisplay.textContent = `${point} p`;
-        });
-    </script>
-
+</script>
 </body>
 </html>
