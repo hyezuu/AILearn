@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -55,7 +56,7 @@ public class EssayService {
 
     /** 내 에세이 목록 조회 */
     public Page<EssayResponseDto> showMyEssays(Provider provider, int page, int pageSize) {
-            Pageable pageable = PageRequest.of(page,pageSize);
+            Pageable pageable = PageRequest.of(page,pageSize, Sort.by("createdAt").descending());
             Page<Essay> essayByUserId = essayRepository.findByUserId(provider.id(), pageable);
             return essayByUserId.map(this::convertResponseToDto);
     }
