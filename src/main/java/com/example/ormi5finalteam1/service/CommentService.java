@@ -9,6 +9,9 @@ import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,7 +45,7 @@ public class CommentService {
 
     // 게시글에 작성된 댓글들을 목록으로 볼 수 있다.
     public List<CommentDto> getCommentsByPostId(Long postId) {
-        return commentRepository.findByPostId(postId).stream()
+        return commentRepository.findByPostIdOrderByCreatedAtAsc(postId).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
@@ -59,10 +62,11 @@ public class CommentService {
     }
 
     // 사용자는 자신이 작성한 댓글들을 목록으로 볼 수 있다.
-    public List<CommentDto> getCommentsByUserId(Long userId) {
-        return commentRepository.findByUserId(userId).stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+    public Page<CommentDto> getCommentsByUserId(int page, int size, Provider provider) {
+        User user = userService.getUser(provider.id());
+        Pageable pageable = PageRequest.of(page, size);
+        return commentRepository.findByUserIdOrderByCreatedAtDesc(user.getId(), pageable)
+                .map(this::convertToDto);
     }
 
     private CommentDto convertToDto(Comment comment) {
