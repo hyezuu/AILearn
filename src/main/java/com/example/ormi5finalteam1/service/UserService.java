@@ -6,6 +6,7 @@ import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.domain.user.dto.CreateUserRequestDto;
 import com.example.ormi5finalteam1.repository.UserRepository;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,12 +20,13 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailVerificationService emailVerificationService;
 
     @Transactional
     public void createUser(CreateUserRequestDto requestDto) {
 
-        if (isDuplicateEmail(requestDto.email())) {
-            throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
+        if (!emailVerificationService.isEmailVerified(requestDto.email())) {
+            throw new BusinessException(ErrorCode.EMAIL_NOT_VERIFIED);
         }
         if (isDuplicateNickname(requestDto.nickname())) {
             throw new BusinessException(ErrorCode.DUPLICATE_NICKNAME);
@@ -37,6 +39,15 @@ public class UserService implements UserDetailsService {
             .build();
 
         repository.save(user);
+        emailVerificationService.clearVerificationStatus(requestDto.email());
+    }
+
+    @Transactional
+    public void requestEmailVerification(String email) throws MessagingException {
+        if (isDuplicateEmail(email)) {
+            throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
+        }
+        emailVerificationService.sendVerificationEmail(email);
     }
 
     public boolean isDuplicateEmail(String email) {
