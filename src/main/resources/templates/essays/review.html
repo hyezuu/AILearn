@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,30 +9,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="/css/essay-review.css">
-    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/essays_review.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/js/main.js"></script>
 </head>
 <body>
 <div id="layout">
     <!-- 메뉴 부분 -->
-    <header>
-        <h2><a href="#"><img src="/images/ailearn-logo.png" alt="AILEARN" style="width: 80%;"></a></h2>
-        <ul>
-            <li><a href="/login">LOG OUT</a></li>
-            <li>
-                <a href="#" class="mainMenu">MENU v</a>
-                <nav>
-                    <a href="/my">마이페이지</a>
-                    <a href="/posts">커뮤니티</a>
-                    <a href="/vocabulary-list">단어장</a>
-                    <a href="/grammar-examples?keyword=">문법예문</a>
-                    <a href="/essays">에세이</a>
-                </nav>
-            </li>
-        </ul>
-    </header>
+    <header th:replace="~{/layout/header::header}"></header>
     <!-- 메뉴 부분 끝 -->
     <h1>에세이 첨삭</h1>
 
@@ -44,6 +28,7 @@
                 <textarea id="content" name="content"></textarea>
             </div>
         </section>
+        <h2>&#8594;</h2>
         <section>
             <h2>첨삭내용</h2>
             <div>

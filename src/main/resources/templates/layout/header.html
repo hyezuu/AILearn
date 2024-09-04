@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<header th:fragment="header">
+    <style>
+        * {
+            margin: auto 0;
+            padding: 0;
+        }
+        #layout {
+            width: 100%;
+            height: 100%;
+        }
+        a {
+            text-decoration: none;
+            color: black;
+        }
+        header {
+            display: flex;
+            padding-right: 30px;
+            background: white;
+            position: fixed;
+            width: 100%;
+            filter:drop-shadow(0 1px 3px dodgerblue);
+            z-index: 1000;
+        }
+        header h2 {
+            flex: 1;
+        }
+        header h2 a {
+            width: 200px;
+            height: 40px;
+            display: block;
+        }
+        /* 로고 */
+        header img {
+            margin-top: 5px;
+            margin-left: 300px;
+        }
+        /* 로그인 */
+        header li:first-child a {
+            font-weight: 600;
+            color: #777;
+        }
+        header li:nth-child(2) a {
+            font-weight: 600;
+            color: #777;
+        }
+        /* 메뉴 화살표 */
+        header li span {
+            margin-bottom: 5px;
+        }
+        /*메뉴*/
+        header ul {
+            flex: 0.3;
+            list-style: none;
+            display: flex;
+            padding-top: 2px;
+            width: 200px;
+        }
+        header li { flex: 2; position: relative;}
+        header span { margin-top: 7px; display: inline-block; }
+        /*메인메뉴*/
+        a.mainMenu {
+            color: #777;
+            font-size: 1rem;
+            font-weight: 600;
+            display: block;
+            padding: 6px;
+            text-align: center;
+        }
+        a.mainMenu:hover, a.mainMenu.act { color: #464646; }
+        /*서브메뉴*/
+        header nav {
+            background: #f9f9f9;
+            top: 35px;
+            position: absolute;
+            width: 100%;
+            display: none;
+            z-index: 10;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+        header nav a {
+
+            display: block;
+            padding: 4px;
+            text-align: center;
+        }
+        header nav a:hover {
+            background: #e1e1e1;
+            font-weight: bold;
+            color: #000000;
+        }
+        header nav a:last-child {
+            display: none;
+        }
+    </style>
+    <h2><a href="/"><img src="/images/ailearn-logo.png" alt="AILEARN" style="width: 80%;"></a></h2>
+    <ul>
+        <li id="login-button" style="display: none;"><a href="/login">LOG IN</a></li>
+        <li id="signup-button" style="display: none;"><a href="/signup">SIGN UP</a></li>
+        <li id="logout-button" style="display: none;"><a href="/logout">LOG OUT</a></li>
+        <li>
+            <a href="#" class="mainMenu">MENU v</a>
+            <nav>
+                <a href="/my">마이페이지</a>
+                <a href="/posts">커뮤니티</a>
+                <a href="/vocabulary-list">단어장</a>
+                <a href="/grammar-examples?keyword=">문법예문</a>
+                <a href="/essays">에세이</a>
+            </nav>
+        </li>
+    </ul>
+</header>
+</html>
