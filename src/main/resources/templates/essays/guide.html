@@ -9,45 +9,146 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="/css/posts_new.css">
-    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/essays_guide.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/essays/guide.js" ></script>
     <script src="/js/main.js"></script>
 </head>
 <body>
 <div id="layout">
     <!-- 메뉴 부분 -->
-    <header>
-        <h2><a href="#"><img src="/images/ailearn-logo.png" alt="AILEARN" style="width: 80%;"></a></h2>
-        <ul>
-            <li><a href="/login">LOG OUT</a></li>
-            <li>
-                <a href="#" class="mainMenu">MENU v</a>
-                <nav>
-                    <a href="/my">마이페이지</a>
-                    <a href="/posts">커뮤니티</a>
-                    <a href="/vocabulary-list">단어장</a>
-                    <a href="/grammar-examples?keyword=">문법예문</a>
-                    <a href="/essays">에세이</a>
-                </nav>
-            </li>
-        </ul>
-    </header>
+    <header th:replace="~{/layout/header::header}"></header>
+    <!-- 메뉴 부분 끝 -->
 
-    <h1>에세이 가이드</h1>
-    <!-- 에세이 작성 폼-->
-    <form>
-        <label for="title">제목</label>
-        <input type="text" id="title" name="title" required placeholder="제목을 입력해주세요.">
-
-        <label for="content">내용</label>
-        <textarea id="content" name="content" required placeholder="내용을 입력해주세요."></textarea>
-
-        <div class="buttons">
-            <a href="/posts" id="back-to-list"><span>&#60;</span> 뒤로가기</a>
-            <button type="submit">등록</button>
-        </div>
-    </form>
+    <h1>에세이 작성 가이드</h1>
+    <div class="guide">
+        <section class="sec1">
+            <div>
+                <a href="" title="click"><img src="/images/bronze.png" alt="A1"></a>
+                <a href="" title="click"><img src="/images/silver.png" alt="A2"></a>
+                <h2>A1~A2</h2>
+            </div>
+            <div>
+                <div>
+                    <p> &lt; 목표 &gt;
+                        <br>
+                        - 간단한 문장으로 자신의 생각 표현하기
+                        <br>
+                        - 기본적인 문법 구조 사용하기
+                        <br>
+                        - 일상적인 주제에 대해 쓰기
+                    </p>
+                </div>
+                <div>
+                    <p> &lt; 가이드라인 &gt;
+                        <br>
+                        1. 길이: 50-100 단어
+                        <br>
+                        2. 구조: 간단한 서론, 본론, 결론 (각 1-2문장)
+                        <br>
+                        3. 문법: 현재 시제 위주, 간단한 과거 시제 사용
+                        <br>
+                        4. 어휘: 기본적인 일상 어휘 사용5. 주제: 가족, 취미, 일상생활 등
+                    </p>
+                </div>
+                <div>
+                    <p>&lt; 평가 기준 &gt;
+                        <br>
+                        - 기본적인 문장 구조의 정확성
+                        <br>
+                        - 간단한 아이디어 전달 능력
+                        <br>
+                        - 기초 어휘의 적절한 사용
+                    </p>
+                </div>
+            </div>
+        </section>
+        <section class="sec2">
+            <div>
+                <a href="" title="click"><img src="/images/gold.png" alt="B1"></a>
+                <a href="" title="click"><img src="/images/platinum.png" alt="B2"></a>
+                <h2>B1~B2</h2>
+            </div>
+            <div>
+                <div>
+                    <p> &lt; 목표 &gt;
+                        <br>
+                        - 복잡한 문장 구조 사용하기
+                        <br>
+                        - 논리적인 단락 구성하기
+                        <br>
+                        - 다양한 주제에 대한 의견 제시하기
+                    </p>
+                </div>
+                <div>
+                    <p> &lt; 가이드라인 &gt;
+                        <br>
+                        1. 길이: 150-250 단어
+                        <br>
+                        2. 구조: 명확한 서론, 2-3개의 본론 단락, 결론
+                        <br>
+                        3. 문법: 다양한 시제 사용, 조건문, 수동태 도입
+                        <br>
+                        4. 어휘: 주제에 맞는 특정 어휘, 동의어 활용
+                        <br>
+                        5. 주제: 사회 문제, 문화 비교, 환경 등
+                    </p>
+                </div>
+                <div>
+                    <p>&lt; 평가 기준 &gt;
+                        <br>
+                        - 문장 구조의 다양성과 정확성
+                        <br>
+                        - 논리적 흐름과 단락 구성
+                        <br>
+                        - 주제에 대한 이해도와 분석력
+                    </p>
+                </div>
+            </div>
+        </section>
+        <section class="sec3">
+            <div>
+                <a href="" title="click"><img src="/images/diamond.png" alt="C1"></a>
+                <a href="" title="click"><img src="/images/diamond 2.png" alt="C2"></a>
+                <h2>C1~C2</h2>
+            </div>
+            <div>
+                <div>
+                    <p> &lt; 목표 &gt;
+                        <br>
+                        - 복잡한 아이디어를 명확하게 표현하기
+                        <br>
+                        - 학술적/전문적 글쓰기 기술 습득하기
+                        <br>
+                        - 비판적 사고와 분석 능력 보여주기
+                    </p>
+                </div>
+                <div>
+                    <p> &lt; 가이드라인 &gt;
+                        <br>
+                        1. 길이: 300-500 단어
+                        <br>
+                        2. 구조: 체계적인 서론, 본론, 결론
+                        <br>
+                        3. 문법: 분사 구문, 가정법 등 사용
+                        <br>
+                        4. 어휘: 학술/전문 어휘, 관용구, 정교한 표현
+                        <br>
+                        5. 주제: 글로벌 이슈, 추상적, 학술적 주제 등
+                    </p>
+                </div>
+                <div>
+                    <p>&lt; 평가 기준 &gt;
+                        <br>
+                        - 문장 구조의 다양성과 정확성
+                        <br>
+                        - 논리적 흐름과 단락 구성
+                        <br>
+                        - 주제에 대한 이해도와 분석력
+                    </p>
+                </div>
+            </div>
+        </section>
 </div>
 </body>
 </html>

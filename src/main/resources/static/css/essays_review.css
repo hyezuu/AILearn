@@ -18,7 +18,7 @@ a {
 
 h1 {
     margin: 80px;
-    margin-bottom: 50;
+    margin-bottom: 50px;
     display: inline-block;
     text-align: center;
 }
@@ -27,7 +27,7 @@ h1 {
 main {
     display: flex;
     gap: 60px;
-    margin: auto 350px;
+    margin: auto 400px;
 }
 main h2 {
     text-align: center;
@@ -52,17 +52,8 @@ section div {
     font-weight: 600;
     border: none;
     border-radius: 10px;
+    margin-right: 350px;
 }
 .edit-button:hover {
     background-color: #103889;
-}
-
-/* 뒤로가기 */
-#back-to-list {
-    font-size: 1.1rem;
-    font-weight: 600;
-    padding-bottom: 5px;
-}
-#back-to-list span {
-    font-size: 1.6rem;
 }

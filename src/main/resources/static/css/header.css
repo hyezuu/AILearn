@@ -26,6 +26,7 @@ header {
     position: fixed;
     width: 100%;
     filter:drop-shadow(0 1px 3px dodgerblue);
+    z-index: 1000;
 }
 header h2 {
     flex: 1;
