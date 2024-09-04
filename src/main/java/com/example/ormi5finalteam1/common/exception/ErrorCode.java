@@ -19,7 +19,12 @@ public enum ErrorCode {
     NEW_VOCABULARIES_NOT_FOUND(404,"No new vocabulary found"),
     VOCABULARY_NOT_FOUND(404,"No vocabulary found"),
     POST_NOT_FOUND(404, "Post not found"),
-    COMMENT_NOT_FOUND(404, "Comment not found");
+    COMMENT_NOT_FOUND(404, "Comment not found"),
+    EMAIL_NOT_VERIFIED(400, "Email is not verified"),
+    VERIFICATION_CODE_NOT_FOUND(404, "Verification code not found"),
+    VERIFICATION_CODE_EMAIL_MISMATCH(400, "Verification code email is mismatch"),
+    VERIFICATION_CODE_EXPIRED(400, "Verification code is expired");
+
 
     private final int status;
     private final String message;
