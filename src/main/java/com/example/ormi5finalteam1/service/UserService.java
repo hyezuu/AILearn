@@ -5,7 +5,11 @@ import com.example.ormi5finalteam1.common.exception.ErrorCode;
 import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.domain.user.dto.CreateUserRequestDto;
+import com.example.ormi5finalteam1.domain.user.dto.UpdateUserRequestDto;
 import com.example.ormi5finalteam1.repository.UserRepository;
+import jakarta.mail.MessagingException;
+import jakarta.validation.Valid;
+import java.security.SecureRandom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,14 +23,15 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     @Transactional
     public void createUser(CreateUserRequestDto requestDto) {
 
-        if (isDuplicateEmail(requestDto.email())) {
-            throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
+        if (!emailService.isEmailVerified(requestDto.email())) {
+            throw new BusinessException(ErrorCode.EMAIL_NOT_VERIFIED);
         }
-        if (isDuplicateNickname(requestDto.nickname())) {
+        if (existByNickname(requestDto.nickname())) {
             throw new BusinessException(ErrorCode.DUPLICATE_NICKNAME);
         }
 
@@ -37,13 +42,22 @@ public class UserService implements UserDetailsService {
             .build();
 
         repository.save(user);
+        emailService.clearVerificationStatus(requestDto.email());
     }
 
-    public boolean isDuplicateEmail(String email) {
+    @Transactional
+    public void requestEmailVerification(String email) throws MessagingException {
+        if (existByEmail(email)) {
+            throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
+        }
+        emailService.sendVerificationEmail(email);
+    }
+
+    public boolean existByEmail(String email) {
         return repository.existsByEmail(email);
     }
 
-    public boolean isDuplicateNickname(String nickname) {
+    public boolean existByNickname(String nickname) {
         return repository.existsByNickname(nickname);
     }
 
@@ -73,5 +87,44 @@ public class UserService implements UserDetailsService {
         user.checkAndAddAttendancePoint();
         user.updateLoginTime();
         return user;
+    }
+
+    @Transactional
+    public void sendTemporaryPassword(String email) throws MessagingException {
+        User user = repository.findByEmail(email)
+            .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        String tempPassword = generateTemporaryPassword();
+        user.updatePassword(passwordEncoder.encode(tempPassword));
+        emailService.sendTemporaryPasswordEmail(email, tempPassword);
+    }
+
+    private String generateTemporaryPassword() {
+        SecureRandom random = new SecureRandom();
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < 10; i++) {
+            int randomIndex = random.nextInt(chars.length());
+            sb.append(chars.charAt(randomIndex));
+        }
+
+        return sb.toString();
+    }
+
+    @Transactional
+    public void updateUser(long id, @Valid UpdateUserRequestDto requestDto) {
+        User user = getUser(id);
+
+        if (!user.getNickname().equals(requestDto.nickname())) {
+            if (existByNickname(requestDto.nickname())) {
+                throw new BusinessException(ErrorCode.DUPLICATE_NICKNAME);
+            }
+            user.updateNickname(requestDto.nickname());
+        }
+
+        if (requestDto.password() != null && !requestDto.password().isEmpty()) {
+            user.updatePassword(passwordEncoder.encode(requestDto.password()));
+        }
     }
 }

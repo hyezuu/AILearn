@@ -3,6 +3,7 @@ package com.example.ormi5finalteam1.common.advice;
 import com.example.ormi5finalteam1.common.exception.AlanAIClientException;
 import com.example.ormi5finalteam1.common.exception.BusinessException;
 import com.example.ormi5finalteam1.common.response.ErrorResponse;
+import jakarta.mail.MessagingException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -95,6 +96,13 @@ public class GlobalExceptionAdvice {
   @ExceptionHandler(AlanAIClientException.class)
   public ResponseEntity<ErrorResponse> handleAlanAIClientException(AlanAIClientException e) {
     log.warn("Alan AI client exception occurred: ", e.getMessage());
+    ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.BAD_REQUEST, e.getMessage());
+    return ResponseEntity.badRequest().body(errorResponse);
+  }
+
+  @ExceptionHandler(MessagingException.class)
+  public ResponseEntity<ErrorResponse> handleMessagingException(MessagingException e) {
+    log.warn("MessagingException occurred: ", e);
     ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.BAD_REQUEST, e.getMessage());
     return ResponseEntity.badRequest().body(errorResponse);
   }

@@ -2,9 +2,9 @@ POST localhost:8080/api/signup
 content-type: application/json
 
 {
-  "email": "hyezuu@naver.com",
+  "email": "duudu0704@gmail.com",
   "password": "qweqwe123",
-  "nickname": "혜주"
+  "nickname": "혜주2"
 }
 
 ### get me
@@ -14,13 +14,32 @@ Authorization: Basic hyezuu@naver.com qweqwe123
 //default size = 20, page=0 부터 시작입니다 기본적으로 최신순 조회입니다 (최근에 추가된게 앞으로나와요!)
 ### get my voca
 GET localhost:8080/api/me/vocabulary-list
-Authorization: Basic hyezuu@naver.com qweqwe123
+Authorization: Basic duudu0704@gmail.com qweqwe123
 
 ### get my voca (페이지네이션)
 GET localhost:8080/api/me/vocabulary-list?page=0&size=10
 Authorization: Basic hyezuu@naver.com qweqwe123
 
-### check email
+### post email verification (이메일 전송!)
+POST localhost:8080/api/request-verification?email=duudu0704@gmail.com
+
+### post email verification code (이메일, 인증코드 다시 응답하기)
+POST localhost:8080/api/verify-email?email=duudu0704@gmail.com&code=253312
+
+### get temp password (임시비밀번호 발급)
+GET localhost:8080/api/auth/password?email=duudu0704@gmail.com
+
+### put myinfo (유저정보수정)
+PUT localhost:8080/api/me
+Authorization: Basic duudu0704@gmail.com qweqwe123
+content-type: application/json
+
+{
+  "password": "qweqwe123",
+  "nickname": "혜주1"
+}
+
+### check email (이메일 중복검사)
 GET localhost:8080/api/email-duplication?email=hyezuu@naver.com
 
 ### check nickname

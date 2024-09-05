@@ -166,4 +166,12 @@ public class User extends BaseEntity implements UserDetails {
         this.isReadyForUpgrade = b;
     }
 
+    public void updatePassword(String password) {
+        this.password = password;
+    }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
 }
