@@ -3,9 +3,12 @@ package com.example.ormi5finalteam1.controller.rest_controller;
 import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.domain.user.dto.CreateUserRequestDto;
 import com.example.ormi5finalteam1.domain.vocabulary.dto.MyVocabularyListResponseDto;
+import com.example.ormi5finalteam1.service.EmailVerificationService;
 import com.example.ormi5finalteam1.service.UserService;
 import com.example.ormi5finalteam1.service.VocabularyListService;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +29,7 @@ public class UserController {
 
     private final UserService userService;
     private final VocabularyListService vocabularyListService;
+    private final EmailVerificationService emailVerificationService;
 
     @GetMapping("/email-duplication")
     public boolean checkEmail(@RequestParam String email) {
@@ -50,7 +54,6 @@ public class UserController {
     @GetMapping("/me/vocabulary-list")
     public Page<MyVocabularyListResponseDto> getUserVocabularies(
         @AuthenticationPrincipal Provider provider,
-//        @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC)
         Pageable pageable) {
         return vocabularyListService.getMyVocabularies(provider, pageable);
     }
@@ -60,4 +63,15 @@ public class UserController {
         userService.delete(provider);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/request-verification")
+    public void requestEmailVerification(@RequestParam @Email String email) throws MessagingException {
+        userService.requestEmailVerification(email);
+    }
+
+    @PostMapping("/verify-email")
+    public void verifyEmail(@RequestParam String email, @RequestParam String code) {
+        emailVerificationService.verifyCode(email, code);
+    }
+
 }
