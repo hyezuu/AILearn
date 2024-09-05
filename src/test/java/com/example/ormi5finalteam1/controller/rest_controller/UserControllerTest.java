@@ -63,7 +63,7 @@ class UserControllerTest {
     void checkEmail_은_해당_email이_존재할_시_true_를_반환한다() throws Exception {
         //given
         String email = "test@test.com";
-        when(userService.isDuplicateEmail(anyString())).thenReturn(true);
+        when(userService.existByEmail(anyString())).thenReturn(true);
         //when
         ResultActions actions
             = mockMvc.perform(
@@ -80,7 +80,7 @@ class UserControllerTest {
     void checkEmail_은_해당_email이_존재하지_않을_시_false_를_반환한다() throws Exception {
         //given
         String email = "test@test.com";
-        when(userService.isDuplicateEmail(anyString())).thenReturn(false);
+        when(userService.existByEmail(anyString())).thenReturn(false);
         //when
         ResultActions actions
             = mockMvc.perform(
@@ -124,7 +124,7 @@ class UserControllerTest {
     @Test
     void checkNickname_은_해당_nickname이_존재할_시_true_를_반환한다() throws Exception {
         //given
-        when(userService.isDuplicateNickname(anyString())).thenReturn(true);
+        when(userService.existByNickname(anyString())).thenReturn(true);
         //when
         ResultActions actions
             = mockMvc.perform(
@@ -140,7 +140,7 @@ class UserControllerTest {
     @Test
     void checkEmail_은_해당_nickname이_존재하지_않을_시_false_를_반환한다() throws Exception {
         //given
-        when(userService.isDuplicateNickname(anyString())).thenReturn(false);
+        when(userService.existByNickname(anyString())).thenReturn(false);
         //when
         ResultActions actions
             = mockMvc.perform(

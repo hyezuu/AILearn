@@ -92,16 +92,6 @@ class UserServiceTest {
     }
 
     @Test
-    void isDuplicateEmail_은_해당_email_이_있으면_true_를_반환한다() {
-        //given
-        when(repository.existsByEmail(anyString())).thenReturn(true);
-        //when
-        boolean result = userService.isDuplicateEmail("test@test.com");
-        //then
-        assertThat(result).isTrue();
-    }
-
-    @Test
     void requestEmailVerification_은_중복된_email이_없을_때_이메일을_전송한다() throws MessagingException {
         // given
         String email = "test@test.com";
@@ -126,31 +116,41 @@ class UserServiceTest {
     }
 
     @Test
-    void isDuplicateEmail_은_해당_email_이_없으면_false_를_반환한다() {
+    void existByEmail_은_해당_email_이_있으면_true_를_반환한다() {
         //given
-        when(repository.existsByEmail(anyString())).thenReturn(false);
+        when(repository.existsByEmail(anyString())).thenReturn(true);
         //when
-        boolean result = userService.isDuplicateEmail("test@test.com");
-        //then
-        assertThat(result).isFalse();
-    }
-
-    @Test
-    void isDuplicateEmail_은_해당_nickname_이_있으면_true_를_반환한다() {
-        //given
-        when(repository.existsByNickname(anyString())).thenReturn(true);
-        //when
-        boolean result = userService.isDuplicateNickname("test");
+        boolean result = userService.existByEmail("test@test.com");
         //then
         assertThat(result).isTrue();
     }
 
     @Test
-    void isDuplicateEmail_은_해당_nickname_이_없으면_true_를_반환한다() {
+    void existByEmail_은_해당_email_이_없으면_false_를_반환한다() {
+        //given
+        when(repository.existsByEmail(anyString())).thenReturn(false);
+        //when
+        boolean result = userService.existByEmail("test@test.com");
+        //then
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    void existByNickname_은_해당_nickname_이_있으면_true_를_반환한다() {
+        //given
+        when(repository.existsByNickname(anyString())).thenReturn(true);
+        //whe
+        boolean result = userService.existByNickname("test");
+        //then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void existByNickname_은_해당_nickname_이_없으면_true_를_반환한다() {
         //given
         when(repository.existsByNickname(anyString())).thenReturn(true);
         //when
-        boolean result = userService.isDuplicateNickname("test");
+        boolean result = userService.existByNickname("test");
         //then
         assertThat(result).isTrue();
     }
