@@ -8,7 +8,7 @@ public record MyVocabularyListResponseDto(
     String word,
     String meaning,
     String exampleSentence,
-    String Grade,
+    String grade,
     LocalDateTime createdAt
 ){
     public static MyVocabularyListResponseDto from(VocabularyListVocabulary vlv) {
