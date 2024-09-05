@@ -75,12 +75,14 @@ class UserServiceTest {
         //given
         CreateUserRequestDto requestDto
             = new CreateUserRequestDto("test@test.com", "nickname", "password");
-        when(repository.existsByNickname(anyString())).thenReturn(false);
+        when(emailVerificationService.isEmailVerified(anyString())).thenReturn(true);
         when(repository.existsByNickname(anyString())).thenReturn(true);
         //when & then
         assertThatThrownBy(() -> userService.createUser(requestDto)).isInstanceOf(
                 BusinessException.class)
             .hasFieldOrPropertyWithValue("errorCode", ErrorCode.DUPLICATE_NICKNAME);
+        verify(repository,never()).save(any(User.class));
+        verify(emailVerificationService,never()).clearVerificationStatus(anyString());
     }
 
     @Test
