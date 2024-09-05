@@ -5,8 +5,10 @@ import com.example.ormi5finalteam1.common.exception.ErrorCode;
 import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.domain.user.dto.CreateUserRequestDto;
+import com.example.ormi5finalteam1.domain.user.dto.UpdateUserRequestDto;
 import com.example.ormi5finalteam1.repository.UserRepository;
 import jakarta.mail.MessagingException;
+import jakarta.validation.Valid;
 import java.security.SecureRandom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -110,4 +112,19 @@ public class UserService implements UserDetailsService {
         return sb.toString();
     }
 
+    @Transactional
+    public void updateUser(long id, @Valid UpdateUserRequestDto requestDto) {
+        User user = getUser(id);
+
+        if (!user.getNickname().equals(requestDto.nickname())) {
+            if (existByNickname(requestDto.nickname())) {
+                throw new BusinessException(ErrorCode.DUPLICATE_NICKNAME);
+            }
+            user.updateNickname(requestDto.nickname());
+        }
+
+        if (requestDto.password() != null && !requestDto.password().isEmpty()) {
+            user.updatePassword(passwordEncoder.encode(requestDto.password()));
+        }
+    }
 }

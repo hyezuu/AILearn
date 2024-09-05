@@ -170,4 +170,8 @@ public class User extends BaseEntity implements UserDetails {
         this.password = password;
     }
 
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
 }
