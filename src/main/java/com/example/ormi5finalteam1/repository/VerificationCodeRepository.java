@@ -7,7 +7,7 @@ public interface VerificationCodeRepository {
 
     VerificationCode save(VerificationCode verificationCode);
 
-    Optional<VerificationCode> findByCode(String code);
+    Optional<VerificationCode> findByEmail(String email);
 
-    void remove(String code);
+    void remove(String email);
 }

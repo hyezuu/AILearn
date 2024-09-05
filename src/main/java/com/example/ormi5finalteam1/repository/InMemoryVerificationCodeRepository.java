@@ -13,17 +13,17 @@ public class InMemoryVerificationCodeRepository implements VerificationCodeRepos
 
     @Override
     public VerificationCode save(VerificationCode verificationCode) {
-        repository.put(verificationCode.getCode(), verificationCode);
+        repository.put(verificationCode.getEmail(), verificationCode);
         return verificationCode;
     }
 
     @Override
-    public Optional<VerificationCode> findByCode(String code) {
-        return Optional.ofNullable(repository.get(code));
+    public Optional<VerificationCode> findByEmail(String email) {
+        return Optional.ofNullable(repository.get(email));
     }
 
     @Override
-    public void remove(String code) {
-        repository.remove(code);
+    public void remove(String email) {
+        repository.remove(email);
     }
 }
