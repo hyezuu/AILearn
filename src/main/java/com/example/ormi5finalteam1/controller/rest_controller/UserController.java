@@ -70,7 +70,7 @@ public class UserController {
     }
 
     @PostMapping("/verify-email")
-    public void verifyEmail(@RequestParam String email, @RequestParam String code) {
+    public void verifyEmail(@RequestParam @Email String email, @RequestParam String code) {
         emailVerificationService.verifyCode(email, code);
     }
 
