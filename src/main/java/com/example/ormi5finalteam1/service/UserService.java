@@ -7,6 +7,7 @@ import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.domain.user.dto.CreateUserRequestDto;
 import com.example.ormi5finalteam1.repository.UserRepository;
 import jakarta.mail.MessagingException;
+import java.security.SecureRandom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,12 +21,12 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
-    private final EmailVerificationService emailVerificationService;
+    private final EmailService emailService;
 
     @Transactional
     public void createUser(CreateUserRequestDto requestDto) {
 
-        if (!emailVerificationService.isEmailVerified(requestDto.email())) {
+        if (!emailService.isEmailVerified(requestDto.email())) {
             throw new BusinessException(ErrorCode.EMAIL_NOT_VERIFIED);
         }
         if (existByNickname(requestDto.nickname())) {
@@ -39,7 +40,7 @@ public class UserService implements UserDetailsService {
             .build();
 
         repository.save(user);
-        emailVerificationService.clearVerificationStatus(requestDto.email());
+        emailService.clearVerificationStatus(requestDto.email());
     }
 
     @Transactional
@@ -47,7 +48,7 @@ public class UserService implements UserDetailsService {
         if (existByEmail(email)) {
             throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
         }
-        emailVerificationService.sendVerificationEmail(email);
+        emailService.sendVerificationEmail(email);
     }
 
     public boolean existByEmail(String email) {
@@ -85,4 +86,28 @@ public class UserService implements UserDetailsService {
         user.updateLoginTime();
         return user;
     }
+
+    @Transactional
+    public void sendTemporaryPassword(String email) throws MessagingException {
+        User user = repository.findByEmail(email)
+            .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        String tempPassword = generateTemporaryPassword();
+        user.updatePassword(passwordEncoder.encode(tempPassword));
+        emailService.sendTemporaryPasswordEmail(email, tempPassword);
+    }
+
+    private String generateTemporaryPassword() {
+        SecureRandom random = new SecureRandom();
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < 10; i++) {
+            int randomIndex = random.nextInt(chars.length());
+            sb.append(chars.charAt(randomIndex));
+        }
+
+        return sb.toString();
+    }
+
 }
