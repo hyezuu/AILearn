@@ -6,9 +6,10 @@
     <title>My Page</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap"
+          rel="stylesheet">
     <link rel="stylesheet" href="/css/my.css">
-<!--    <link rel="stylesheet" href="/css/header.css">-->
+    <!--    <link rel="stylesheet" href="/css/header.css">-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/js/my.js"></script>
 </head>
@@ -19,101 +20,171 @@
     <!-- 메뉴 부분 끝 -->
 </div>
 
-    <main>
-        <div class="container">
-            <h1>마이페이지</h1>
+<main>
+    <div class="container">
+        <h1>마이페이지</h1>
 
-            <div class="my-page-list">
-                <a href="">회원정보</a>
-                <a href="/my/posts">내 게시글 목록</a>
-                <a href="/my/edit">회원정보 변경</a>
-            </div>
+        <div class="my-page-list">
+            <a href="">회원정보</a>
+            <a href="/my/posts">내 게시글 목록</a>
+            <a href="/my/edit">회원정보 변경</a>
+        </div>
 
-            <div class="my-page">
-                <div class="user-info" th:object="${user}">
-                    <div class="user-profile-progress">
-                        <img src="/images/profile.png" alt="Profile Image" style="width: 160px">
-                        <div class="user-info-middle">
-                            <div class="user-info-title">
-                                <span th:text="${user.nickname}">user_id</span>
-                                <span><span>Lv.</span><span th:text="${user.level}"></span></span>
+        <div class="my-page">
+            <div class="user-info" th:object="${user}">
+                <div class="user-profile-progress">
+                    <img src="/images/profile.png" alt="Profile Image" style="width: 160px">
+                    <div class="user-info-middle">
+                        <div class="user-info-title">
+                            <span th:text="${user.nickname}">user_id</span>
+                            <span><span>Lv.</span><span id="user-level" th:text="${user.level}"></span></span>
+                        </div>
+                        <div>
+                            <div class="progress-container">
+                                <span id="point-display" class="point-display"></span>
+                                <div class="progress-bar" id="progress-bar"></div>
                             </div>
-                            <div>
-                                <div class="progress-container">
-                                    <span id="point-display" class="point-display"></span>
-                                    <div class="progress-bar" id="progress-bar"></div>
-                                </div>
-                                <div class="point-info">
-                                    <span id="point-text" th:text="${user.point}"></span>
-                                    <span>0%</span>
-                                    <span>100%</span>
-                                </div>
+                            <div class="point-info">
+                                <span id="point-text" th:text="${user.point}"></span>
+                                <span>0%</span>
+                                <span>100%</span>
                             </div>
                         </div>
                     </div>
-                    <div class="user-info-right">
-                        <p class="user-grade-box">
-                            <span class="user-grade-text">등급:</span><span class="user-grade"
-                                                                          th:text="${userGrade}"></span>
-                        </p>
-                        <a class="href-button" href="/tests"> 등급 테스트 하러 가기 </a>
-                    </div>
                 </div>
-            </div>
-
-            <div class="my-study">
-                <div>
-                    <h2>내 단어장</h2>
-                    <div class="table-box">
-                        <table>
-                            <thead>
-                            <tr>
-                                <th>WORD</th>
-                                <th>MEANING</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="voca : ${vocabulary}">
-                                <td th:text="${voca.word()}"></td>
-                                <td th:text="${voca.meaning()}"></td>
-                            </tr>
-                            </tbody>
-                        </table>
+                <div class="user-info-right">
+                    <div class="user-grade-box" id="user-grade-box">
+                        <div>
+                            <span class="user-grade-text">등급:</span>
+                            <span id="user-grade" class="user-grade" th:text="${userGrade}"></span>
+                        </div>
+                        <div id="user-grade-image"></div>
                     </div>
-                </div>
-
-                <div>
-                    <h2>내 에세이</h2>
-                    <div class="table-box">
-                        <table>
-                            <thead>
-                            <tr>
-                                <th>TOPIC</th>
-                                <th>CREATED AT</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="essay : ${essays}">
-                                <td th:text="${essay.topic}"></td>
-                                <td th:text="${#temporals.format(essay.createdAt, 'yy-MM-dd HH:mm')}"></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="move">
-                    <a href="/vocabulary-list"><span>단어장 만들기 +</span></a>
-                    <a href="/essays/new"><span>에세이 만들기 +</span></a>
-                    <a href="/essays"><span>에세이 AI 첨삭받기 +</span></a>
-                    <a href="/posts"><span>커뮤니티 공유하기 →</span></a>
+                    <a id="test-button" class="href-button" href="/tests"> 등급 테스트 하러 가기 </a>
                 </div>
             </div>
         </div>
-    </main>
+
+        <div class="my-study">
+            <div>
+                <h2>내 단어장</h2>
+                <div class="table-box">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>WORD</th>
+                            <th>MEANING</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="voca : ${vocabulary}">
+                            <td th:text="${voca.word()}"></td>
+                            <td th:text="${voca.meaning()}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div>
+                <h2>내 에세이</h2>
+                <div class="table-box">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>TOPIC</th>
+                            <th>CREATED AT</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="essay : ${essays}">
+                            <td th:text="${essay.topic}"></td>
+                            <td th:text="${#temporals.format(essay.createdAt, 'yy-MM-dd HH:mm')}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="move">
+                <a href="/vocabulary-list"><span>단어장 만들기 +</span></a>
+                <a href="/essays/new"><span>에세이 만들기 +</span></a>
+                <a href="/essays"><span>에세이 AI 첨삭받기 +</span></a>
+                <a href="/posts"><span>커뮤니티 공유하기 →</span></a>
+            </div>
+        </div>
+    </div>
+</main>
 
 <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const userGrade = parseInt(document.getElementById("user-grade").textContent);
 
+        console.log(userGrade);
+        const userGradeSpan = document.getElementById("user-grade");
+        const gradeBox = document.getElementById("user-grade-box")
+        const gradeImg = document.getElementById("user-grade-image");
+
+        // 이미지 추가 함수
+        function addImage(imgSrc) {
+            const imgElement = document.createElement("img");
+            imgElement.src = imgSrc;
+            imgElement.alt = "User Grade Image";
+            imgElement.style.width = "70px";  // 이미지 크기를 원하는 대로 설정
+            gradeImg.appendChild(imgElement);
+        }
+
+        // userGrade에 따라 텍스트와 이미지를 설정
+        switch (userGrade) {
+            case 0:
+                userGradeSpan.innerText = "A1";
+                addImage("/images/bronze.png"); // 이미지 경로 설정
+                gradeBox.classList.replace("user-grade-box", "user-grade-box0");
+                break;
+            case 1:
+                userGradeSpan.innerText = "A2";
+                addImage("/images/silver.png");
+                gradeBox.classList.replace("user-grade-box", "user-grade-box1");
+                break;
+            case 2:
+                userGradeSpan.innerText = "B1";
+                addImage("/images/gold.png");
+                gradeBox.classList.replace("user-grade-box", "user-grade-box2");
+                break;
+            case 3:
+                userGradeSpan.innerText = "B2";
+                addImage("/images/platinum.png");
+                gradeBox.classList.replace("user-grade-box", "user-grade-box3");
+                break;
+            case 4:
+                userGradeSpan.innerText = "C1";
+                addImage("/images/diamond.png");
+                gradeBox.classList.replace("user-grade-box", "user-grade-box4");
+                break;
+            case 5:
+                userGradeSpan.innerText = "C2";
+                addImage("/images/diamond 2.png");
+                gradeBox.classList.toggle("user-grade-box", "user-grade-box5");
+                break;
+            default:
+                userGradeSpan.innerText = "Unknown";
+                break;
+        }
+
+
+        // 5단위 레벨에서만 테스트 가능
+        document.getElementById("test-button").addEventListener("click", function(event) {
+            event.preventDefault();
+
+            const level = parseInt(document.getElementById("user-level").innerText);
+
+            if(level % 5 === 0){
+                window.location.href = `/tests`;
+            } else {
+                window.alert("5단위 레벨에서만 테스트를 진행할 수 있습니다.\n(예시: Lv.5, Lv.10, Lv.15 에서만 가능)")
+            }
+        });
+    })
 </script>
 </body>
 </html>

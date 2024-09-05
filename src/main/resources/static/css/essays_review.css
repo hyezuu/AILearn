@@ -36,7 +36,7 @@ main h2 {
 .container {
     margin: 20px 0;
     width: 370px;
-    height: 300px;
+    min-height: 300px;
     border-radius: 7px;
     padding: 30px;
     border: 1px solid rgba(16, 56, 137, 0.25);
