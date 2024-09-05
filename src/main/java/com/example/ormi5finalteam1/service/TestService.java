@@ -3,10 +3,7 @@ package com.example.ormi5finalteam1.service;
 import com.example.ormi5finalteam1.common.exception.BusinessException;
 import com.example.ormi5finalteam1.common.exception.ErrorCode;
 import com.example.ormi5finalteam1.domain.Grade;
-import com.example.ormi5finalteam1.domain.test.SubmitRequestDto;
-import com.example.ormi5finalteam1.domain.test.SubmitRequestVo;
-import com.example.ormi5finalteam1.domain.test.Test;
-import com.example.ormi5finalteam1.domain.test.TestQuestionResponseDto;
+import com.example.ormi5finalteam1.domain.test.*;
 import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.repository.TestRepository;
@@ -20,6 +17,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class TestService {
 
@@ -35,7 +33,7 @@ public class TestService {
      */
     public List<TestQuestionResponseDto> getLevelTests(Grade selectedGrade) {
 
-        if (selectedGrade.equals(Grade.A1) || selectedGrade.equals(Grade.C2))
+        if (selectedGrade.equals(Grade.C2))
             throw new BusinessException(ErrorCode.CANNOT_TAKE_TEST);
 
         List<Test> gradeTestQuestions = getTests(selectedGrade);
@@ -53,14 +51,12 @@ public class TestService {
      * A2: 10문항
      * B1 ~ B2: 15문항
      * C1 ~ C2: 20문항
-     * @param provider 현재 회원
+     * @param user 현재 회원
      * @return 해당 레벨에 맞는 문제 리스트
      */
-    public List<TestQuestionResponseDto> getUpgradeTests(Provider provider) {
-        User user = userService.loadUserByUsername(provider.email());
-        if (!user.isReadyForUpgrade()) throw new BusinessException(ErrorCode.CANNOT_TAKE_TEST);
-
-        Grade nextGrade = Grade.values()[provider.grade().getIndex() + 1];
+    @Transactional(readOnly = true)
+    public List<TestQuestionResponseDto> getUpgradeTests(User user) {
+        Grade nextGrade = Grade.values()[user.getGrade().getIndex() + 1];
 
         List<Test> upgradeTestQuestions = getTests(nextGrade);
         return upgradeTestQuestions.stream()
@@ -76,6 +72,7 @@ public class TestService {
         if (grade.equals(Grade.A1) || grade.equals(Grade.A2)) size = 10;
         else if (grade.equals(Grade.B1) || grade.equals(Grade.B2)) size = 15;
         else size = 20;
+
 
         List<Test> gradeTestQuestions = new ArrayList<>();
         for (int i = 0; i < size; i++) {
@@ -94,22 +91,37 @@ public class TestService {
      * @param submitRequestVo 사용자가 제출한 문제, 답안이 들어있는 Vo
      * @return 설정된 사용자의 등급, 통과하지 못했으면 null(초기라서)
      */
-    @Transactional
     public Grade submitLevelTests(Provider provider, Grade grade, SubmitRequestVo submitRequestVo) {
 
-        User user = userService.loadUserByUsername(provider.email());
-        if (!user.isReadyForUpgrade()) throw new BusinessException(ErrorCode.CANNOT_TAKE_TEST);
-
+        User user = findUser(provider);
         int count = markAnswer(submitRequestVo);
 
         if ((grade.equals(Grade.A2) && count >= 6) ||
                 ((grade.equals(Grade.B1) || grade.equals(Grade.B2)) && count >= 10) ||
                 (grade.equals(Grade.C1) && count >= 16)) {
-            user.changeGrade(grade);
-            user.changeReadyStatus(false);
+            changeUserStatus(user, grade);
         }
-
         return user.getGrade();
+    }
+
+    public TestResultResponseDto thymeleafSubmitLevelTests(User user, Grade grade, SubmitRequestVo submitRequestVo) {
+
+        int count = markAnswer(submitRequestVo);
+
+        String status;
+        Grade resultGrade;
+        if ((grade.equals(Grade.A2) && count >= 6) ||
+                ((grade.equals(Grade.B1) || grade.equals(Grade.B2)) && count >= 10) ||
+                (grade.equals(Grade.C1) && count >= 16)) {
+            status = "success";
+            resultGrade = grade;
+            changeUserStatus(user, resultGrade);
+        } else {
+            status = "fail";
+            Grade[] values = Grade.values();
+            resultGrade = values[grade.getIndex() - 1];
+        }
+        return TestResultResponseDto.toDto(status, resultGrade);
     }
 
     /**
@@ -122,12 +134,9 @@ public class TestService {
      * @param submitRequestVo 사용자가 제출한 문제, 답안이 들어있는 Vo
      * @return 테스트에 통과했으면 true, 아니면 false
      */
-    @Transactional
     public Grade submitUpgradeTests(Provider provider, SubmitRequestVo submitRequestVo) {
 
-        User user = userService.loadUserByUsername(provider.email());
-        if (!user.isReadyForUpgrade()) throw new BusinessException(ErrorCode.CANNOT_TAKE_TEST);
-
+        User user = findUser(provider);
         int count = markAnswer(submitRequestVo);
 
         Grade[] values = Grade.values();
@@ -138,15 +147,46 @@ public class TestService {
         if ((nextGrade.equals(Grade.A2) && count >= 6) ||
                 ((nextGrade.equals(Grade.B1) || nextGrade.equals(Grade.B2)) && count >= 10) ||
                 ((nextGrade.equals(Grade.C1) || nextGrade.equals(Grade.C2)) && count >= 16))
-            user.changeGrade(nextGrade);
+            changeUserStatus(user, nextGrade);
         // 강등
         else if ((nextGrade.equals(Grade.A2) && count <= 2) ||
                 ((nextGrade.equals(Grade.B1) || nextGrade.equals(Grade.B2)) && count <= 4) ||
                 ((nextGrade.equals(Grade.C1) || nextGrade.equals(Grade.C2)) && count <= 7))
-            user.changeGrade(values[nowGradeIndex - 1]);
-        user.changeReadyStatus(false);
+            changeUserStatus(user, values[nowGradeIndex - 1]);
 
         return user.getGrade();
+    }
+
+    public TestResultResponseDto renewalSubmitUpgradeTests(User user, SubmitRequestVo submitRequestVo) {
+
+        int count = markAnswer(submitRequestVo);
+
+        Grade[] values = Grade.values();
+        int nowGradeIndex = user.getGrade().getIndex();
+        Grade nextGrade = values[nowGradeIndex + 1];
+
+        String status = "keep";
+        Grade result = user.getGrade();
+        // 승급
+        if ((nextGrade.equals(Grade.A2) && count >= 6) ||
+                ((nextGrade.equals(Grade.B1) || nextGrade.equals(Grade.B2)) && count >= 10) ||
+                ((nextGrade.equals(Grade.C1) || nextGrade.equals(Grade.C2)) && count >= 16)){
+            status = "success"; result = nextGrade; }
+        // 강등
+        else if ((nextGrade.equals(Grade.A2) && count <= 2) ||
+                ((nextGrade.equals(Grade.B1) || nextGrade.equals(Grade.B2)) && count <= 4) ||
+                ((nextGrade.equals(Grade.C1) || nextGrade.equals(Grade.C2)) && count <= 7)) {
+            status = "fail"; result = values[nowGradeIndex - 1]; }
+
+        changeUserStatus(user, result);
+        return TestResultResponseDto.builder().status(status).grade(result).build();
+    }
+
+    private User findUser(Provider provider) {
+        User user = userService.loadUserByUsername(provider.email());
+        if (!user.isReadyForUpgrade()) throw new BusinessException(ErrorCode.CANNOT_TAKE_TEST);
+        System.out.println("found User");
+        return user;
     }
 
     private int markAnswer(SubmitRequestVo submitRequestVo) {
@@ -156,14 +196,23 @@ public class TestService {
         for (SubmitRequestDto requestDto : submitRequestVo.getDtoList()) {
             Test test = testRepository.findById(requestDto.getTestId())
                     .orElseThrow(() -> new BusinessException(ErrorCode.TEST_NOT_FOUND));
-
             if (requestDto.getAnswer().equals(test.getAnswer())) count++;
         }
 
         return count;
     }
 
-    @Transactional
+    public void setA1(User user) {
+        changeUserStatus(user, Grade.A1);
+    }
+
+    private void changeUserStatus(User user, Grade grade) {
+        user.changeGrade(grade);
+        user.changeReadyStatus(false);
+        System.out.println("Changer User status");
+        System.out.println(user.getGrade() + " " + user.isReadyForUpgrade());
+    }
+
     public void saveTests(List<Test> tests) {
         tests.removeIf(test -> testRepository.existsByAnswer(test.getAnswer()));
         testRepository.saveAll(tests);

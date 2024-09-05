@@ -47,12 +47,6 @@ public class TestControllerTest {
 
     private Provider provider;
 
-    @BeforeEach
-    void setUp() {
-
-
-    }
-
     @DisplayName("레벨테스트 조회")
     @org.junit.jupiter.api.Test
     void testGetLevelTests() throws Exception {

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Result</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/test-result.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <script src="/js/tests.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div id="layout">
+    <!-- 메뉴 부분 -->
+    <header th:replace="~{/layout/header::header}"></header>
+    <!-- 메뉴 부분 끝 -->
+    <main>
+        <div class="result-container">
+            <h2>등급 테스트 결과</h2>
+            <div class="main-content">
+                <h3>당신의 현재 레벨은?</h3>
+                <p class="user-result"><strong th:text="${user.nickname}"></strong>님의 테스트 결과는 <strong
+                        th:text="${user.grade}"></strong> 입니다!</p>
+                <p class="suggestion">AILEARN과 학습을 통해 실력을 더 키워보세요.</p>
+                <div class="level-display">
+                    <div class="level-icon">
+                        <!--                <img src="star-icon.png" alt="Level Icon">-->
+                        <p class="level-name" th:text="${user.grade}"></p>
+                        <p class="level-tier" th:text="${user.grade.getTier()}"></p>
+                    </div>
+                    <div class="level-chart">
+                        <p class="chart-percentage">상위 62%</p>
+                        <div class="bar-container">
+                            <div class="bar"
+                                 th:classappend="${user.grade == T(com.example.ormi5finalteam1.domain.Grade).A1} ? 'active' : ''"></div>
+                            <div class="bar"
+                                 th:classappend="${user.grade == T(com.example.ormi5finalteam1.domain.Grade).A2} ? 'active' : ''"></div>
+                            <div class="bar"
+                                 th:classappend="${user.grade == T(com.example.ormi5finalteam1.domain.Grade).B1} ? 'active' : ''"></div>
+                            <div class="bar"
+                                 th:classappend="${user.grade == T(com.example.ormi5finalteam1.domain.Grade).B2} ? 'active' : ''"></div>
+                            <div class="bar"
+                                 th:classappend="${user.grade == T(com.example.ormi5finalteam1.domain.Grade).C1} ? 'active' : ''"></div>
+                            <div class="bar"
+                                 th:classappend="${user.grade == T(com.example.ormi5finalteam1.domain.Grade).C2} ? 'active' : ''"></div>
+                        </div>
+                        <div class="chart-labels">
+                            <span>A1</span><span>A2</span><span>B1</span><span>B2</span><span>C1</span><span>C2</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>

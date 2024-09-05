@@ -20,10 +20,6 @@ public enum Grade {
         this.index = index;
     }
 
-    public int getIndex() {
-        return index;
-    }
-
     public static String[] getGrades() {
         return Arrays.stream(Grade.values())
             .map(Enum::name)

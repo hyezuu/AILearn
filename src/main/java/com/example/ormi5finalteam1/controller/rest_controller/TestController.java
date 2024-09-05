@@ -5,9 +5,13 @@ import com.example.ormi5finalteam1.common.exception.ErrorCode;
 import com.example.ormi5finalteam1.domain.Grade;
 import com.example.ormi5finalteam1.domain.test.SubmitRequestVo;
 import com.example.ormi5finalteam1.domain.test.TestQuestionResponseDto;
+import com.example.ormi5finalteam1.domain.test.TestResultResponseDto;
 import com.example.ormi5finalteam1.domain.user.Provider;
+import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.service.TestService;
+import com.example.ormi5finalteam1.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +23,7 @@ import java.util.List;
 public class TestController {
 
     private final TestService testService;
+    private final UserService userservice;
 
     @GetMapping("/level-tests")
     public List<TestQuestionResponseDto> getLevelTests(@AuthenticationPrincipal Provider provider,
@@ -31,7 +36,7 @@ public class TestController {
     @GetMapping("/upgrade-tests")
     public List<TestQuestionResponseDto> getUpgradeTests(@AuthenticationPrincipal Provider provider) {
         if (provider.grade() == null) throw new BusinessException(ErrorCode.CANNOT_TAKE_TEST);
-        return testService.getUpgradeTests(provider);
+        return testService.getUpgradeTests(userservice.loadUserByUsername(provider.email()));
     }
 
     @PostMapping("/grade")
@@ -43,11 +48,11 @@ public class TestController {
         return testService.submitLevelTests(provider, grade, submitRequestVo);
     }
     @PostMapping("/upgrade")
-    public Grade submitUpgradeTests(@AuthenticationPrincipal Provider provider,
-                                    @RequestBody SubmitRequestVo submitRequestVo) {
+    public ResponseEntity<TestResultResponseDto> submitUpgradeTests(@AuthenticationPrincipal Provider provider,
+                                                                    @RequestBody SubmitRequestVo submitRequestVo) {
 
-        if (provider.grade() == null) throw new BusinessException(ErrorCode.CANNOT_TAKE_TEST);
-
-        return testService.submitUpgradeTests(provider, submitRequestVo);
+        User user = userservice.loadUserByUsername(provider.email());
+        if (user.getGrade() == null || !user.isReadyForUpgrade()) throw new BusinessException(ErrorCode.CANNOT_TAKE_TEST);
+        return ResponseEntity.ok(testService.renewalSubmitUpgradeTests(user, submitRequestVo));
     }
 }
