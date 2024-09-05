@@ -7,6 +7,8 @@ import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.external.api.util.ContentParser;
 import com.example.ormi5finalteam1.external.constants.AlanAIRequestPrompt;
 import com.example.ormi5finalteam1.repository.ReviewedEssaysRepository;
+import com.example.ormi5finalteam1.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,10 +20,12 @@ public class EssayProcessingService {
     private final EssayAlanApiService essayAlanApiService;
     private final ReviewedEssaysRepository reviewedEssaysRepository;
     private final ContentParser contentParser;
+    private final UserRepository userRepository;
 
     @Value("${alanai.api.key}")
     private String clientId;
 
+    @Transactional
     public ReviewedEssaysResponseDto processEssay(Long essayId) {
         /* 1. DB에서 Essay 가져오기 */
         Essay essay = essayService.getEssayById(essayId);
@@ -37,7 +41,9 @@ public class EssayProcessingService {
         reviewedEssaysRepository.save(reviewedEssays);
 
         /* 4. 해당 user의 포인트 3증가 */
-        essay.getUser().addEssayWriteAndReviewPoint();
+        User user = essay.getUser();
+        user.addEssayWriteAndReviewPoint();
+//        userRepository.save(user);
 
         /* 5. ReviewedEssaysResponseDto로 첨삭된 데이터, 기존에세이 데이터 반환 */
         return ReviewedEssaysResponseDto.builder()
