@@ -2,6 +2,7 @@ package com.example.ormi5finalteam1.controller.rest_controller;
 
 import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.domain.user.dto.CreateUserRequestDto;
+import com.example.ormi5finalteam1.domain.user.dto.UpdateUserRequestDto;
 import com.example.ormi5finalteam1.domain.vocabulary.dto.MyVocabularyListResponseDto;
 import com.example.ormi5finalteam1.service.EmailService;
 import com.example.ormi5finalteam1.service.UserService;
@@ -18,6 +19,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -80,6 +82,12 @@ public class UserController {
     @GetMapping("/auth/password")
     public void resetPassword(@RequestParam @Email String email) throws MessagingException {
         userService.sendTemporaryPassword(email);
+    }
+
+    @PutMapping("/me")
+    public void update(@AuthenticationPrincipal Provider provider, @RequestBody @Valid
+        UpdateUserRequestDto requestDto) {
+        userService.updateUser(provider.id(), requestDto);
     }
 
 }
