@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내 게시글 목록</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="/css/my-post-list.css">
+    <!--    <link rel="stylesheet" href="/css/header.css">-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/my.js"></script>
+
+</head>
+<body>
+<div id="layout">
+    <!-- 메뉴 부분 -->
+    <header th:replace="~{/layout/header::header}"></header>
+    <!-- 메뉴 부분 끝 -->
+</div>
+
+<main>
+    <div class="container">
+        <h1>마이페이지</h1>
+
+        <div class="my-page-list">
+            <a href="" class="my-page-list-a">회원정보</a>
+            <a href="/my/posts" class="my-page-list-a-post">내 게시글 목록</a>
+            <a href="/my/edit" class="my-page-list-a">회원정보 변경</a>
+        </div>
+
+        <div class="my-page">
+            <div>
+                <h2>내 게시글</h2>
+                <div class="table-box2">
+                    <table class="my-page-table">
+                        <thead>
+                        <tr>
+                            <th>제목</th>
+                            <th>작성일자</th>
+                            <th>조회수</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="voca : ${vocabulary}">
+                            <td th:text="${voca.word()}"></td>
+                            <td th:text="${voca.meaning()}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="my-comment">
+                <div>
+                    <h2>내 댓글</h2>
+                    <div class="table-box">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>제목 / 댓글 </th> <!-- 택1 -->
+                                <th>작성자 / 작성일자</th> <!-- 택1 -->
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="voca : ${vocabulary}">
+                                <td th:text="${voca.word()}"></td>
+                                <td th:text="${voca.meaning()}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div>
+                    <h2>좋아요 누른 게시글</h2>
+                    <div class="table-box">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>제목</th>
+                                <th>작성자</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="essay : ${essays}">
+                                <td th:text="${essay.topic}"></td>
+                                <td th:text="${#temporals.format(essay.createdAt, 'yy-MM-dd HH:mm')}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+
+</script>
+</body>
+</html>
