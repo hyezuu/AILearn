@@ -35,6 +35,9 @@ class UserServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Mock
+    private EmailVerificationService emailVerificationService;
+
     @InjectMocks
     private UserService userService;
 
@@ -43,12 +46,13 @@ class UserServiceTest {
         //given
         CreateUserRequestDto requestDto
             = new CreateUserRequestDto("test@test.com", "nickname", "password");
-        when(repository.existsByEmail(anyString())).thenReturn(false);
+        when(emailVerificationService.isEmailVerified(anyString())).thenReturn(true);
         when(repository.existsByNickname(anyString())).thenReturn(false);
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
         //when & then
         assertThatCode(() -> userService.createUser(requestDto)).doesNotThrowAnyException();
         verify(repository).save(any(User.class));
+        verify(emailVerificationService).clearVerificationStatus(anyString());
     }
 
     @Test
