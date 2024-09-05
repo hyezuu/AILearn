@@ -28,7 +28,7 @@ public class UserService implements UserDetailsService {
         if (!emailVerificationService.isEmailVerified(requestDto.email())) {
             throw new BusinessException(ErrorCode.EMAIL_NOT_VERIFIED);
         }
-        if (isDuplicateNickname(requestDto.nickname())) {
+        if (existByNickname(requestDto.nickname())) {
             throw new BusinessException(ErrorCode.DUPLICATE_NICKNAME);
         }
 
@@ -44,17 +44,17 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void requestEmailVerification(String email) throws MessagingException {
-        if (isDuplicateEmail(email)) {
+        if (existByEmail(email)) {
             throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
         }
         emailVerificationService.sendVerificationEmail(email);
     }
 
-    public boolean isDuplicateEmail(String email) {
+    public boolean existByEmail(String email) {
         return repository.existsByEmail(email);
     }
 
-    public boolean isDuplicateNickname(String nickname) {
+    public boolean existByNickname(String nickname) {
         return repository.existsByNickname(nickname);
     }
 

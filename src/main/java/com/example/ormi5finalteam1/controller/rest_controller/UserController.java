@@ -35,12 +35,12 @@ public class UserController {
 
     @GetMapping("/email-duplication")
     public boolean checkEmail(@Email @RequestParam String email) {
-        return userService.isDuplicateEmail(email);
+        return userService.existByEmail(email);
     }
 
     @GetMapping("/nickname-duplication")
     public boolean checkNickname(@RequestParam String nickname) {
-        return userService.isDuplicateNickname(nickname);
+        return userService.existByNickname(nickname);
     }
 
     @PostMapping("/signup")
