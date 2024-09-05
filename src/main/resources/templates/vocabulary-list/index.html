@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내 단어장</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/vocabulary-list.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js">
+
+    <!-- alert창 디자인을 위한 url -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <script src="/js/vocabulary-list/index.js"></script>
+    <script src="/js/main.js"></script>
+</head>
+<body>
+<div id="layout">
+    <!-- 메뉴 부분 -->
+    <header th:replace="~{/layout/header::header}"></header>
+    <!-- 메뉴 부분 끝 -->
+    <h1>내 단어장</h1>
+    <div class="search-container">
+        <input type="text" class="search-input" placeholder="search">
+        <button class="search-button">search</button>
+    </div>
+    <div th:each="vocabulary : ${vocabulary}" class="vocabulary" id="voca-box">
+        <div class="vocabulary-header">
+            <p th:text="${vocabulary}">단어 이름</p>
+            <a href="#" class="delete-vocabulary"><img src="/images/x-mark.png" alt="단어 삭제 버튼" title="단어 삭제 버튼"></a>
+        </div>
+        <p class="vocabulary-content" th:text="${vocabulary.content}">단어 예문</p>
+    </div>
+</div>
+</body>
+</html>
