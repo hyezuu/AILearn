@@ -3,7 +3,7 @@ package com.example.ormi5finalteam1.controller.rest_controller;
 import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.domain.user.dto.CreateUserRequestDto;
 import com.example.ormi5finalteam1.domain.vocabulary.dto.MyVocabularyListResponseDto;
-import com.example.ormi5finalteam1.service.EmailVerificationService;
+import com.example.ormi5finalteam1.service.EmailService;
 import com.example.ormi5finalteam1.service.UserService;
 import com.example.ormi5finalteam1.service.VocabularyListService;
 import jakarta.mail.MessagingException;
@@ -31,7 +31,7 @@ public class UserController {
 
     private final UserService userService;
     private final VocabularyListService vocabularyListService;
-    private final EmailVerificationService emailVerificationService;
+    private final EmailService emailService;
 
     @GetMapping("/email-duplication")
     public boolean checkEmail(@Email @RequestParam String email) {
@@ -67,13 +67,19 @@ public class UserController {
     }
 
     @PostMapping("/request-verification")
-    public void requestEmailVerification(@RequestParam @Email String email) throws MessagingException {
+    public void requestEmailVerification(@RequestParam @Email String email)
+        throws MessagingException {
         userService.requestEmailVerification(email);
     }
 
     @PostMapping("/verify-email")
     public void verifyEmail(@RequestParam @Email String email, @RequestParam String code) {
-        emailVerificationService.verifyCode(email, code);
+        emailService.verifyCode(email, code);
+    }
+
+    @GetMapping("/auth/password")
+    public void resetPassword(@RequestParam @Email String email) throws MessagingException {
+        userService.sendTemporaryPassword(email);
     }
 
 }
