@@ -115,8 +115,8 @@ public class EssayControllerTest {
         Provider provider
                 = new Provider(1L, "test@email.com", "testuser", Role.USER, Grade.A1, 10);
         LocalDateTime now = LocalDateTime.now();
-        EssayResponseDto essay1 = new EssayResponseDto("Topic 1", "Content 1", now);
-        EssayResponseDto essay2 = new EssayResponseDto("Topic 2", "Content 2", now);
+        EssayResponseDto essay1 = new EssayResponseDto(1L,"Topic 1", "Content 1", now);
+        EssayResponseDto essay2 = new EssayResponseDto(1L,"Topic 2", "Content 2", now);
         PageImpl<EssayResponseDto> page = new PageImpl<>(Arrays.asList(essay1, essay2));
 
         Mockito.when(essayService.showMyEssays(any(Provider.class), anyInt(), anyInt())).thenReturn(page);
