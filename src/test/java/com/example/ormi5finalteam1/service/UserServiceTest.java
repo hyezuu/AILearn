@@ -39,7 +39,7 @@ class UserServiceTest {
     private PasswordEncoder passwordEncoder;
 
     @Mock
-    private EmailVerificationService emailVerificationService;
+    private EmailService emailService;
 
     @Mock
     private User mockUser;
@@ -53,27 +53,27 @@ class UserServiceTest {
         //given
         CreateUserRequestDto requestDto
             = new CreateUserRequestDto("test@test.com", "nickname", "password");
-        when(emailVerificationService.isEmailVerified(anyString())).thenReturn(true);
+        when(emailService.isEmailVerified(anyString())).thenReturn(true);
         when(repository.existsByNickname(anyString())).thenReturn(false);
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
         //when & then
         assertThatCode(() -> userService.createUser(requestDto)).doesNotThrowAnyException();
         verify(repository).save(any(User.class));
-        verify(emailVerificationService).clearVerificationStatus(anyString());
+        verify(emailService).clearVerificationStatus(anyString());
     }
 
     @Test
     void createUser_은_이메일이_검증되지_않았을_경우_BusinessException을_던진다() {
         // given
         CreateUserRequestDto requestDto = new CreateUserRequestDto("test@test.com", "nickname", "password");
-        when(emailVerificationService.isEmailVerified(anyString())).thenReturn(false);
+        when(emailService.isEmailVerified(anyString())).thenReturn(false);
 
         // when & then
         assertThatThrownBy(() -> userService.createUser(requestDto))
             .isInstanceOf(BusinessException.class)
             .hasFieldOrPropertyWithValue("errorCode", ErrorCode.EMAIL_NOT_VERIFIED);
         verify(repository,never()).save(any(User.class));
-        verify(emailVerificationService,never()).clearVerificationStatus(anyString());
+        verify(emailService,never()).clearVerificationStatus(anyString());
     }
 
     @Test
@@ -81,14 +81,14 @@ class UserServiceTest {
         //given
         CreateUserRequestDto requestDto
             = new CreateUserRequestDto("test@test.com", "nickname", "password");
-        when(emailVerificationService.isEmailVerified(anyString())).thenReturn(true);
+        when(emailService.isEmailVerified(anyString())).thenReturn(true);
         when(repository.existsByNickname(anyString())).thenReturn(true);
         //when & then
         assertThatThrownBy(() -> userService.createUser(requestDto)).isInstanceOf(
                 BusinessException.class)
             .hasFieldOrPropertyWithValue("errorCode", ErrorCode.DUPLICATE_NICKNAME);
         verify(repository,never()).save(any(User.class));
-        verify(emailVerificationService,never()).clearVerificationStatus(anyString());
+        verify(emailService,never()).clearVerificationStatus(anyString());
     }
 
     @Test
@@ -99,7 +99,7 @@ class UserServiceTest {
 
         // when & then
         assertThatCode(() -> userService.requestEmailVerification(email)).doesNotThrowAnyException();
-        verify(emailVerificationService).sendVerificationEmail(email);
+        verify(emailService).sendVerificationEmail(email);
     }
 
     @Test
@@ -112,7 +112,7 @@ class UserServiceTest {
         assertThatThrownBy(() -> userService.requestEmailVerification(email))
             .isInstanceOf(BusinessException.class)
             .hasFieldOrPropertyWithValue("errorCode", ErrorCode.DUPLICATE_EMAIL);
-        verify(emailVerificationService, never()).sendVerificationEmail(email);
+        verify(emailService, never()).sendVerificationEmail(email);
     }
 
     @Test

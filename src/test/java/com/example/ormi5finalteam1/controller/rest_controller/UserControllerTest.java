@@ -24,7 +24,7 @@ import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.domain.user.Role;
 import com.example.ormi5finalteam1.domain.user.dto.CreateUserRequestDto;
 import com.example.ormi5finalteam1.domain.vocabulary.dto.MyVocabularyListResponseDto;
-import com.example.ormi5finalteam1.service.EmailVerificationService;
+import com.example.ormi5finalteam1.service.EmailService;
 import com.example.ormi5finalteam1.service.UserService;
 import com.example.ormi5finalteam1.service.VocabularyListService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -57,7 +57,7 @@ class UserControllerTest {
     @MockBean
     private VocabularyListService vocabularyListService;
     @MockBean
-    private EmailVerificationService emailVerificationService;
+    private EmailService emailService;
 
     @Test
     void checkEmail_은_해당_email이_존재할_시_true_를_반환한다() throws Exception {
@@ -354,7 +354,7 @@ class UserControllerTest {
 
         // then
         actions.andExpect(status().isOk());
-        verify(emailVerificationService).verifyCode(email, code);
+        verify(emailService).verifyCode(email, code);
     }
 
     @Test
@@ -363,7 +363,7 @@ class UserControllerTest {
         String email = "nonexistent@email.com";
         String code = "123456";
         doThrow(new BusinessException(ErrorCode.VERIFICATION_CODE_NOT_FOUND))
-            .when(emailVerificationService).verifyCode(email, code);
+            .when(emailService).verifyCode(email, code);
 
         // when
         ResultActions actions = mockMvc.perform(
@@ -376,7 +376,7 @@ class UserControllerTest {
         // then
         actions.andExpect(status().isNotFound())
             .andExpect(jsonPath("$.message").value("Verification code not found"));
-        verify(emailVerificationService).verifyCode(email, code);
+        verify(emailService).verifyCode(email, code);
     }
 
     @Test
@@ -385,7 +385,7 @@ class UserControllerTest {
         String email = "test@email.com";
         String wrongCode = "000000";
         doThrow(new BusinessException(ErrorCode.VERIFICATION_CODE_EMAIL_MISMATCH))
-            .when(emailVerificationService).verifyCode(email, wrongCode);
+            .when(emailService).verifyCode(email, wrongCode);
 
         // when
         ResultActions actions = mockMvc.perform(
@@ -398,7 +398,7 @@ class UserControllerTest {
         // then
         actions.andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.message").value("Verification code email is mismatch"));
-        verify(emailVerificationService).verifyCode(email, wrongCode);
+        verify(emailService).verifyCode(email, wrongCode);
     }
 
     @Test
@@ -407,7 +407,7 @@ class UserControllerTest {
         String email = "test@email.com";
         String expiredCode = "222222";
         doThrow(new BusinessException(ErrorCode.VERIFICATION_CODE_EXPIRED))
-            .when(emailVerificationService).verifyCode(email, expiredCode);
+            .when(emailService).verifyCode(email, expiredCode);
 
         // when
         ResultActions actions = mockMvc.perform(
@@ -420,6 +420,6 @@ class UserControllerTest {
         // then
         actions.andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.message").value("Verification code is expired"));
-        verify(emailVerificationService).verifyCode(email, expiredCode);
+        verify(emailService).verifyCode(email, expiredCode);
     }
 }
