@@ -22,11 +22,13 @@ h1 {
     display: inline-block;
     text-align: center;
 }
+
 /* 게시글 폼 */
 form {
-    margin: 70px;
+    margin: 70px auto;
     display: flex;
     flex-direction: column;
+    max-width: 800px;
 }
 
 /* 라벨 */
@@ -35,12 +37,13 @@ label {
     font-size: 16pt;
     font-weight: 600;
 }
+
 /* 제목과 내용 공통 */
 input[type="text"], textarea {
-    width: 100%;
     padding: 8px;
     margin-top: 5px;
 }
+
 label[for="content"], label[for="title"] {
     margin-top: 30px;
     margin-bottom: 10px;
@@ -53,7 +56,6 @@ input[type="text"] {
 }
 
 /* 내용 */
-
 textarea {
     height: 600px;
     border-radius: 10px;

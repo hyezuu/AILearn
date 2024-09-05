@@ -62,16 +62,26 @@ section>div:nth-child(2) {
     opacity: 1;
     font-size: 13pt;
 }
+
 section div a {
     display: flex;
     margin: 20px;
 }
 
 section div div {
-    width: 400px;
+    width: 350px;
     height: 200px;
     padding: 20px;
     display: flex;
+    flex-flow: column;
+}
+
+h3 {
+    margin: 0;
+}
+
+section div div p {
+    margin: 4px 0;
 }
 
 section img {

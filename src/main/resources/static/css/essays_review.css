@@ -18,7 +18,7 @@ a {
 
 h1 {
     margin: 80px;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
     display: inline-block;
     text-align: center;
 }
@@ -33,17 +33,32 @@ main h2 {
     text-align: center;
     margin: 20px 0;
 }
-section div {
-    width: 500px;
-    height: 600px;
-    border: 1px solid #ccc;
-    background: rgb(239, 255, 254);
+.container {
+    margin: 20px 0;
+    width: 370px;
+    height: 300px;
+    border-radius: 7px;
+    padding: 30px;
+    border: 1px solid rgba(16, 56, 137, 0.25);
+    background: #2e5dbd08;
+}
+
+.arrow {
+    margin: auto;
+}
+.sec-container {
+    display: flex;
+    gap: 30px;
+}
+
+.loading {
+    text-align: center;
+    margin: 80px auto;
 }
 
 
 /* 수정 버튼 */
 .edit-button {
-    margin: 60px;
     float: right;
     padding : 6px 30px;
     background-color: #2e5dbd;
@@ -52,8 +67,30 @@ section div {
     font-weight: 600;
     border: none;
     border-radius: 10px;
-    margin-right: 350px;
 }
 .edit-button:hover {
     background-color: #103889;
+}
+
+form {
+    display: flex;
+    margin: 30px;
+    flex-flow: column;
+    align-content: space-around;
+    flex-wrap: wrap;
+}
+
+textarea {
+    font-family: "IBM Plex Sans KR", sans-serif;
+    font-size: 16px;
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: none;
+    resize: none;
+}
+
+.description {
+    margin-left: 80px;
+    margin-bottom: 80px;
 }
