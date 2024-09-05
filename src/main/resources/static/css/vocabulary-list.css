@@ -1,0 +1,97 @@
+* {
+    margin: auto 0;
+    padding: 0;
+}
+
+#layout {
+    width: 100%;
+    height: 100%;
+    font-family: "IBM Plex Sans KR", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+h1 {
+    margin: 80px;
+    margin-bottom: 60px;
+    display: inline-block;
+    text-align: center;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    font-family: "IBM Plex Sans KR", sans-serif;
+}
+
+/* 검색창 */
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+}
+.search-input {
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #666666;
+    border-radius: 10px;
+    width: 300px;
+    margin-right: 10px;
+}
+.search-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #103889;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.search-button:hover {
+    background-color: #0f246c;
+}
+
+
+/* 단어 */
+
+.vocabulary {
+    width: 800px;
+    margin: 80px auto;
+    border: 1px solid #d4e9f7;
+    background: rgb(212,233,247);
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+.vocabulary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.vocabulary-header p {
+    margin: 0;
+    font-weight: bold;
+    font-size: 16pt;
+}
+.delete-vocabulary img {
+    width: 16px;  /* 이미지 크기 조정 */
+    height: 16px;
+    vertical-align: middle;
+}
+.vocabulary-content {
+    margin: 0;
+    font-size: 13pt;
+}
+
+#voca-box {
+    filter: drop-shadow(1px 1px 2px dodgerblue);
+}
