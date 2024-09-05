@@ -17,7 +17,9 @@ import com.example.ormi5finalteam1.domain.Grade;
 import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.domain.user.Role;
 import com.example.ormi5finalteam1.domain.user.dto.CreateUserRequestDto;
+import com.example.ormi5finalteam1.service.EmailVerificationService;
 import com.example.ormi5finalteam1.service.UserService;
+import com.example.ormi5finalteam1.service.VocabularyListService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,16 +42,21 @@ class UserControllerTest {
     private ObjectMapper objectMapper;
     @MockBean
     private UserService userService;
+    @MockBean
+    private VocabularyListService vocabularyListService;
+    @MockBean
+    private EmailVerificationService emailVerificationService;
 
     @Test
     void checkEmail_은_해당_email이_존재할_시_true_를_반환한다() throws Exception {
         //given
+        String email = "test@test.com";
         when(userService.isDuplicateEmail(anyString())).thenReturn(true);
         //when
         ResultActions actions
             = mockMvc.perform(
             get("/api/email-duplication")
-                .param("email", "email")
+                .param("email", email)
                 .with(csrf())
                 .accept(MediaType.APPLICATION_JSON));
         //then
@@ -60,12 +67,13 @@ class UserControllerTest {
     @Test
     void checkEmail_은_해당_email이_존재하지_않을_시_false_를_반환한다() throws Exception {
         //given
+        String email = "test@test.com";
         when(userService.isDuplicateEmail(anyString())).thenReturn(false);
         //when
         ResultActions actions
             = mockMvc.perform(
             get("/api/email-duplication")
-                .param("email", "newEmail")
+                .param("email", email)
                 .with(csrf())
                 .accept(MediaType.APPLICATION_JSON));
         //then
@@ -76,6 +84,20 @@ class UserControllerTest {
     @Test
     void checkEmail_은_email_파라미터를_누락할_시_400_에러를_반환한다() throws Exception {
         //given
+        //when
+        ResultActions actions
+            = mockMvc.perform(
+            get("/api/email-duplication")
+                .with(csrf())
+                .accept(MediaType.APPLICATION_JSON));
+        //then
+        actions.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void checkEmail_은_유효하지_않은_이메일로_요청_시_400_에러를_반환한다() throws Exception {
+        //given
+        String email = "invalid-email";
         //when
         ResultActions actions
             = mockMvc.perform(
