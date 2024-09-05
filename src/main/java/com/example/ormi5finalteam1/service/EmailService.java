@@ -6,6 +6,7 @@ import com.example.ormi5finalteam1.domain.verificationcode.VerificationCode;
 import com.example.ormi5finalteam1.repository.VerificationCodeRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Random;
@@ -28,7 +29,9 @@ public class EmailVerificationService {
     @Value("${spring.mail.username}")
     private String serviceEmail;
     private static final Integer EXPIRATION_TIME_IN_MINUTES = 5;
+    private static final Integer TEMP_PASSWORD_LENGTH = 10;
     private final Map<String, Boolean> verifiedEmails = new ConcurrentHashMap<>();
+    private final UserService userService;
 
     public void sendVerificationEmail(String to) throws MessagingException {
         String code = generateVerificationCode();
@@ -44,7 +47,7 @@ public class EmailVerificationService {
 
         Context context = new Context();
         context.setVariable("verificationCode", code);
-        String htmlContent = templateEngine.process("verificationEmailTemplate", context);
+        String htmlContent = templateEngine.process("email/verificationEmailTemplate", context);
         helper.setText(htmlContent, true);
 
         mailSender.send(message);
@@ -78,4 +81,40 @@ public class EmailVerificationService {
     public void clearVerificationStatus(String email) {
         verifiedEmails.remove(email);
     }
+
+    public void sendTemporaryPassword(String email) throws MessagingException {
+        if (!userService.existByEmail(email)) {
+            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        String tempPassword = generateTemporaryPassword();
+        userService.updatePassword(email, tempPassword);
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+        helper.setFrom(serviceEmail);
+        helper.setTo(email);
+        helper.setSubject("임시 비밀번호 발급");
+
+        Context context = new Context();
+        context.setVariable("temporaryPassword", tempPassword);
+        String htmlContent = templateEngine.process("email/temporaryPasswordEmailTemplate", context);
+        helper.setText(htmlContent, true);
+
+        mailSender.send(message);
+    }
+
+    private String generateTemporaryPassword() {
+        SecureRandom random = new SecureRandom();
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < TEMP_PASSWORD_LENGTH; i++) {
+            int randomIndex = random.nextInt(chars.length());
+            sb.append(chars.charAt(randomIndex));
+        }
+
+        return sb.toString();
+    }
+
 }
