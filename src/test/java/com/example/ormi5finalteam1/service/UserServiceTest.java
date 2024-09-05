@@ -18,6 +18,7 @@ import com.example.ormi5finalteam1.domain.user.Role;
 import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.domain.user.dto.CreateUserRequestDto;
 import com.example.ormi5finalteam1.repository.UserRepository;
+import jakarta.mail.MessagingException;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -93,6 +94,30 @@ class UserServiceTest {
         boolean result = userService.isDuplicateEmail("test@test.com");
         //then
         assertThat(result).isTrue();
+    }
+
+    @Test
+    void requestEmailVerification_은_중복된_email이_없을_때_이메일을_전송한다() throws MessagingException {
+        // given
+        String email = "test@test.com";
+        when(repository.existsByEmail(anyString())).thenReturn(false);
+
+        // when & then
+        assertThatCode(() -> userService.requestEmailVerification(email)).doesNotThrowAnyException();
+        verify(emailVerificationService).sendVerificationEmail(email);
+    }
+
+    @Test
+    void requestEmailVerification_은_중복된_email이_있을_때_BusinessException을_던진다() throws MessagingException {
+        // given
+        String email = "test@test.com";
+        when(repository.existsByEmail(anyString())).thenReturn(true);
+
+        // when & then
+        assertThatThrownBy(() -> userService.requestEmailVerification(email))
+            .isInstanceOf(BusinessException.class)
+            .hasFieldOrPropertyWithValue("errorCode", ErrorCode.DUPLICATE_EMAIL);
+        verify(emailVerificationService, never()).sendVerificationEmail(email);
     }
 
     @Test
