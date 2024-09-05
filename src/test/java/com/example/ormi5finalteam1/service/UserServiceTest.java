@@ -19,6 +19,7 @@ import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.domain.user.dto.CreateUserRequestDto;
 import com.example.ormi5finalteam1.repository.UserRepository;
 import jakarta.mail.MessagingException;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,8 +41,12 @@ class UserServiceTest {
     @Mock
     private EmailVerificationService emailVerificationService;
 
+    @Mock
+    private User mockUser;
+
     @InjectMocks
     private UserService userService;
+
 
     @Test
     void createUser_은_유저를_생성할_수_있다() {
@@ -191,16 +196,21 @@ class UserServiceTest {
 
     @Test
     void loadUserByUsername_은_email_로_유저_데이터를_찾아올_수_있다() {
-        //given
+        // given
         String email = "test@test.com";
-        User user = User.builder().email(email).build();
-        when(repository.findByEmail(email)).thenReturn(Optional.of(user));
-        //when
+        when(repository.findByEmail(email)).thenReturn(Optional.of(mockUser));
+        when(mockUser.getEmail()).thenReturn(email);
+        when(mockUser.isActive()).thenReturn(true);
+        when(mockUser.getDeletedAt()).thenReturn(null);
+
+        // when
         User result = userService.loadUserByUsername(email);
-        //then
-        assertThat(result).isEqualTo(user);
+
+        // then
+        assertThat(result).isEqualTo(mockUser);
         assertThat(result.getEmail()).isEqualTo(email);
-        assertThat(result.getLastLoginedAt()).isNotNull();
+        verify(mockUser).checkAndAddAttendancePoint();
+        verify(mockUser).updateLoginTime();
         verify(repository).findByEmail(email);
     }
 
@@ -217,27 +227,27 @@ class UserServiceTest {
 
     @Test
     void loadUserByUsername_은_유저가_deactive_인_경우_BusinessException_을_던진다() {
-        //given
-        String email = "test@test.com";
-        User user = User.builder().email(email).build();
-        user.deactivateUser();
-        when(repository.findByEmail(email)).thenReturn(Optional.of(user));
-        //when & then
-        assertThatThrownBy(() -> userService.loadUserByUsername(email)).isInstanceOf(
-                BusinessException.class)
+        // given
+        String email = "inactive@test.com";
+        when(repository.findByEmail(email)).thenReturn(Optional.of(mockUser));
+        when(mockUser.isActive()).thenReturn(false);
+
+        // when & then
+        assertThatThrownBy(() -> userService.loadUserByUsername(email))
+            .isInstanceOf(BusinessException.class)
             .hasFieldOrPropertyWithValue("errorCode", ErrorCode.USER_SUSPENDED);
     }
 
     @Test
     void loadUserByUsername_은_유저가_deleted_인_경우_BusinessException_을_던진다() {
-        //given
-        String email = "test@test.com";
-        User user = User.builder().email(email).build();
-        user.delete();
-        when(repository.findByEmail(email)).thenReturn(Optional.of(user));
-        //when & then
-        assertThatThrownBy(() -> userService.loadUserByUsername(email)).isInstanceOf(
-                BusinessException.class)
+        // given
+        String email = "deleted@test.com";
+        when(repository.findByEmail(email)).thenReturn(Optional.of(mockUser));
+        when(mockUser.getDeletedAt()).thenReturn(LocalDateTime.now());
+
+        // when & then
+        assertThatThrownBy(() -> userService.loadUserByUsername(email))
+            .isInstanceOf(BusinessException.class)
             .hasFieldOrPropertyWithValue("errorCode", ErrorCode.USER_DEACTIVATED);
     }
 }
