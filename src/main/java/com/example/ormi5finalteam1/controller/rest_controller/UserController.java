@@ -32,7 +32,7 @@ public class UserController {
     private final EmailVerificationService emailVerificationService;
 
     @GetMapping("/email-duplication")
-    public boolean checkEmail(@RequestParam String email) {
+    public boolean checkEmail(@Email @RequestParam String email) {
         return userService.isDuplicateEmail(email);
     }
 
