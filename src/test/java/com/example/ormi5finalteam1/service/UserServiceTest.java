@@ -6,6 +6,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -56,15 +57,17 @@ class UserServiceTest {
     }
 
     @Test
-    void createUser_은_중복된_email_이_존재할_시_BusinessException을_던진다() {
-        //given
-        CreateUserRequestDto requestDto
-            = new CreateUserRequestDto("test@test.com", "nickname", "password");
-        when(repository.existsByEmail(anyString())).thenReturn(true);
-        //when & then
-        assertThatThrownBy(() -> userService.createUser(requestDto)).isInstanceOf(
-                BusinessException.class)
-            .hasFieldOrPropertyWithValue("errorCode", ErrorCode.DUPLICATE_EMAIL);
+    void createUser_은_이메일이_검증되지_않았을_경우_BusinessException을_던진다() {
+        // given
+        CreateUserRequestDto requestDto = new CreateUserRequestDto("test@test.com", "nickname", "password");
+        when(emailVerificationService.isEmailVerified(anyString())).thenReturn(false);
+
+        // when & then
+        assertThatThrownBy(() -> userService.createUser(requestDto))
+            .isInstanceOf(BusinessException.class)
+            .hasFieldOrPropertyWithValue("errorCode", ErrorCode.EMAIL_NOT_VERIFIED);
+        verify(repository,never()).save(any(User.class));
+        verify(emailVerificationService,never()).clearVerificationStatus(anyString());
     }
 
     @Test
