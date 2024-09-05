@@ -164,6 +164,32 @@ class UserServiceTest {
     }
 
     @Test
+    void getUser_는_유저를_찾을_수_있다() {
+        // given
+        long userId = 1L;
+        User user = new User(userId);
+        when(repository.findById(userId)).thenReturn(Optional.of(user));
+
+        // when
+        User result = userService.getUser(userId);
+
+        // then
+        assertThat(result).isEqualTo(user);
+    }
+
+    @Test
+    void getUser_는_유저가_없을_때_BusinessException을_던진다() {
+        // given
+        long userId = 1L;
+        when(repository.findById(userId)).thenReturn(Optional.empty());
+
+        // when & then
+        assertThatThrownBy(() -> userService.getUser(userId))
+            .isInstanceOf(BusinessException.class)
+            .hasFieldOrPropertyWithValue("errorCode", ErrorCode.USER_NOT_FOUND);
+    }
+
+    @Test
     void loadUserByUsername_은_email_로_유저_데이터를_찾아올_수_있다() {
         //given
         String email = "test@test.com";
