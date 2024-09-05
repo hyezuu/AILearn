@@ -47,7 +47,7 @@ public class MyController {
         model.addAttribute("user", user);
 
         if(user.getGrade() == null) {
-            model.addAttribute("userGrade", 0);
+            model.addAttribute("userGrade", 7);
         } else {
             model.addAttribute("userGrade",user.getGrade().getIndex());
         }
