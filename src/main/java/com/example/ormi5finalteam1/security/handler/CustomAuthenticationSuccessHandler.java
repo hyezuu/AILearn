@@ -1,5 +1,6 @@
 package com.example.ormi5finalteam1.security.handler;
 
+import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.domain.user.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,13 +17,17 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-        Authentication authentication) throws IOException, ServletException {
+                                        Authentication authentication) throws IOException, ServletException {
 
         if (authentication.getPrincipal() instanceof User u) {
+            Provider provider = u.toProvider();
             PreAuthenticatedAuthenticationToken token = new PreAuthenticatedAuthenticationToken(
-                u.toProvider(), null, u.getAuthorities());
+                    provider, null, u.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(token);
+
+            response.sendRedirect(provider.grade() == null ? "/tests" : "/");
+        } else {
+            response.sendRedirect("/");
         }
-        response.sendRedirect("/");
     }
 }

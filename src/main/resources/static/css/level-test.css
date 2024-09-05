@@ -1,0 +1,56 @@
+main {
+    padding: 150px;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+input {
+    width: 300px;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #F9F9F9;
+    border: 1px solid #A8A8A8;
+    border-radius: 4px;
+    box-sizing: border-box;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.question {
+    margin-bottom: 20px;
+}
+
+.question p {
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+ul {
+    list-style: none;
+}
+
+input[type="text"] {
+    font-size: 16px;
+}
+
+.submit-container {
+    text-align: center;
+}
+
+button[type="submit"] {
+    text-align: right;
+    margin-top: 30px;
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}

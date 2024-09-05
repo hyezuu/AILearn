@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select grade</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/select-level.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <script src="/js/tests.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div id="layout">
+    <!-- 메뉴 부분 -->
+    <header th:replace="~{/layout/header::header}"></header>
+    <!-- 메뉴 부분 끝 -->
+    <main>
+        <div class="container">
+            <h1>등급 테스트</h1>
+            <p>원하시는 레벨을 선택해 주세요!</p>
+
+            <form id="gradeForm">
+                <ul class="card-container">
+                    <li class="card">
+                        <input type="radio" id="A1" name="grade" value="A1">
+                        <label for="A1" class="card-content">
+                            <div class="card-header">
+                                <h2 class="grade">A1</h2>
+                                <h3 class="tier">BRONZE</h3>
+                            </div>
+                            <div class="card-body">
+                                <span class="description">테스트를 원하시지 않거나 입문하시는 분은 A1을 선택해 주세요.</span>
+                            </div>
+                        </label>
+                    </li>
+
+                    <li class="card">
+                        <input type="radio" id="A2" name="grade" value="A2">
+                        <label for="A2" class="card-content">
+                            <div class="card-header">
+                                <h2 class="grade">A2</h2>
+                                <h3 class="tier">SILVER</h3>
+                            </div>
+                            <div class="card-body">
+                                <span class="description">알파벳, 발음기호, 기초어휘, 문법 문장 테스트. 영어를 처음부터 하고자 하는 분에게 추천.</span>
+                            </div>
+                        </label>
+                    </li>
+
+                    <li class="card">
+                        <input type="radio" id="B1" name="grade" value="B1">
+                        <label for="B1" class="card-content">
+                            <div class="card-header">
+                                <h2 class="grade">B1</h2>
+                                <h3 class="tier">GOLD</h3>
+                            </div>
+                            <div class="card-body">
+                                <span class="description">알파벳, 발음기호, 기초어휘, 문법 문장 테스트. 영어를 처음부터 하고자 하는 분에게 추천.</span>
+                            </div>
+                        </label>
+                    </li>
+
+                    <li class="card">
+                        <input type="radio" id="B2" name="grade" value="B2">
+                        <label for="B2" class="card-content">
+                            <div class="card-header">
+                                <h2 class="grade">B2</h2>
+                                <h3 class="tier">PLATINUM</h3>
+                            </div>
+                            <div class="card-body">
+                                <span class="description">알파벳, 발음기호, 기초어휘, 문법 문장 테스트. 영어를 처음부터 하고자 하는 분에게 추천.</span>
+                            </div>
+                        </label>
+                    </li>
+
+                    <li class="card">
+                        <input type="radio" id="C1" name="grade" value="C1">
+                        <label for="C1" class="card-content">
+                            <div class="card-header">
+                                <h2 class="grade">C1</h2>
+                                <h3 class="tier">DIAMOND</h3>
+                            </div>
+                            <div class="card-body">
+                                <span class="description">알파벳, 발음기호, 기초어휘, 문법 문장 테스트. 영어를 처음부터 하고자 하는 분에게 추천.</span>
+                            </div>
+                        </label>
+                    </li>
+                </ul>
+
+                <button class="submit-btn" type="submit" onclick="submitForm()">선택 완료</button>
+            </form>
+            <p class="note">• 선택하신 레벨 테스트에서 80점 이상 받지 못할 경우, 한 단계 아래 레벨 테스트를 보게 됩니다.<br>
+                EX) B2 테스트에서 탈락하실 경우 -> B1 테스트를 보시게 됩니다.</p>
+        </div>
+    </main>
+</div>
+</body>
+</html>
