@@ -18,7 +18,7 @@ a {
 
 h1 {
     margin: 80px;
-    margin-bottom: 60px;
+    margin-bottom: 20px;
     display: inline-block;
     text-align: center;
 }
@@ -97,19 +97,26 @@ td {
 
 /* 작성하기 버튼 */
 .edit-button {
-    margin: 60px;
-    float: right;
-    padding : 6px 30px;
-    background-color: #2e5dbd;
+    padding: 6px 30px;
+    background-color: #103889;
     color: white;
-    font-size: 1.1rem;
+    font-size: 16px;
     font-weight: 600;
     border: none;
     border-radius: 10px;
-    margin-right: 620px;
+    cursor: pointer;
 }
 .edit-button:hover {
-    background-color: #103889;
+    background-color: #0f246c;
+    filter: drop-shadow(0px 0px 2px #103889 );
+    border: 1px solid white;
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    max-width: 700px;
+    margin: 20px auto 50px;
 }
 
 

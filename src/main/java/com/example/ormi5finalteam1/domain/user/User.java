@@ -116,10 +116,11 @@ public class User extends BaseEntity implements UserDetails {
 
     private void updateLevel() {
         int newLevel = this.point / UserLevelConstants.POINTS_PER_LEVEL;
-        if (newLevel > this.level) {
-            this.level = newLevel;
+        if (newLevel > 0) {
+            this.level += newLevel;
+            this.point = this.point % UserLevelConstants.POINTS_PER_LEVEL;
             this.isReadyForUpgrade = (this.level % UserLevelConstants.LEVELS_FOR_UPGRADE_READY
-                == 0);
+                    == 0);
         }
     }
 
