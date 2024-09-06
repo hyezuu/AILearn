@@ -72,4 +72,23 @@ public class EssayController {
         EssayResponseDto essayResponseDto = essayService.showEssay(id);
         return new ResponseEntity<>(essayResponseDto, HttpStatusCode.valueOf(200));
     }
+
+    /** 에세이 삭제 */
+    @DeleteMapping("/essays/{id}/delete")
+    public ResponseEntity<Void> deleteEssay(@PathVariable Long id) {
+        essayService.deleteEssay(id);
+        return new ResponseEntity<>(HttpStatusCode.valueOf(200));
+    }
+
+    /** 에세이 검색 */
+    @GetMapping("/essays/search")
+    public ResponseEntity<Page<EssayResponseDto>> searchEssays(
+            @AuthenticationPrincipal Provider provider,
+            @RequestParam(name = "topic") String topic,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int pageSize
+    ) {
+        Page<EssayResponseDto> findByTopic = essayService.searchEssays(topic, page, pageSize, provider);
+        return new ResponseEntity<>(findByTopic, HttpStatusCode.valueOf(200));
+    }
 }

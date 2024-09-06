@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,20 +58,28 @@ public class EssayService {
     /** 내 에세이 목록 조회 */
     public Page<EssayResponseDto> showMyEssays(Provider provider, int page, int pageSize) {
             Pageable pageable = PageRequest.of(page,pageSize, Sort.by("createdAt").descending());
-            Page<Essay> essayByUserId = essayRepository.findByUserId(provider.id(), pageable);
+            Page<Essay> essayByUserId = essayRepository.findByUserIdAndDeletedAtNull(provider.id(), pageable);
             return essayByUserId.map(this::convertResponseToDto);
-    }
-
-    /** id로 에세이 조회 */
-    public Essay getEssayById(Long id) {
-        return essayRepository.findById(id)
-                .orElseThrow(() -> new BusinessException(ErrorCode.ESSAY_NOT_FOUND));
     }
 
     /** 에세이 상세 조회 */
     public EssayResponseDto showEssay(Long id) {
         Essay essayById = getEssayById(id);
         return convertResponseToDto(essayById);
+    }
+
+    /** 에세이 삭제 */
+    @Transactional
+    public void deleteEssay(Long id) {
+        Essay essay = getEssayById(id);
+        essay.delete();
+    }
+
+    /** 에세이 검색 */
+    public Page<EssayResponseDto> searchEssays(String topic, int page, int pageSize, Provider provider) {
+        Pageable pageable = PageRequest.of(page,pageSize, Sort.by("createdAt").descending());
+        Page<Essay> byTopicContains = essayRepository.findByTopicContainsAndUser_IdAndDeletedAtNull(topic, provider.id(), pageable);
+        return byTopicContains.map(this::convertResponseToDto);
     }
 
     /** DTO-Entity 변환 */
@@ -82,13 +91,13 @@ public class EssayService {
               .content(essayRequestDto.content())
               .build();
     }
-
     private EssayGuideResponseDto convertGuideResponseToDto(EssayGuide essayGuide) {
        return new EssayGuideResponseDto(
                essayGuide.getGrade(),
                essayGuide.getContent()
        );
     }
+
     private EssayResponseDto convertResponseToDto(Essay essay) {
         return EssayResponseDto.builder()
                 .id(essay.getId())
@@ -96,5 +105,11 @@ public class EssayService {
                 .content(essay.getContent())
                 .createdAt(essay.getCreatedAt())
                 .build();
+    }
+
+    /** id로 에세이 조회 */
+    public Essay getEssayById(Long id) {
+        return essayRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.ESSAY_NOT_FOUND));
     }
 }
