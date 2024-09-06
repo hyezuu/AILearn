@@ -38,7 +38,7 @@ public class AdminService {
     }
 
     public void deletePost(Long postId) {
-        Post foundPost = postService.getPostById(postId);
+        Post foundPost = postService.getPost(postId);
         if (foundPost.getDeletedAt() == null) foundPost.delete();
         else throw new BusinessException(ErrorCode.ALREADY_DELETED);
     }
