@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문법 예문</title>
+    <!-- 폰트를 위한 url -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/grammar-examples.css">
+    <!-- alert창 디자인을 위한 url -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="/js/grammar-examples/index.js"></script>
+</head>
+<body>
+<div id="layout">
+    <h1>문법 예문</h1>
+    <div class="search_new-grammar">
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="search">
+            <button class="search-button">search</button>
+        </div>
+        <div class="new-grammar">
+            <button>예문 추가하기</button>
+        </div>
+    </div>
+    <div>
+        <ul class="grammar-example" id="grammar-box">
+            <li th:each="vocabulary : ${vocabulary}" class="vocabulary-item" >
+                <div class="grammar-example-header">
+                    <p th:text="${grammar-example}">문법 예문</p>
+                    <button type="submit" id="checkAnswer">정답확인</button>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="pagination">
+    <button id="prev-page" class="pagination-button"> << </button>
+    <span id="page-info"></span>
+    <button id="next-page" class="pagination-button"> >> </button>
+</div>
+
+</body>
+</html>
