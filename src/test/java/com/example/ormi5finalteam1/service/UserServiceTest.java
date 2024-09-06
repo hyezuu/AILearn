@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -18,6 +19,7 @@ import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.domain.user.Role;
 import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.domain.user.dto.CreateUserRequestDto;
+import com.example.ormi5finalteam1.domain.user.dto.UpdateUserRequestDto;
 import com.example.ormi5finalteam1.repository.UserRepository;
 import jakarta.mail.MessagingException;
 import java.time.LocalDateTime;
@@ -279,6 +281,56 @@ class UserServiceTest {
         verify(passwordEncoder,never()).encode(anyString());
         verify(emailService,never()).sendTemporaryPasswordEmail(eq(email), anyString());
         verify(mockUser, never()).updatePassword(anyString());
+    }
+
+    @Test
+    void updateUser_로_닉네임과_비밀번호를_업데이트할_수_있다() {
+        // given
+        long userId = 1L;
+        UpdateUserRequestDto requestDto = new UpdateUserRequestDto("newNickname", "newPassword");
+        User user = mock(User.class);
+        when(repository.findById(userId)).thenReturn(Optional.of(user));
+        when(user.getNickname()).thenReturn("oldNickname");
+        when(repository.existsByNickname("newNickname")).thenReturn(false);
+        when(passwordEncoder.encode("newPassword")).thenReturn("encodedNewPassword");
+        // when
+        assertThatCode(() -> userService.updateUser(userId, requestDto)).doesNotThrowAnyException();
+        // then
+        verify(user).updateNickname("newNickname");
+        verify(user).updatePassword("encodedNewPassword");
+    }
+
+    @Test
+    void updateUser_는_닉네임이_중복될_경우_BusinessException을_던진다() {
+        // given
+        long userId = 1L;
+        UpdateUserRequestDto requestDto = new UpdateUserRequestDto("duplicateNickname", "newPassword");
+        User user = mock(User.class);
+        when(repository.findById(userId)).thenReturn(Optional.of(user));
+        when(user.getNickname()).thenReturn("oldNickname");
+        when(repository.existsByNickname("duplicateNickname")).thenReturn(true);
+        // when & then
+        assertThatThrownBy(() -> userService.updateUser(userId, requestDto))
+            .isInstanceOf(BusinessException.class)
+            .hasFieldOrPropertyWithValue("errorCode", ErrorCode.DUPLICATE_NICKNAME);
+        verify(user, never()).updateNickname(anyString());
+        verify(user, never()).updatePassword(anyString());
+    }
+
+    @Test
+    void updateUser_는_비밀번호가_null이거나_비어있을_경우_비밀번호를_업데이트하지_않는다() {
+        // given
+        long userId = 1L;
+        UpdateUserRequestDto requestDto = new UpdateUserRequestDto("newNickname", null);
+        User user = mock(User.class);
+        when(repository.findById(userId)).thenReturn(Optional.of(user));
+        when(user.getNickname()).thenReturn("oldNickname");
+        when(repository.existsByNickname("newNickname")).thenReturn(false);
+        // when
+        assertThatCode(() -> userService.updateUser(userId, requestDto)).doesNotThrowAnyException();
+        // then
+        verify(user).updateNickname("newNickname");
+        verify(user, never()).updatePassword(anyString());
     }
 
 }
