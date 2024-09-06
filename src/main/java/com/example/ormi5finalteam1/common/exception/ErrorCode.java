@@ -23,8 +23,9 @@ public enum ErrorCode {
     EMAIL_NOT_VERIFIED(400, "Email is not verified"),
     VERIFICATION_CODE_NOT_FOUND(404, "Verification code not found"),
     VERIFICATION_CODE_EMAIL_MISMATCH(400, "Verification code email is mismatch"),
-    VERIFICATION_CODE_EXPIRED(400, "Verification code is expired");
-
+    VERIFICATION_CODE_EXPIRED(400, "Verification code is expired"),
+    HAS_NO_AUTHORITY(400, "Cannot access due to authority"),
+    ALREADY_DELETED(400, "Already deleted entity");
 
     private final int status;
     private final String message;

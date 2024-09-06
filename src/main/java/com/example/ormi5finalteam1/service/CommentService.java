@@ -70,6 +70,13 @@ public class CommentService {
                 .map(this::convertToDto);
     }
 
+    // 관리자가 댓글을 삭제할 때 호출하는 메서드
+    public void deleteCommentByAdmin(Long postId, Long commentId) {
+        Comment comment = commentRepository.findByIdAndPostId(commentId, postId);
+        if (comment == null) throw new BusinessException(ErrorCode.COMMENT_NOT_FOUND);
+        commentRepository.delete(comment);
+    }
+
     private CommentDto convertToDto(Comment comment) {
         return new CommentDto(
                 comment.getId(),
