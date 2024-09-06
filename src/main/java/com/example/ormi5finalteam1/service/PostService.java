@@ -4,6 +4,7 @@ import com.example.ormi5finalteam1.common.exception.BusinessException;
 import com.example.ormi5finalteam1.common.exception.ErrorCode;
 import com.example.ormi5finalteam1.domain.post.Post;
 import com.example.ormi5finalteam1.domain.post.dto.PostDto;
+import com.example.ormi5finalteam1.domain.post.dto.PostReponseDto;
 import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.repository.PostRepository;
@@ -24,16 +25,16 @@ public class PostService {
     }
 
     // 게시글 전체 조회 또는 키워드 검색
-    public Page<PostDto> getAllPosts(int page, int size, String keyword) {
+    public Page<PostReponseDto> getAllPosts(int page, int size, String keyword) {
         Pageable pageable = PageRequest.of(page, size);
 
         // 키워드가 null 이거나 빈 문자열이면 전체 조회, 그렇지 않으면 검색
         if (keyword == null || keyword.trim().isEmpty()) {
             return postRepository.findAllByDeletedAtIsNullOrderByCreatedAtDesc(pageable)
-                    .map(this::convertToDto);
+                    .map(this::convertToResponseDto);
         } else {
             return postRepository.findAllByTitleContainingAndDeletedAtIsNullOrderByCreatedAtDesc(keyword, pageable)
-                    .map(this::convertToDto);
+                    .map(this::convertToResponseDto);
         }
     }
 
@@ -101,6 +102,16 @@ public class PostService {
                 post.getUser().getId(),
                 post.getTitle(),
                 post.getContent(),
+                post.getViewCount()
+        );
+    }
+
+    private PostReponseDto convertToResponseDto(Post post) {
+        return new PostReponseDto(
+                post.getId(),
+                post.getUser().getNickname(),
+                post.getTitle(),
+                post.getCreatedAt(),
                 post.getViewCount()
         );
     }
