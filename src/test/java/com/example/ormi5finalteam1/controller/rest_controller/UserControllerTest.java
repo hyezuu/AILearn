@@ -3,6 +3,7 @@ package com.example.ormi5finalteam1.controller.rest_controller;
 import static com.example.ormi5finalteam1.util.TestSecurityContextFactory.authenticatedProvider;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
@@ -13,6 +14,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -23,6 +25,7 @@ import com.example.ormi5finalteam1.domain.Grade;
 import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.domain.user.Role;
 import com.example.ormi5finalteam1.domain.user.dto.CreateUserRequestDto;
+import com.example.ormi5finalteam1.domain.user.dto.UpdateUserRequestDto;
 import com.example.ormi5finalteam1.domain.vocabulary.dto.MyVocabularyListResponseDto;
 import com.example.ormi5finalteam1.service.EmailService;
 import com.example.ormi5finalteam1.service.UserService;
@@ -282,10 +285,12 @@ class UserControllerTest {
         LocalDateTime now = LocalDateTime.now();
         List<MyVocabularyListResponseDto> vocabularyList = List.of(
             new MyVocabularyListResponseDto(1L, "apple", "사과", "I ate an apple.", "A1", now),
-            new MyVocabularyListResponseDto(2L, "banana", "바나나", "The monkey likes bananas.", "A2", now)
+            new MyVocabularyListResponseDto(2L, "banana", "바나나", "The monkey likes bananas.", "A2",
+                now)
         );
         Page<MyVocabularyListResponseDto> mockedPage = new PageImpl<>(vocabularyList);
-        when(vocabularyListService.getMyVocabularies(eq(provider), any(Pageable.class))).thenReturn(mockedPage);
+        when(vocabularyListService.getMyVocabularies(eq(provider), any(Pageable.class))).thenReturn(
+            mockedPage);
         // when
         ResultActions actions = mockMvc.perform(
             get("/api/me/vocabulary-list")
@@ -416,10 +421,126 @@ class UserControllerTest {
                 .param("code", expiredCode)
                 .with(csrf())
                 .accept(MediaType.APPLICATION_JSON));
-
         // then
         actions.andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.message").value("Verification code is expired"));
         verify(emailService).verifyCode(email, expiredCode);
+    }
+
+    @Test
+    void resetPassword_는_유효한_이메일로_임시_비밀번호를_전송한다() throws Exception {
+        // given
+        String email = "test@email.com";
+        // when
+        ResultActions actions = mockMvc.perform(
+            get("/api/auth/password")
+                .param("email", email)
+                .with(csrf())
+                .accept(MediaType.APPLICATION_JSON));
+        // then
+        actions.andExpect(status().isOk());
+        verify(userService).sendTemporaryPassword(email);
+    }
+
+    @Test
+    void resetPassword_는_유효하지_않은_이메일_형식으로_요청시_400_에러를_반환한다() throws Exception {
+        // given
+        String invalidEmail = "invalid-email";
+        // when
+        ResultActions actions = mockMvc.perform(
+            get("/api/auth/password")
+                .param("email", invalidEmail)
+                .with(csrf())
+                .accept(MediaType.APPLICATION_JSON));
+        // then
+        actions.andExpect(status().isBadRequest());
+        verify(userService, never()).sendTemporaryPassword(anyString());
+    }
+
+    @Test
+    void resetPassword_는_존재하지_않는_이메일로_요청시_404_에러를_반환한다() throws Exception {
+        // given
+        String nonExistentEmail = "nonexistent@email.com";
+        doThrow(new BusinessException(ErrorCode.USER_NOT_FOUND))
+            .when(userService).sendTemporaryPassword(nonExistentEmail);
+        // when
+        ResultActions actions = mockMvc.perform(
+            get("/api/auth/password")
+                .param("email", nonExistentEmail)
+                .with(csrf())
+                .accept(MediaType.APPLICATION_JSON));
+        // then
+        actions.andExpect(status().isNotFound());
+        verify(userService).sendTemporaryPassword(nonExistentEmail);
+    }
+
+    @Test
+    void update_는_유효한_데이터로_사용자_정보를_업데이트한다() throws Exception {
+        // given
+        Provider provider = new Provider(1L, "test@email.com", "oldNickname", Role.USER, Grade.A1, 10);
+        UpdateUserRequestDto requestDto = new UpdateUserRequestDto("newNickname", "newPassword");
+        // when
+        ResultActions actions = mockMvc.perform(
+            put("/api/me")
+                .with(csrf())
+                .with(authenticatedProvider(provider))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(requestDto)));
+        // then
+        actions.andExpect(status().isOk());
+        verify(userService).updateUser(provider.id(), requestDto);
+    }
+
+    @Test
+    void update_는_유효하지_않은_닉네임으로_요청시_400_에러를_반환한다() throws Exception {
+        // given
+        Provider provider = new Provider(1L, "test@email.com", "oldNickname", Role.USER, Grade.A1, 10);
+        UpdateUserRequestDto requestDto = new UpdateUserRequestDto("a", "validPassword");
+        // when
+        ResultActions actions = mockMvc.perform(
+            put("/api/me")
+                .with(csrf())
+                .with(authenticatedProvider(provider))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(requestDto)));
+        // then
+        actions.andExpect(status().isBadRequest());
+        verify(userService, never()).updateUser(anyLong(), any(UpdateUserRequestDto.class));
+    }
+
+    @Test
+    void update_는_유효하지_않은_비밀번호로_요청시_400_에러를_반환한다() throws Exception {
+        // given
+        Provider provider = new Provider(1L, "test@email.com", "oldNickname", Role.USER, Grade.A1, 10);
+        UpdateUserRequestDto requestDto = new UpdateUserRequestDto("validNickname", "short");
+        // when
+        ResultActions actions = mockMvc.perform(
+            put("/api/me")
+                .with(csrf())
+                .with(authenticatedProvider(provider))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(requestDto)));
+        // then
+        actions.andExpect(status().isBadRequest());
+        verify(userService, never()).updateUser(anyLong(), any(UpdateUserRequestDto.class));
+    }
+
+    @Test
+    void update_는_중복된_닉네임으로_요청시_409_에러를_반환한다() throws Exception {
+        // given
+        Provider provider = new Provider(1L, "test@email.com", "oldNickname", Role.USER, Grade.A1, 10);
+        UpdateUserRequestDto requestDto = new UpdateUserRequestDto("duplicated", "validPassword");
+        doThrow(new BusinessException(ErrorCode.DUPLICATE_NICKNAME))
+            .when(userService).updateUser(provider.id(), requestDto);
+        // when
+        ResultActions actions = mockMvc.perform(
+            put("/api/me")
+                .with(csrf())
+                .with(authenticatedProvider(provider))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(requestDto)));
+        // then
+        actions.andExpect(status().isConflict());
+        verify(userService).updateUser(provider.id(), requestDto);
     }
 }
