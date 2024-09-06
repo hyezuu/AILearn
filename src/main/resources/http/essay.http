@@ -15,10 +15,13 @@ content-type: application/json
 {
 }
 
-###
+### essay 목록조회
 GET localhost:8080/api/me/essays
 Authorization: Basic hyezuu@naver.com qweqwe123
 
-###
+### essay 상세조회
 GET localhost:8080/api/essays/1
 Authorization: Basic hyezuu@naver.com qweqwe123
+
+### essay 삭제
+DELETE localhost:8080/api/essays/24/delete

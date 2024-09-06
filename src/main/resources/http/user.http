@@ -2,7 +2,7 @@ POST localhost:8080/api/signup
 content-type: application/json
 
 {
-  "email": "duudu0704@gmail.com",
+  "email": "nigoleto@gmail.com",
   "password": "qweqwe123",
   "nickname": "혜주2"
 }
@@ -21,10 +21,10 @@ GET localhost:8080/api/me/vocabulary-list?page=0&size=10
 Authorization: Basic hyezuu@naver.com qweqwe123
 
 ### post email verification (이메일 전송!)
-POST localhost:8080/api/request-verification?email=duudu0704@gmail.com
+POST localhost:8080/api/request-verification?email=nigoleto@gmail.com
 
 ### post email verification code (이메일, 인증코드 다시 응답하기)
-POST localhost:8080/api/verify-email?email=duudu0704@gmail.com&code=253312
+POST localhost:8080/api/verify-email?email=nigoleto@gmail.com&code=737496
 
 ### get temp password (임시비밀번호 발급)
 GET localhost:8080/api/auth/password?email=duudu0704@gmail.com
