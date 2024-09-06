@@ -20,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -132,7 +133,7 @@ class PostServiceTest {
                 .password("password")
                 .nickname("testUser")
                 .build();
-        PostDto postDto = new PostDto(null, 1L, "title", "content", 0);
+        PostDto postDto = new PostDto(null, 1L,"nickname", "title", "content", 0, LocalDateTime.now(), null);
         Post post = new Post(user, "title", "content");
 
         when(userService.getUser(provider.id())).thenReturn(user);
@@ -148,7 +149,7 @@ class PostServiceTest {
     }
 
     @Test
-    void updatePost_게시글을_수정할_수_있다() {
+    void updatePost_게시글을_수정하고_updatedAt_도_갱신할_수_있다() {
         // Given
         Provider provider = new Provider(1, "test@example.com", "test", Role.USER, Grade.A1, 0);
         User user = User.builder()
@@ -157,8 +158,9 @@ class PostServiceTest {
                 .nickname("testUser")
                 .build();
         ReflectionTestUtils.setField(user, "id", provider.id());
+
         Post post = new Post(user, "oldTitle", "oldContent");
-        PostDto postDto = new PostDto(1L, 1L, "newTitle", "newContent", 0);
+        PostDto postDto = new PostDto(1L, 1L, "nickname", "newTitle", "newContent", 0, LocalDateTime.now(), null);
 
         when(postRepository.findById(1L)).thenReturn(Optional.of(post));
 
@@ -166,7 +168,9 @@ class PostServiceTest {
         PostDto updatedPost = postService.updatePost(1L, postDto, provider);
 
         // Then
-        assertEquals("newTitle", updatedPost.getTitle());
+        assertEquals("newTitle", updatedPost.getTitle());  // title이 "newTitle"로 업데이트되었는지 확인
+        assertEquals("newContent", updatedPost.getContent());  // content가 "newContent"로 업데이트되었는지 확인
+        assertNotEquals(LocalDateTime.of(2023, 1, 1, 0, 0), updatedPost.getUpdatedAt());  // updatedAt이 갱신되었는지 확인
         verify(postRepository, times(1)).findById(1L);
         verify(postRepository, times(1)).save(post);
     }
