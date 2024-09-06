@@ -19,6 +19,8 @@ document.addEventListener("DOMContentLoaded", function() {
             console.error('Error fetching user data:', error);
         });
 
+
+    // 게시글 생성 api 요청
     document.getElementById("post-form").addEventListener("submit", function(event) {
         event.preventDefault();
 
