@@ -159,8 +159,7 @@ input {
 button {
     width: 100%;
     padding: 10px;
-    margin-bottom: 20px;
-    margin-top: 20px;
+    margin-top: 10px;
     background-color: #2e5dbd;
     color: white;
     border: none;
@@ -196,7 +195,6 @@ hr {
 
 /*인증 코드 입력 토글*/
 #toggleContent {
-    margin-top: 20px;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -210,4 +208,61 @@ hr {
 h1 {
     margin-bottom: 40px;
     text-align: center;
+}
+
+.validation-message {
+    font-size: 0.8em;
+    height: 1em;
+    line-height: 1em;
+}
+
+.success-message {
+    color: #007bff;
+}
+
+.error-message {
+    color: #dc3545;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+#signup-button-main {
+    margin-top: 15px;
+}
+
+/* 수정 및 추가된 부분 */
+.input-button-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.input-button-wrapper input {
+    flex-grow: 1;
+    margin-right: 10px;
+    margin-bottom: 0;
+}
+
+.input-button-wrapper button {
+    flex-shrink: 0;
+    width: 30%;
+    white-space: nowrap;
+}
+
+.email-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.email-container input {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.email-container button {
+    flex-shrink: 0;
 }

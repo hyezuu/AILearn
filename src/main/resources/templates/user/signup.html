@@ -19,47 +19,50 @@
 
 <main>
   <div class="container">
-    <h1>마이페이지</h1>
-
+    <h1>회원가입</h1>
     <div class="signup-form">
-      <form id="signupForm" th:action="@{/signup}" th:object="${createUserRequestDto}" method="post">
+      <form id="signupForm" th:action="@{/signup}" th:object="${createUserRequestDto}"
+            method="post">
         <div class="form-group">
           <label for="email">이메일</label>
-          <div class="form-div">
-            <input type="email" class="form-control" id="email" name="email" th:field="*{email}" required>
-            <span id="emailResult"></span>
-            <button type="button" id="request-verification" class="btn btn-primary btn-block">메일 인증</button>
+          <div class="input-button-wrapper">
+            <input type="email" class="form-control" id="email" name="email" th:field="*{email}"
+                   required placeholder="example@email.com">
+            <button type="button" id="request-verification" class="btn btn-primary">메일 인증</button>
           </div>
+          <span id="emailResult" class="validation-message"></span>
         </div>
 
         <div id="toggle-content" class="form-group-verification" style="display:none;">
           <label for="authenticationCode">인증 코드 입력</label>
-          <div class="form-div">
-            <input type="text" class="form-control" id="authenticationCode" name="authenticationCode" required>
-            <span id="emailVerification"></span>
-            <button type="button" id="verify-email" class="btn btn-primary btn-block">인증 코드 확인</button>
+          <div class="input-button-wrapper">
+            <input type="text" class="form-control" id="authenticationCode"
+                   name="authenticationCode" required placeholder="인증 코드 6자리">
+            <button type="button" id="verify-email" class="btn btn-primary">인증 코드 확인</button>
           </div>
+          <span id="emailVerification" class="validation-message"></span>
         </div>
 
         <div class="form-group">
           <label for="nickname">닉네임</label>
-          <div class="form-div">
-            <input type="text" class="form-control" id="nickname" name="nickname" th:field="*{nickname}" required>
-            <span id="nicknameResult"></span>
-          </div>
+          <input type="text" class="form-control" id="nickname" name="nickname"
+                 th:field="*{nickname}" required placeholder="2-12자 사이">
+          <span id="nicknameResult" class="validation-message"></span>
         </div>
 
         <div class="form-group">
           <label for="password">비밀번호</label>
-          <input type="password" class="form-control-password" id="password" name="password" th:field="*{password}" required>
+          <input type="password" class="form-control" id="password" name="password"
+                 th:field="*{password}" required placeholder="8-16자 사이">
         </div>
 
         <div class="form-group">
           <label for="confirmPassword">비밀번호 확인</label>
-          <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+          <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
+                 required placeholder="비밀번호 재입력">
         </div>
 
-        <button type="submit" id="signup-button">회원가입</button>
+        <button type="submit" id="signup-button-main">회원가입</button>
       </form>
     </div>
     <hr/>
@@ -68,139 +71,7 @@
       <a href="/forgot-password" class="hr-a">비밀번호 찾기</a>
     </div>
   </div>
-
-  <script>
-    $(document).ready(function () {
-      let emailVerified = false;
-      let nicknameVerified = false;
-
-      function checkDuplication(field, url, resultSpan) {
-        const value = $(field).val();
-        if (value) {
-          $.ajax({
-            url: url,
-            type: 'GET',
-            data: {[field.name]: value},
-            success: function (response) {
-              if (response) {
-                $(resultSpan).text('이미 사용중입니다.').removeClass('success-message').addClass('error-message');
-                if (field.name === 'email') emailVerified = false;
-                if (field.name === 'nickname') nicknameVerified = false;
-              } else {
-                $(resultSpan).text('사용 가능합니다.').removeClass('error-message').addClass('success-message');
-                if (field.name === 'email') emailVerified = true;
-                if (field.name === 'nickname') nicknameVerified = true;
-              }
-            },
-            error: function () {
-              $(resultSpan).text('확인 중 오류가 발생했습니다.').removeClass('success-message').addClass('error-message');
-            }
-          });
-        } else {
-          $(resultSpan).text('').removeClass('success-message error-message');
-        }
-      }
-
-      $('#email').on('blur', function () {
-        checkDuplication(this, '/api/email-duplication', '#emailResult');
-      });
-
-      $('#nickname').on('blur', function () {
-        checkDuplication(this, '/api/nickname-duplication', '#nicknameResult');
-      });
-
-      $('#request-verification').on('click', function() {
-        const email = $('#email').val();
-        $.ajax({
-          url: '/api/request-verification',
-          type: 'POST',
-          data: { email: email },
-          success: function() {
-            alert('인증 코드가 이메일로 전송되었습니다.');
-            $('#toggle-content').show();
-          },
-          error: function() {
-            alert('인증 코드 전송에 실패했습니다.');
-          }
-        });
-      });
-
-      $('#verify-email').on('click', function() {
-        const email = $('#email').val();
-        const code = $('#authenticationCode').val();
-        $.ajax({
-          url: '/api/verify-email',
-          type: 'POST',
-          data: { email: email, code: code },
-          success: function() {
-            $('#emailVerification').text('이메일이 인증되었습니다.').removeClass('error-message').addClass('success-message');
-            emailVerified = true;
-          },
-          error: function() {
-            $('#emailVerification').text('인증에 실패했습니다.').removeClass('success-message').addClass('error-message');
-            emailVerified = false;
-          }
-        });
-      });
-
-      $('#signupForm').on('submit', function(e) {
-        e.preventDefault();
-        if (!emailVerified) {
-          alert('이메일 인증이 필요합니다.');
-          return;
-        }
-        if (!nicknameVerified) {
-          alert('닉네임 중복 확인이 필요합니다.');
-          return;
-        }
-        if ($('#password').val() !== $('#confirmPassword').val()) {
-          alert('비밀번호가 일치하지 않습니다.');
-          return;
-        }
-
-        $.ajax({
-          url: '/api/signup',
-          type: 'POST',
-          contentType: 'application/json',
-          data: JSON.stringify({
-            email: $('#email').val(),
-            nickname: $('#nickname').val(),
-            password: $('#password').val()
-          }),
-          success: function() {
-            alert('회원가입이 완료되었습니다.');
-            window.location.href = '/login';
-          },
-          error: function(xhr) {
-            alert('회원가입에 실패했습니다: ' + xhr.responseText);
-          }
-        });
-      });
-    });
-
-    // 기존의 메뉴 관련 스크립트는 그대로 유지
-    $(document).ready(function () {
-      $("a.mainMenu").mouseenter(function () {
-        $("header nav").stop().slideDown();
-      });
-      $("header nav a").mouseenter(function () {
-        $("a.mainMenu").removeClass('act');
-        $(this).parent().prev().addClass('act');
-      });
-      $("header ul").mouseleave(function () {
-        $("a.mainMenu").removeClass('act');
-        $("header nav").stop().slideUp();
-      });
-
-      $(document).scroll(function () {
-        const h2 = $(window).height();
-        const t1 = $(document).scrollTop();
-        const ht = Math.floor(t1 / h1);
-        $("a").removeClass();
-        $("li").eq(ht).children().addClass("menuOver " + "m" + (ht + 1));
-      });
-    });
-  </script>
+  <script src="/js/user/sign-up.js"></script>
 </main>
 </body>
 </html>
