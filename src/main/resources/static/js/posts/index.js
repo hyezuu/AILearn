@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 ? posts.title.substring(0, 35) + "..."
                 : posts.title
 
-            const nickname = posts.userNickname;
+            const nickname = posts.userName;
 
             const date = new Date(posts.createdAt).toISOString().slice(2, 16).replace("T"," ");
 

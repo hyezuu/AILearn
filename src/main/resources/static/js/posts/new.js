@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .catch(error => {
             window.alert("로그인이 필요합니다.")
+            window.location.href = '/posts';
             console.error('Error fetching user data:', error);
         });
 
