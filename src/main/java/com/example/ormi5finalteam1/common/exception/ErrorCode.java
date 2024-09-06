@@ -25,7 +25,9 @@ public enum ErrorCode {
     VERIFICATION_CODE_EMAIL_MISMATCH(400, "Verification code email is mismatch"),
     VERIFICATION_CODE_EXPIRED(400, "Verification code is expired"),
     HAS_NO_AUTHORITY(400, "Cannot access due to authority"),
-    ALREADY_DELETED(400, "Already deleted entity");
+    ALREADY_DELETED(400, "Already deleted entity"),
+    ALREADY_LIKED(400, "Already liked post"),
+    LIKE_NOT_FOUND(404, "Like not found");
 
     private final int status;
     private final String message;
