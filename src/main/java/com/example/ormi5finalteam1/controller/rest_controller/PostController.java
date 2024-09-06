@@ -23,16 +23,17 @@ public class PostController {
     @GetMapping("/posts")
     public ResponseEntity<Page<PostDto>> getAllPosts(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "12") int size) {
-        Page<PostDto> posts = postService.getAllPosts(page, size);
+            @RequestParam(defaultValue = "12") int size,
+            @RequestParam(required = false) String keyword) {
+        Page<PostDto> posts = postService.getAllPosts(page, size, keyword);
         return new ResponseEntity<>(posts, HttpStatus.valueOf(200));
     }
 
     // 게시글 상세 조회
     @GetMapping("/posts/{id}")
-    public ResponseEntity<Post> getPostById(@PathVariable Long id) {
-        Post post = postService.getPostById(id);
-        return new ResponseEntity<>(post, HttpStatus.valueOf(200));
+    public ResponseEntity<PostDto> getPostById(@PathVariable Long id) {
+        PostDto postDto = postService.getPostById(id);
+        return new ResponseEntity<>(postDto, HttpStatus.valueOf(200));
     }
 
     // 게시글 생성

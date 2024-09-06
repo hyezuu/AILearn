@@ -5,6 +5,7 @@ import com.example.ormi5finalteam1.common.exception.ErrorCode;
 import com.example.ormi5finalteam1.domain.comment.Comment;
 import com.example.ormi5finalteam1.domain.comment.dto.CommentDto;
 import com.example.ormi5finalteam1.domain.post.Post;
+import com.example.ormi5finalteam1.domain.post.dto.PostDto;
 import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.repository.CommentRepository;
@@ -37,7 +38,7 @@ public class CommentService {
     @Transactional
     public CommentDto createComment(CommentDto commentDto, Provider provider) {
         User user = userService.getUser(provider.id());
-        Post post = postService.getPostById(commentDto.getPostId());
+        Post post = postService.getPost(commentDto.getPostId());
         Comment comment = new Comment(user, post, commentDto.getContent());
         commentRepository.save(comment);
         return convertToDto(comment);

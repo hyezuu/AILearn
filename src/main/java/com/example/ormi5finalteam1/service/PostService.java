@@ -23,17 +23,25 @@ public class PostService {
         this.userService = userService;
     }
 
-    // 게시글 전체 조회
-    public Page<PostDto> getAllPosts(int page, int size) {
+    // 게시글 전체 조회 또는 키워드 검색
+    public Page<PostDto> getAllPosts(int page, int size, String keyword) {
         Pageable pageable = PageRequest.of(page, size);
-        return postRepository.findAllByDeletedAtIsNullOrderByCreatedAtDesc(pageable)
-                .map(this::convertToDto);
+
+        // 키워드가 null 이거나 빈 문자열이면 전체 조회, 그렇지 않으면 검색
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return postRepository.findAllByDeletedAtIsNullOrderByCreatedAtDesc(pageable)
+                    .map(this::convertToDto);
+        } else {
+            return postRepository.findAllByTitleContainingAndDeletedAtIsNullOrderByCreatedAtDesc(keyword, pageable)
+                    .map(this::convertToDto);
+        }
     }
 
     // 게시글 상세 조회
-    public Post getPostById(Long id) {
-        return postRepository.findById(id)
+    public PostDto getPostById(Long id) {
+        Post post = postRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.POST_NOT_FOUND));
+        return convertToDto(post);
     }
 
     // 게시글 생성
@@ -80,6 +88,11 @@ public class PostService {
         Pageable pageable = PageRequest.of(page, size);
         return postRepository.findAllByUserIdAndDeletedAtIsNullOrderByCreatedAtDesc(userId, pageable)
                 .map(this::convertToDto);
+    }
+
+    public Post getPost(Long id) {
+        return postRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.POST_NOT_FOUND));
     }
 
     private PostDto convertToDto(Post post) {

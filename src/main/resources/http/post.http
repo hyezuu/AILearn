@@ -4,7 +4,7 @@ Authorization: Basic hyezuu@naver.com qweqwe123
 
 {
   "userId": 1,
-  "title": "Post 1",
+  "title": "apple13",
   "content": "Content 1"
 }
 
@@ -15,6 +15,9 @@ GET localhost:8080/api/posts/17
 ### get all
 GET localhost:8080/api/posts
 
+### get by keyword
+GET localhost:8080/api/posts?keyword=apple
+
 ### update
 PUT localhost:8080/api/posts/13
 content-type: application/json
@@ -22,7 +25,7 @@ Authorization: Basic hyezuu@naver.com qweqwe123
 
 {
     "title": "Post 1",
-    "content": "Content d1"
+    "content": "Content dd1"
 }
 
 ### delete
