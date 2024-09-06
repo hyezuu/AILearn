@@ -99,9 +99,12 @@ public class PostService {
         return new PostDto(
                 post.getId(),
                 post.getUser().getId(),
+                post.getUser().getNickname(),
                 post.getTitle(),
                 post.getContent(),
-                post.getViewCount()
+                post.getViewCount(),
+                post.getCreatedAt(),
+                post.getUpdatedAt()
         );
     }
 }
