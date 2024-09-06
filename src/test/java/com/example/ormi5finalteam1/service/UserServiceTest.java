@@ -6,6 +6,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -250,4 +251,34 @@ class UserServiceTest {
             .isInstanceOf(BusinessException.class)
             .hasFieldOrPropertyWithValue("errorCode", ErrorCode.USER_DEACTIVATED);
     }
+
+    @Test
+    void sendTemporaryPassword_는_임시_비밀번호를_생성하고_이메일로_전송한다() throws MessagingException {
+        // given
+        String email = "test@test.com";
+        when(repository.findByEmail(email)).thenReturn(Optional.of(mockUser));
+        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
+        // when & then
+        assertThatCode(() -> userService.sendTemporaryPassword(email)).doesNotThrowAnyException();
+        verify(repository).findByEmail(email);
+        verify(passwordEncoder).encode(anyString());
+        verify(emailService).sendTemporaryPasswordEmail(eq(email), anyString());
+        verify(mockUser).updatePassword(anyString());
+    }
+
+    @Test
+    void sendTemporaryPassword_는_유저를_찾을_수_없을_때_BusinessException_을_던진다() throws MessagingException {
+        // given
+        String email = "test@test.com";
+        when(repository.findByEmail(email)).thenReturn(Optional.empty());
+        // when & then
+        assertThatThrownBy(() -> userService.sendTemporaryPassword(email))
+            .isInstanceOf(BusinessException.class)
+            .hasFieldOrPropertyWithValue("errorCode", ErrorCode.USER_NOT_FOUND);
+        verify(repository).findByEmail(email);
+        verify(passwordEncoder,never()).encode(anyString());
+        verify(emailService,never()).sendTemporaryPasswordEmail(eq(email), anyString());
+        verify(mockUser, never()).updatePassword(anyString());
+    }
+
 }
