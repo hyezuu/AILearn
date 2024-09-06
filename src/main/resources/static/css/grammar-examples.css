@@ -1,0 +1,154 @@
+* {
+    margin: auto 0;
+    padding: 0;
+
+}
+
+#layout {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: "IBM Plex Sans KR", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+h1 {
+    margin: 80px;
+    margin-bottom: 60px;
+    display: inline-block;
+    text-align: center;
+}
+
+ul {
+    list-style: none;
+}
+
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    font-family: "IBM Plex Sans KR", sans-serif;
+}
+
+/* 검색창과 예문 추가 버튼 */
+.search_new-grammar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 80px;
+    width: 70%;
+    margin: auto;
+}
+
+/* 검색창 */
+.search-container {
+    margin: 20px;
+}
+.search-input {
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #666666;
+    border-radius: 10px;
+    width: 300px;
+    margin-right: 10px;
+}
+.search-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #103889;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.search-button:hover {
+    background-color: #0f246c;
+}
+
+/* 예문 추가 버튼 */
+.new-grammar button {
+    width: 160px;
+    padding : 8px 10px;
+    background-color: #103889;
+    color: white;
+    font-weight: 600;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 10px;
+    align-content: center;
+}
+.new-grammar button:hover {
+    background-color: #0f246c;
+
+}
+
+
+/* 문법 예문 */
+
+.grammar-example {
+    width: 70%;
+    margin: 80px auto;
+    border: 1px solid #d4e9f7;
+    background: rgb(212,233,247);
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+#grammar-box {
+    filter: drop-shadow(1px 1px 2px dodgerblue);
+}
+.grammar-example-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.grammar-example-header p {
+    margin: 0;
+    font-weight: bold;
+    font-size: 16pt;
+
+}
+
+.grammar-example-header button {
+    width: 160px;
+    padding : 8px 10px;
+    background-color: #103889;
+    color: white;
+    font-weight: 600;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 20px;
+}
+.grammar-example-header button:hover {
+    background-color: #0f246c;
+}
+
+
+/* 페이지 네비게이션 */
+.pagination {
+    display: flex;
+    margin: 20px auto;
+    gap: 20px;
+    justify-content: center;
+}
+
+.pagination button {
+    border: none;
+    background-color: rgba(255,255,255);
+    cursor: pointer;
+}
+
+.pagination button:hover {
+    font-size: 17px;
+    font-weight: bold;
+}
