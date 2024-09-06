@@ -13,6 +13,6 @@ public class PostReponseDto {
     private Long id;
     private String userNickname;
     private String title;
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
     private int viewCount;
 }
