@@ -100,6 +100,10 @@ public class User extends BaseEntity implements UserDetails {
         return email;
     }
 
+    public void activateUser() {
+        this.isActive = true;
+    }
+
     public void deactivateUser() {
         this.isActive = false;
     }
