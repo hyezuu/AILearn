@@ -41,6 +41,8 @@ public class PostService {
     public PostDto getPostById(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.POST_NOT_FOUND));
+        post.increaseViewCount();
+        postRepository.save(post);
         return convertToDto(post);
     }
 
