@@ -42,7 +42,6 @@ document.addEventListener("DOMContentLoaded", function() {
             ? `/api/essays/search?topic=${encodeURIComponent(searchQuery)}&page=${page}&pageSize=${pageSize}`
             : `/api/me/essays?page=${page}&pageSize=${pageSize}`;
 
-        console.log(searchQuery)
 
         fetch(url, {
             method: 'GET',

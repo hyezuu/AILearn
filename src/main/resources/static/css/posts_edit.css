@@ -40,6 +40,8 @@ input[type="text"], textarea {
     width: 100%;
     padding: 8px;
     margin-top: 10px;
+    font-family: "IBM Plex Sans KR", sans-serif;
+    resize: none;
 }
 
 /* 제목 */

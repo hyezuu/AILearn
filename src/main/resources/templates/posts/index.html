@@ -17,11 +17,19 @@
     <!-- 메뉴 부분 -->
     <header th:replace="~{/layout/header::header}"></header>
     <!-- 메뉴 부분 끝 -->
-    <h1>게시글 리스트</h1>
-    <div class="search-container">
-        <input type="text" class="search-input" placeholder="search">
-        <button class="search-button">search</button>
-    </div>
+
+    <section>
+        <h1>게시글 리스트</h1>
+
+        <div class="buttons">
+            <a href="/posts/new"><button type="submit" class="edit-button">게시글 작성하기</button></a>
+        </div>
+    </section>
+
+    <form id="search-container" class="search-container">
+        <input type="text" id="search-input" class="search-input" placeholder="search">
+        <button type="submit" id="search-button" class="search-button">search</button>
+    </form>
 
     <table class="table">
         <thead>
@@ -29,62 +37,22 @@
             <th>제목</th>
             <th>작성자</th>
             <th>작성일</th>
+            <th>조회수</th>
         </tr>
         </thead>
-        <tbody>
-        <tr>
-            <td>제목</td>
-            <td>작성자</td>
-            <td>작성일</td>
-        </tr>
+        <tbody id="post-list">
+
         </tbody>
     </table>
-    <div class="buttons">
-        <button type="submit" class="edit-button">작성하기</button>
+
+    <div class="pagination">
+        <button id="prev-page" class="pagination-button"> << </button>
+        <span id="page-info"></span>
+        <button id="next-page" class="pagination-button"> >> </button>
     </div>
 
-    <!-- 페이지 네비게이션 -->
-    <nav aria-label="Page navigation" class="pagination-container">
-        <!--표에 사용될 변수값 초기화 -->
-        <ul class="pagination" th:with="start=${T(java.lang.Math).floor(postSummaryResponseList.number / 10) * 10 + 1}, last=(${start + 9 < postSummaryResponseList.totalPages ? start + 9 : postSummaryResponseList.totalPages})">
-            <th:block th:with="
-        firstAddr=@{/post/list(page=1)},
-        prevAddr=@{/post/list(page=${postSummaryResponseList.number})},
-        nextAddr=@{/post/list(page=${postSummaryResponseList.number + 2})},
-        lastAddr=@{/post/list(page=${postSummaryResponseList.totalPages})}">
-                <li class="page-item">
-                    <a class="page-link" th:href="${firstAddr}" aria-label="First">
-                        <span aria-hidden="true"> << </span>
-                    </a>
-                </li>
-                <!-- 이전 페이지로 가기 버튼 -->
-                <li class="page-item" th:class="${postSummaryResponseList.first} ? 'disabled'">
-                    <a class="page-link" th:href="${postSummaryResponseList.first} ? '#' :${prevAddr}"
-                       aria-label="Previous">
-                        <span aria-hidden="true">&lt;</span>
-                    </a>
-                </li>
-                <!--1,2,3,4,.. 등 페이지-->
-                <li class="page-item" th:each="page: ${#numbers.sequence(start, last)}"
-                    th:class="${page == postSummaryResponseList.number + 1} ? 'active'">
-                    <a class="page-link" th:text="${page}" th:href="@{/post/list(page=${page})}"></a>
-                </li>
-                <!--다음 페이지로 -->
-                <li class="page-item" th:class="${postSummaryResponseList.last} ? 'disabled'">
-                    <a class="page-link" th:href="${postSummaryResponseList.last} ? '#' : ${nextAddr}"
-                       aria-label="Next">
-                        <span aria-hidden="true">&gt;</span>
-                    </a>
-                </li>
-                <!--맨 마지막 페이지로 이동 -->
-                <li class="page-item">
-                    <a class="page-link" th:href="${lastAddr}" aria-label="Last">
-                        <span aria-hidden="true"> >> </span>
-                    </a>
-                </li>
-            </th:block>
-        </ul>
-    </nav>
 </div>
+
+<script src="/js/posts/index.js"></script>
 </body>
 </html>

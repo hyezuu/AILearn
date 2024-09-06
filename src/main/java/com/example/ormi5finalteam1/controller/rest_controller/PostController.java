@@ -1,6 +1,5 @@
 package com.example.ormi5finalteam1.controller.rest_controller;
 
-import com.example.ormi5finalteam1.domain.post.Post;
 import com.example.ormi5finalteam1.domain.post.dto.PostDto;
 import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.service.PostService;
