@@ -12,9 +12,10 @@ import java.time.LocalDateTime;
 public class PostDto {
     private Long id;
     private Long userId;
-    private String userNickname;
+    private String userName;
     private String title;
     private String content;
-    private LocalDateTime createdAt;
     private int viewCount;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

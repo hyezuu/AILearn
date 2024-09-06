@@ -1,7 +1,6 @@
 package com.example.ormi5finalteam1.controller.rest_controller;
 
 import com.example.ormi5finalteam1.domain.post.dto.PostDto;
-import com.example.ormi5finalteam1.domain.post.dto.PostReponseDto;
 import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.service.PostService;
 import org.springframework.data.domain.Page;
@@ -21,11 +20,11 @@ public class PostController {
 
     // 게시글 전체 조회
     @GetMapping("/posts")
-    public ResponseEntity<Page<PostReponseDto>> getAllPosts(
+    public ResponseEntity<Page<PostDto>> getAllPosts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int size,
             @RequestParam(required = false) String keyword) {
-        Page<PostReponseDto> posts = postService.getAllPosts(page, size, keyword);
+        Page<PostDto> posts = postService.getAllPosts(page, size, keyword);
         return new ResponseEntity<>(posts, HttpStatus.valueOf(200));
     }
 
