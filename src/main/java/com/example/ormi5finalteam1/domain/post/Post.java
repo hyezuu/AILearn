@@ -34,8 +34,8 @@ public class Post extends BaseEntity {
     @Column(name= "view_count", nullable = false)
     private int viewCount = 0;
 
-    /*@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments;*/
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Like> likes;
