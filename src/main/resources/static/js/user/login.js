@@ -30,5 +30,10 @@ document.addEventListener('DOMContentLoaded', function() {
     messageContainer.textContent = message;
     messageContainer.className = isError ? 'error-message' : 'success-message';
     messageContainer.style.display = 'block';
+
+    // 5초 후 메시지 숨기기
+    setTimeout(() => {
+      messageContainer.style.display = 'none';
+    }, 5000);
   }
 });
