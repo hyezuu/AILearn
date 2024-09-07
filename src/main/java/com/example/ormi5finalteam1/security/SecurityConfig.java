@@ -1,7 +1,5 @@
 package com.example.ormi5finalteam1.security;
 
-import com.example.ormi5finalteam1.security.CustomAuthenticationProvider;
-import com.example.ormi5finalteam1.security.ProviderBasicAuthenticationFilter;
 import com.example.ormi5finalteam1.security.handler.CustomAuthenticationFailureHandler;
 import com.example.ormi5finalteam1.security.handler.CustomAuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
@@ -31,12 +29,13 @@ public class SecurityConfig {
         throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable).cors(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(api -> api
-                .requestMatchers("/signup", "/login").permitAll()
+                .requestMatchers("/css/**", "/js/**", "/images/**", "/static/**").permitAll()
+                .requestMatchers("/signup", "/login", "/").permitAll()
                 .requestMatchers("/*/signup","/*/login").permitAll()
-                .requestMatchers("/api/me").hasRole("USER")
+                .requestMatchers("/api/me").hasAnyRole("USER")
                 .requestMatchers("/my").hasRole("USER")
                     .requestMatchers("/tests", "/tests/level-tests", "/level-tests", "/test-result").authenticated()
-                .anyRequest().permitAll())
+                .anyRequest().hasAnyRole("USER","ADMIN"))
             .formLogin(form -> form
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
