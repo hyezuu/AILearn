@@ -33,8 +33,7 @@ function submitForm() {
                 alert("레벨을 선택해 주세요!");
             }
         }
-    )
-    ;
+    );
 }
 
 document.addEventListener('DOMContentLoaded', function () {
