@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
@@ -27,12 +28,13 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
         AuthenticationException exception) throws IOException, ServletException {
         ErrorResponse errorResponse;
 
-        if (exception instanceof AuthenticationServiceException
-            && exception.getCause() instanceof BusinessException businessException) {
-            errorResponse = ErrorResponse.of(businessException.getErrorCode(),
-                translateErrorMessage(businessException.getErrorCode()));
-        } else {
+        if (exception instanceof AuthenticationServiceException && exception.getCause() instanceof BusinessException) {
+            BusinessException businessException = (BusinessException) exception.getCause();
+            errorResponse = ErrorResponse.of(businessException.getErrorCode(), translateErrorMessage(businessException.getErrorCode()));
+        } else if (exception instanceof BadCredentialsException) {
             errorResponse = ErrorResponse.of(HttpStatus.UNAUTHORIZED, DEFAULT_ERROR_MESSAGE);
+        } else {
+            errorResponse = ErrorResponse.of(HttpStatus.UNAUTHORIZED, "인증에 실패했습니다.");
         }
 
         response.setStatus(errorResponse.status());
