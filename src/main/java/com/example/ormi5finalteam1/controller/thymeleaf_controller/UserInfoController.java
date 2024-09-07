@@ -36,4 +36,9 @@ public class UserInfoController {
         return "user/login";
     }
 
+    @GetMapping("/forgot-password")
+    public String forgotPassword() {
+        return "user/find-password";
+    }
+
 }
