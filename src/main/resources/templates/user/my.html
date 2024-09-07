@@ -54,7 +54,7 @@
                 </div>
                 <div class="user-info-right">
                     <div class="user-grade-box" id="user-grade-box">
-                        <div>
+                        <div class="user-grade-text">
                             <span class="user-grade-text">등급:</span>
                             <span id="user-grade" class="user-grade" th:text="${userGrade}"></span>
                         </div>
@@ -114,6 +114,7 @@
             </div>
         </div>
     </div>
+    <div id="ready-upgrade" th:text="${user.readyForUpgrade}" style="display: none;"></div>
 </main>
 
 <script>
@@ -176,10 +177,10 @@
         document.getElementById("test-button").addEventListener("click", function(event) {
             event.preventDefault();
 
-            const level = parseInt(document.getElementById("user-level").innerText);
+            const ready = document.getElementById("ready-upgrade").innerText;
 
-            if(level % 5 === 0){
-                window.location.href = `/tests`;
+            if(ready === "true"){
+                window.location.href = "/upgrade-tests";
             } else {
                 window.alert("5단위 레벨에서만 테스트를 진행할 수 있습니다.\n(예시: Lv.5, Lv.10, Lv.15 에서만 가능)")
             }

@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function() {
         window.location.href = `/essays/${essayId}`;
     });
 
+    // 해당 에세이에 대한 상세 정보 GET
     function fetchEssayData(essayId) {
         fetch(`/api/essays/${essayId}`, {
             method: 'GET',
@@ -95,5 +96,33 @@ document.addEventListener("DOMContentLoaded", function() {
                 console.error("Error:", error);
             });
     });
+
+    // 에세이 삭제
+    document.getElementById("essay-delete").addEventListener("click", function (event){
+        event.preventDefault();
+
+        fetch(`/api/essays/${essayId}/delete`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            // 응답 본문이 있을 경우에만 JSON 파싱
+            return response.text().then(text => {
+                return text ? JSON.parse(text) : {};
+            });
+        })
+            .then(data => {
+                window.location.href = `/essays`;
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+    })
 
 });

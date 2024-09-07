@@ -42,6 +42,8 @@ label {
 input[type="text"], textarea {
     padding: 8px;
     margin-top: 5px;
+    font-family: "IBM Plex Sans KR", sans-serif;
+    resize: none;
 }
 
 label[for="content"], label[for="title"] {

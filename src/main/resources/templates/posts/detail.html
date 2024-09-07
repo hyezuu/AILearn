@@ -21,35 +21,46 @@
 
     <h1>커뮤니티</h1>
     <!-- 게시글 상세 부분-->
-    <form>
+    <div class="post">
         <div class="input-container">
-            <input type="text" aria-label="제목" name="title" placeholder="제목">
-            <div class="button-container">
-                <a href="/posts/list"><img src="/images/delete.png" alt="삭제버튼"></a>
-                <a href="/posts/{id}/edit"><img src="/images/edit.png" alt="수정버튼"></a>
+            <div class="title-container">
+                <div>
+                    <h2 id="post-title">게시글 제목</h2>
+                    <span id="post-createdAt">작성일</span>
+                    <span id="post-viewCount">조회수</span>
+                </div>
+                <div class="button-container" style="display: none;">
+                    <a id="delete-post"><img src="/images/delete.png" alt="삭제버튼"></a>
+                    <a id="edit"><img src="/images/edit.png" alt="수정버튼"></a>
+                </div>
             </div>
+            <p id="post-content"></p>
         </div>
-        <textarea id="content" name="content"></textarea>
-    </form>
+    </div>
     <!-- 댓글부분 -->
     <div class="comment-section">
         <!-- 댓글 입력 폼 -->
         <div class="comment-form">
             <h3>댓글 작성</h3>
-            <form>
-                <input type="text" placeholder="댓글을 입력하세요.">
+            <form id="input-comment">
+                <input id="input-comment-value" type="text" placeholder="댓글을 입력하세요.">
                 <button type="submit" >등록</button>
             </form>
-            <div th:each="comment : ${comments}" class="comment">
-                <div class="comment-header">
-                    <p class="comment-author" th:text="${comment.author}">작성자 이름</p>
-                    <a href="#" class="delete-comment"><img src="/images/x-mark.png" alt="댓글삭제버튼"></a>
-                </div>
-                <p class="comment-content" th:text="${comment.content}">댓글 내용</p>
-                <small class="comment-date" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}">작성 날짜</small>
+<!--            <div th:each="comment : ${comments}" class="comment">-->
+<!--                <div class="comment-header">-->
+<!--                    <p class="comment-author" th:text="${comment.author}">작성자 이름</p>-->
+<!--                    <a href="#" class="delete-comment"><img src="/images/x-mark.png" alt="댓글삭제버튼"></a>-->
+<!--                </div>-->
+<!--                <p class="comment-content" th:text="${comment.content}">댓글 내용</p>-->
+<!--                <small class="comment-date" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}">작성 날짜</small>-->
+<!--            </div>-->
+            <div id="comment-list">
+
             </div>
         </div>
     </div>
 </div>
+
+<script src="/js/posts/detail.js"></script>
 </body>
 </html>

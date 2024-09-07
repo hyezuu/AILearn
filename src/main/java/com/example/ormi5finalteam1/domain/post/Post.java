@@ -54,4 +54,8 @@ public class Post extends BaseEntity {
     public void delete() {
         super.delete();
     }
+
+    public void increaseViewCount() {
+        this.viewCount++;
+    }
 }

@@ -55,6 +55,7 @@ textarea {
     height: 600px;
     border-radius: 10px;
     border: 2px solid #ccc;
+    resize: none;
 }
 
 
@@ -74,7 +75,7 @@ textarea {
 /* 수정+삭제 버튼 */
 .buttons {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     margin-top: 40px;
 }
 /* 삭제 버튼 */

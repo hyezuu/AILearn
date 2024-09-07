@@ -1,0 +1,13 @@
+POST localhost:8080/api/posts/16/like
+content-type: application/json
+Authorization: Basic hyezuu@naver.com qweqwe123
+
+
+### delete
+DELETE localhost:8080/api/posts/19/like
+Authorization: Basic hyezuu@naver.com qweqwe123
+
+
+### get my liked posts
+GET localhost:8080/api/me/likes
+Authorization: Basic hyezuu@naver.com qweqwe123

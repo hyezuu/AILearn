@@ -81,8 +81,10 @@ public class CommentService {
         return new CommentDto(
                 comment.getId(),
                 comment.getUser().getId(),
+                comment.getUser().getNickname(),
                 comment.getPost().getId(),
-                comment.getContent()
+                comment.getContent(),
+                comment.getCreatedAt()
         );
     }
 }
