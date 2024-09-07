@@ -1,37 +1,43 @@
 document.addEventListener('DOMContentLoaded', function() {
   const loginForm = document.getElementById('loginForm');
   const messageContainer = document.getElementById('message-container');
+  const submitButton = loginForm.querySelector('button[type="submit"]');
 
-  loginForm.addEventListener('submit', function(e) {
+  loginForm.addEventListener('submit', async function(e) {
     e.preventDefault();
     const formData = new FormData(loginForm);
 
-    fetch('/login', {
-      method: 'POST',
-      body: formData,
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest'
+    submitButton.disabled = true;
+    submitButton.textContent = '로그인 중...';
+
+    try {
+      const response = await fetch('/login', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      });
+
+      if (response.ok || response.redirected) {
+        window.location.href = '/';
+        return;
       }
-    })
-    .then(response => {
-      if (!response.ok) {
-        return response.json().then(errorData => {
-          throw errorData;
-        });
-      }
-      window.location.href = '/'; // 로그인 성공 시 리다이렉트
-    })
-    .catch(errorData => {
-      showMessage(errorData.message, true);
-    });
+
+      const errorData = await response.json();
+      showMessage(errorData.message || '로그인 중 오류가 발생했습니다.');
+    } catch (error) {
+      showMessage('서버와의 통신 중 오류가 발생했습니다.');
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = '로그인';
+    }
   });
 
-  function showMessage(message, isError = true) {
+  function showMessage(message) {
     messageContainer.textContent = message;
-    messageContainer.className = isError ? 'error-message' : 'success-message';
     messageContainer.style.display = 'block';
 
-    // 5초 후 메시지 숨기기
     setTimeout(() => {
       messageContainer.style.display = 'none';
     }, 5000);
