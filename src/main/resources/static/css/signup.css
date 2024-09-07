@@ -118,13 +118,22 @@ header nav a:hover {
     background: white;
     padding: 20px;
     border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 form {
-    margin-left: 200px;
-    width: 50%;
+    width: 100%;
     display: flex;
     flex-direction: column;
+    margin-left: 0; /* 이전의 margin-left 제거 */
+}
+
+
+.signup-form {
+    width: 100%;
+    max-width: 400px;
 }
 
 .form-div {
@@ -173,15 +182,21 @@ button:hover{
 }
 
 hr {
-    margin-left: 200px;
-    width: 50%;
+    margin-top: 20px;
+    margin-bottom: 5px;
+    width: 100%;
+    max-width: 400px;
+    border: 0;
+    border-top: 1px solid #b9b9b9;
+    margin-left: 0; /* 이전의 margin-left 제거 */
 }
-
-.hr{
-    margin-left: 200px;
-    width: 50%;
+.hr {
+    width: 100%;
+    max-width: 400px;
     display: flex;
     justify-content: space-between;
+    margin-top: 10px;
+    margin-left: 0; /* 이전의 margin-left 제거 */
 }
 
 .hr-a {
@@ -226,6 +241,7 @@ h1 {
 
 .form-group {
     margin-bottom: 15px;
+    width: 100%;
 }
 
 #signup-button-main {

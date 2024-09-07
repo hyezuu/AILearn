@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const confirmPassword = document.getElementById('confirmPassword');
   const nicknameResultElement = document.getElementById('nicknameResult');
   const passwordResultElement = document.getElementById('passwordResult');
+  const confirmPasswordResultElement = document.getElementById('confirmPasswordResult');
   const emailResultElement = document.getElementById('emailResult');
 
   function validateEmail() {
@@ -39,8 +40,9 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
       nicknameResultElement.textContent = '';
       nicknameResultElement.classList.remove('error-message');
-      nicknameVerified = true;
+      return true;  // 유효성 검사 통과
     }
+    return false;  // 유효성 검사 실패
   }
 
   // 비밀번호 유효성 검사
@@ -67,6 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
   password.addEventListener('input', function () {
     validatePassword();
   });
+
 
   async function checkDuplication(field, url, resultSpan) {
     const value = field.value;
@@ -124,13 +127,13 @@ document.addEventListener('DOMContentLoaded', function () {
   // 비밀번호 일치 여부를 확인하는 함수
   function checkPasswordMatch() {
     if (password.value !== confirmPassword.value) {
-      passwordResultElement.textContent = '비밀번호가 일치하지 않습니다.';
-      passwordResultElement.classList.remove('success-message');
-      passwordResultElement.classList.add('error-message');
+      confirmPasswordResultElement.textContent = '비밀번호가 일치하지 않습니다.';
+      confirmPasswordResultElement.classList.remove('success-message');
+      confirmPasswordResultElement.classList.add('error-message');
     } else {
-      passwordResultElement.textContent = '비밀번호가 일치합니다.';
-      passwordResultElement.classList.remove('error-message');
-      passwordResultElement.classList.add('success-message')
+      confirmPasswordResultElement.textContent = '비밀번호가 일치합니다.';
+      confirmPasswordResultElement.classList.remove('error-message');
+      confirmPasswordResultElement.classList.add('success-message')
     }
   }
 
