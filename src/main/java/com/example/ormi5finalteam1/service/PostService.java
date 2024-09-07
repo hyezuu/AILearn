@@ -13,11 +13,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class PostService {
     private final PostRepository postRepository;
     private final UserService userService;
-
     public PostService(PostRepository postRepository, UserService userService) {
         this.postRepository = postRepository;
         this.userService = userService;
@@ -96,6 +98,18 @@ public class PostService {
         return postRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.POST_NOT_FOUND));
     }
+
+    // 관리자가 전체 게시글 조회 시 호출되는 메서드
+    public List<Post> getAllPostsByAdmin() {
+        return postRepository.findAll();
+    }
+
+    // 관리자가 게시글 상세 조회시 호출되는 메서드
+    public Post getPostByAdmin(Long postId) {
+
+        return postRepository.findById(postId).orElseThrow(() -> new BusinessException(ErrorCode.POST_NOT_FOUND));
+    }
+
 
     private PostDto convertToDto(Post post) {
         return new PostDto(
