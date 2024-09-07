@@ -5,7 +5,9 @@ import com.example.ormi5finalteam1.domain.test.SubmitRequestVo;
 import com.example.ormi5finalteam1.domain.test.TestQuestionResponseDto;
 import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.domain.user.Role;
+import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.service.TestService;
+import com.example.ormi5finalteam1.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -42,10 +44,23 @@ public class TestControllerTest {
     @MockBean
     private TestService testService;
 
+    @MockBean
+    private UserService userService;
+
     @Autowired
     private ObjectMapper objectMapper;
 
     private Provider provider;
+    private User user;
+    @BeforeEach
+    public void setUp() {
+        user = User.builder()
+                .email("test@example.com")
+                .password("password")
+                .nickname("nick").build();
+        user.changeGrade(Grade.A2);
+    }
+
 
     @DisplayName("레벨테스트 조회")
     @org.junit.jupiter.api.Test
@@ -101,7 +116,8 @@ public class TestControllerTest {
         TestQuestionResponseDto dto1 = new TestQuestionResponseDto(Grade.B2, 1L, "Question1");
         TestQuestionResponseDto dto2 = new TestQuestionResponseDto(Grade.B2, 2L, "Question2");
         List<TestQuestionResponseDto> responseList = List.of(dto1, dto2);
-        when(testService.getUpgradeTests(provider)).thenReturn(responseList);
+        when(userService.loadUserByUsername(provider.email())).thenReturn(user);
+        when(testService.getUpgradeTests(user)).thenReturn(responseList);
 
         // when & then
         mockMvc.perform(get("/api/upgrade-tests")
