@@ -1,89 +1,49 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <link rel="stylesheet" href="/css/login.css">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap"
-          rel="stylesheet">
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="/js/main.js"></script>
-
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link rel="stylesheet" href="/css/login.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap"
+      rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="/js/my.js"></script>
 </head>
 <body>
 <div id="layout">
-    <!-- 메뉴 부분 -->
-    <header th:replace="~{/layout/header::header}"></header>
-    <!-- 메뉴 부분 끝 -->
+  <header th:replace="~{/layout/header::header}"></header>
 </div>
 
 <main>
-    <div class="container">
-        <h1>AILEARN</h1>
+  <div class="container">
+    <h1><img src="/images/signup-login-logo.png" alt="AILEARN 로고"></h1>
+    <div id="message-container" class="validation-message"></div>
+    <form id="loginForm" th:action="@{/login}" method="post" class="login-form">
+      <label for="username"></label>
+      <div class="container-div">
+        <input type="text" id="username" name="username" placeholder="이메일을 입력하세요" required>
+      </div>
 
-        <form th:action="@{/login}" method="post" class="login-form">
-            <label for="username"></label>
+      <label for="password"></label>
+      <div class="container-div">
+        <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" required>
+      </div>
 
-            <div class="container-div">
-                <input type="text" id="username" name="username" placeholder="이메일을 입력하세요" required>
-            </div>
+      <div class="container-div">
+        <button type="submit" value="Log in">로그인</button>
+      </div>
+    </form>
 
-            <label for="password"></label>
-            <div class="container-div">
-                <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" required>
-            </div>
-
-            <!-- 로그인 실패 시 오류 메시지 표시 -->
-            <div th:if="${session.SPRING_SECURITY_LAST_EXCEPTION}" class="login-fail">
-                <p style="color: red;" th:text="${session.SPRING_SECURITY_LAST_EXCEPTION}">이메일 혹은 비밀번호가 일치하지 않습니다.</p>
-            </div>
-
-            <div class="container-div">
-                <button type="submit" value="Log in">로그인</button>
-            </div>
-        </form>
-
-        <hr/>
-        <div class="hr">
-            <a href="" class="hr-a">회원가입하기</a>
-            <a href="" class="hr-a">비밀번호 찾기</a>
-        </div>
+    <hr/>
+    <div class="hr">
+      <a href="/signup" class="hr-a">회원가입하기</a>
+      <a href="/forgot-password" class="hr-a">비밀번호 찾기</a>
     </div>
-
-    <script>
-        $(document).ready(function () {
-            $("a.mainMenu").mouseenter(function () {
-                $("header nav").stop().slideDown();
-            });
-            $("header nav a").mouseenter(function () {
-                $("a.mainMenu").removeClass('act');
-                $(this).parent().prev().addClass('act');
-            });
-            $("header ul").mouseleave(function () {
-                $("a.mainMenu").removeClass('act');
-                $("header nav").stop().slideUp();
-            });
-
-            //휠(스크롤) 위치에 따라 왼쪽메뉴 활성화.
-            $(document).scroll(function () {
-                //브라우저높이
-                const h2 = $(window).height();
-
-                const t1 = $(document).scrollTop();
-
-                const ht = Math.floor(t1 / h1);
-
-                //모든클래스 삭제
-                $("a").removeClass();
-                //해당 메뉴만 클래스 추가
-                $("li").eq(ht).children().addClass("menuOver " + "m" + (ht + 1));
-            });
-        });
-    </script>
+  </div>
+  <script src="/js/user/login.js"></script>
 </main>
 </body>
 </html>
