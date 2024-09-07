@@ -29,7 +29,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @ExtendWith(MockitoExtension.class)
@@ -218,14 +217,14 @@ class UserServiceTest {
     }
 
     @Test
-    void loadUserByUsername_은_유저가_존재하지_않는_경우_UsernameNotFoundException_을_던진다() {
+    void loadUserByUsername_은_유저가_존재하지_않는_경우_BusinessException_을_던진다() {
         //given
         String email = "test@test.com";
         when(repository.findByEmail(email)).thenReturn(Optional.empty());
         //when & then
         assertThatThrownBy(() -> userService.loadUserByUsername(email))
-            .isInstanceOf(UsernameNotFoundException.class)
-            .hasMessage("User not found with username");
+            .isInstanceOf(BusinessException.class)
+            .hasFieldOrPropertyWithValue("errorCode", ErrorCode.USER_NOT_FOUND);
     }
 
     @Test
