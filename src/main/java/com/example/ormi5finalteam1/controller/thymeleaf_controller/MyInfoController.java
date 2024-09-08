@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/my")
-public class MyController {
+public class MyInfoController {
 
     private final EssayService essayService;
     private final UserService userService;
@@ -74,5 +74,10 @@ public class MyController {
         Provider currentUser = userService.getUser(provider.id()).toProvider();
         model.addAttribute("currentUser", currentUser);
         return "user/user-info-edit";
+    }
+
+    @GetMapping("/posts")
+    public String myPosts() {
+        return "user/my-post-list";
     }
 }

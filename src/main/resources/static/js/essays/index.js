@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 ? essay.content.substring(0, 60) + "..."
                 : essay.content;
 
-            const date = new Date(essay.createdAt).toISOString().slice(2, 16);
+            const date = new Date(essay.createdAt).toISOString().slice(2, 16).replace("T"," ");
 
             const row = document.createElement("tr");
             row.innerHTML = `

@@ -26,7 +26,7 @@
         <h1>마이페이지</h1>
 
         <div class="my-page-list">
-            <a href="" class="my-page-list-a">회원정보</a>
+            <a href="/my" class="my-page-list-a">회원정보</a>
             <a href="/my/posts" class="my-page-list-a-post">내 게시글 목록</a>
             <a href="/my/edit" class="my-page-list-a">회원정보 변경</a>
         </div>
@@ -43,13 +43,14 @@
                             <th>조회수</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr th:each="voca : ${vocabulary}">
-                            <td th:text="${voca.word()}"></td>
-                            <td th:text="${voca.meaning()}"></td>
-                        </tr>
+                        <tbody id="post-list">
                         </tbody>
                     </table>
+                </div>
+                <div class="pagination">
+                    <button id="post-prev-page" class="pagination-button"> << </button>
+                    <span id="post-page-info"></span>
+                    <button id="post-next-page" class="pagination-button"> >> </button>
                 </div>
             </div>
 
@@ -60,17 +61,18 @@
                         <table>
                             <thead>
                             <tr>
-                                <th>제목 / 댓글 </th> <!-- 택1 -->
-                                <th>작성자 / 작성일자</th> <!-- 택1 -->
+                                <th> 게시글 제목 </th>
+                                <th> 댓글 내용 </th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <tr th:each="voca : ${vocabulary}">
-                                <td th:text="${voca.word()}"></td>
-                                <td th:text="${voca.meaning()}"></td>
-                            </tr>
+                            <tbody id="comment-list">
                             </tbody>
                         </table>
+                    </div>
+                    <div class="pagination">
+                        <button id="comment-prev-page" class="pagination-button"> << </button>
+                        <span id="comment-page-info"></span>
+                        <button id="comment-next-page" class="pagination-button"> >> </button>
                     </div>
                 </div>
 
@@ -84,13 +86,14 @@
                                 <th>작성자</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <tr th:each="essay : ${essays}">
-                                <td th:text="${essay.topic}"></td>
-                                <td th:text="${#temporals.format(essay.createdAt, 'yy-MM-dd HH:mm')}"></td>
-                            </tr>
+                            <tbody id="like-list">
                             </tbody>
                         </table>
+                    </div>
+                    <div class="pagination">
+                        <button id="like-prev-page" class="pagination-button"> << </button>
+                        <span id="like-page-info"></span>
+                        <button id="like-next-page" class="pagination-button"> >> </button>
                     </div>
                 </div>
             </div>
@@ -98,8 +101,6 @@
     </div>
 </main>
 
-<script>
-
-</script>
+<script src="/js/user/my-post-list.js"></script>
 </body>
 </html>
