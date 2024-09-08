@@ -13,6 +13,8 @@ public interface VocabularyListRepository extends JpaRepository<VocabularyList, 
 
     Optional<VocabularyList> findByUserId(Long userId);
 
+    Boolean existsByUserId(Long userId);
+
     @Query(value =
         "SELECT vlv FROM VocabularyListVocabulary vlv " +
         "JOIN FETCH vlv.vocabulary v " +
