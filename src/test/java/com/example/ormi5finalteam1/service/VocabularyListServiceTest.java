@@ -138,6 +138,26 @@ class VocabularyListServiceTest {
     }
 
     @Test
+    void isVocabularyExist_는_유저의_단어장이_있으면_true_를_반환한다() {
+        //given
+        when(vocabularyListRepository.existsByUserId(anyLong())).thenReturn(true);
+        //when
+        boolean result = vocabularyListService.isVocabularyExist(provider);
+        //then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void isVocabularyExist_는_유저의_단어장이_없으면_false_를_반환한다() {
+        //given
+        when(vocabularyListRepository.existsByUserId(anyLong())).thenReturn(false);
+        //when
+        boolean result = vocabularyListService.isVocabularyExist(provider);
+        //then
+        assertThat(result).isFalse();
+    }
+
+    @Test
     void getMyVocabularyList_는_유저_아이디로_단어장을_찾아올_수_있다() {
         // given
         when(vocabularyListRepository.findByUserId(anyLong())).thenReturn(Optional.of(vocabularyList));
