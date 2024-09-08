@@ -47,7 +47,7 @@ public class SecurityConfig {
             )
             .logout(logout -> logout.logoutUrl("/logout"))
             .authenticationProvider(provider)
-            .requiresChannel(channel -> channel.anyRequest().requiresSecure()) // HTTPS 리다이렉트 설정 추가
+//            .requiresChannel(channel -> channel.anyRequest().requiresSecure()) // HTTPS 리다이렉트 설정 추가
             .with(new MyCustomDsl(), myCustomDsl -> {
                 try {
                     myCustomDsl.init(http);
