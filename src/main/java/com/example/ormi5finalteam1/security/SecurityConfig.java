@@ -31,13 +31,13 @@ public class SecurityConfig {
         throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable).cors(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(api -> api
-                .requestMatchers("/signup", "/login").permitAll()
+                .requestMatchers("/css/**", "/js/**", "/images/**", "/static/**").permitAll()
+                .requestMatchers("/signup", "/login", "/", "/forgot-password").permitAll()
                 .requestMatchers("/*/signup","/*/login").permitAll()
                 .requestMatchers("/api/me").hasRole("USER")
-                .requestMatchers("/my/**").hasRole("USER")
-                .requestMatchers("/essays/**").hasRole("USER")
+                .requestMatchers("/my").hasRole("USER")
                     .requestMatchers("/tests", "/tests/level-tests", "/level-tests", "/test-result").authenticated()
-                .anyRequest().permitAll())
+                .anyRequest().hasAnyRole("USER","ADMIN"))
             .formLogin(form -> form
                 .loginPage("/login")
                 .loginProcessingUrl("/login")

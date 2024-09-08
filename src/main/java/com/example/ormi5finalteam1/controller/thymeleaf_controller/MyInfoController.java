@@ -66,14 +66,15 @@ public class MyInfoController {
         return "user/my";
     }
 
+    @GetMapping("/edit")
+    public String edit(@AuthenticationPrincipal Provider provider, Model model) {
+        Provider currentUser = userService.getUser(provider.id()).toProvider();
+        model.addAttribute("currentUser", currentUser);
+        return "user/user-info-edit";
+    }
 
     @GetMapping("/posts")
     public String myPosts() {
         return "user/my-post-list";
-    }
-
-    @GetMapping("/edit")
-    public String userEdit() {
-        return "user/user-info-edit";
     }
 }

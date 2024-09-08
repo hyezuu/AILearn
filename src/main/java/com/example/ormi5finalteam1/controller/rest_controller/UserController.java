@@ -52,7 +52,7 @@ public class UserController {
 
     @GetMapping("/me")
     public Provider getMe(@AuthenticationPrincipal Provider provider) {
-        return provider;
+        return userService.getUser(provider.id()).toProvider();
     }
 
     @GetMapping("/me/vocabulary-list")
@@ -60,6 +60,11 @@ public class UserController {
         @AuthenticationPrincipal Provider provider,
         Pageable pageable) {
         return vocabularyListService.getMyVocabularies(provider, pageable);
+    }
+
+    @GetMapping("/me/vocabulary-list/status")
+    public Boolean getUserVocabularyListStatus(@AuthenticationPrincipal Provider provider) {
+        return vocabularyListService.isVocabularyExist(provider);
     }
 
     @DeleteMapping("/withdrawal")
