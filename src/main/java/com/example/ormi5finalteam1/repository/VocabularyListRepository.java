@@ -22,7 +22,7 @@ public interface VocabularyListRepository extends JpaRepository<VocabularyList, 
         "ORDER BY vlv.createdAt DESC",
         countQuery =
             "SELECT COUNT(vlv) FROM VocabularyListVocabulary vlv " +
-            "WHERE vlv.vocabularyList.user.id = :userId")
+            "WHERE vlv.vocabularyList.user.id = :userId and vlv.deletedAt IS null")
     Page<VocabularyListVocabulary> findByUserIdOrderByCreatedAtDesc(@Param("userId") long id,
         Pageable pageable);
 }
