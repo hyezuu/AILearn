@@ -52,7 +52,7 @@ public class UserController {
 
     @GetMapping("/me")
     public Provider getMe(@AuthenticationPrincipal Provider provider) {
-        return provider;
+        return userService.getUser(provider.id()).toProvider();
     }
 
     @GetMapping("/me/vocabulary-list")
