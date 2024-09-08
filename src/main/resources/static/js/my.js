@@ -59,3 +59,111 @@ progressBar.style.width = progressPercentage + "%";
 pointDisplay.style.left = progressPercentage + "%";
 pointDisplay.textContent = `${point} p`;
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const userGrade = parseInt(document.getElementById("user-grade").textContent);
+
+    console.log(userGrade);
+    const userGradeSpan = document.getElementById("user-grade");
+    const gradeBox = document.getElementById("user-grade-box")
+    const gradeImg = document.getElementById("user-grade-image");
+
+    // 이미지 추가 함수
+    function addImage(imgSrc) {
+        const imgElement = document.createElement("img");
+        imgElement.src = imgSrc;
+        imgElement.alt = "User Grade Image";
+        imgElement.style.width = "70px";  // 이미지 크기를 원하는 대로 설정
+        gradeImg.appendChild(imgElement);
+    }
+
+    // userGrade에 따라 텍스트와 이미지를 설정
+    switch (userGrade) {
+        case 0:
+            userGradeSpan.innerText = "A1";
+            addImage("/images/bronze.png"); // 이미지 경로 설정
+            gradeBox.classList.replace("user-grade-box", "user-grade-box0");
+            break;
+        case 1:
+            userGradeSpan.innerText = "A2";
+            addImage("/images/silver.png");
+            gradeBox.classList.replace("user-grade-box", "user-grade-box1");
+            break;
+        case 2:
+            userGradeSpan.innerText = "B1";
+            addImage("/images/gold.png");
+            gradeBox.classList.replace("user-grade-box", "user-grade-box2");
+            break;
+        case 3:
+            userGradeSpan.innerText = "B2";
+            addImage("/images/platinum.png");
+            gradeBox.classList.replace("user-grade-box", "user-grade-box3");
+            break;
+        case 4:
+            userGradeSpan.innerText = "C1";
+            addImage("/images/diamond.png");
+            gradeBox.classList.replace("user-grade-box", "user-grade-box4");
+            break;
+        case 5:
+            userGradeSpan.innerText = "C2";
+            addImage("/images/diamond 2.png");
+            gradeBox.classList.toggle("user-grade-box", "user-grade-box5");
+            break;
+        default:
+            userGradeSpan.innerText = "Unknown";
+            break;
+    }
+
+
+    // 5단위 레벨에서만 테스트 가능
+    document.getElementById("test-button").addEventListener("click", function(event) {
+        event.preventDefault();
+
+        const ready = document.getElementById("ready-upgrade").innerText;
+
+        if(ready === "true"){
+            window.location.href = "/upgrade-tests";
+        } else {
+            window.alert("5단위 레벨에서만 테스트를 진행할 수 있습니다.\n(예시: Lv.5, Lv.10, Lv.15 에서만 가능)")
+        }
+    });
+
+
+    //단어장 생성
+    const createVocabularyLink = document.getElementById('createVocabularyLink');
+
+    if (createVocabularyLink) {
+        createVocabularyLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            createVocabularyList();
+        });
+    }
+
+    function createVocabularyList() {
+        createVocabularyLink.textContent = '단어장 생성 중...';
+        createVocabularyLink.style.pointerEvents = 'none'; // 중복 클릭 방지
+
+        fetch('/api/vocabulary-list', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text();
+        })
+        .then(() => {
+            alert('단어장이 성공적으로 생성되었습니다.');
+            window.location.href = '/vocabulary-list'; // 단어장 페이지로 리다이렉트
+        })
+        .catch(error => {
+            console.error('Error creating vocabulary list:', error);
+            createVocabularyLink.textContent = '단어장 만들기 + (재시도)';
+            createVocabularyLink.style.pointerEvents = 'auto'; // 재시도 가능하도록 활성화
+        });
+    }
+})

@@ -21,17 +21,17 @@
     <!-- 메뉴 부분 -->
     <header th:replace="~{/layout/header::header}"></header>
     <!-- 메뉴 부분 끝 -->
-    <h1>내 단어장</h1>
-    <div class="search-container">
-        <input type="text" class="search-input" placeholder="search">
-        <button class="search-button">search</button>
-    </div>
-    <div th:each="vocabulary : ${vocabulary}" class="vocabulary" id="voca-box">
-        <div class="vocabulary-header">
-            <p th:text="${vocabulary}">단어 이름</p>
-            <a href="#" class="delete-vocabulary"><img src="/images/x-mark.png" alt="단어 삭제 버튼" title="단어 삭제 버튼"></a>
+    <div class="container">
+        <div class="my-list">
+            <div>
+                <a href="/vocabulary-list" class="my-page-list-a">내 단어장</a>
+                <a href="/grammar-examples" class="my-page-list-a">문법 예문</a>
+            </div>
+            <button id="addVocabularyButton">단어 추가하기</button>
         </div>
-        <p class="vocabulary-content" th:text="${vocabulary.content}">단어 예문</p>
+        <hr>
+        <div id="vocabularyContainer"></div>
+        <div id="paginationContainer"></div>
     </div>
 </div>
 </body>
