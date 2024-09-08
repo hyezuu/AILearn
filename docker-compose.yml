@@ -25,7 +25,7 @@ services:
 #      context: .
 #      dockerfile: Dockerfile
     image: elma98/ai-learn:v.1.0.0
-    container_name: ai-learn-container
+    container_name: ai-learn
     depends_on:
       - mysql
     environment:
