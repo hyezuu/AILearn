@@ -33,6 +33,11 @@ public record ErrorResponse(
             Collections.emptyList());
     }
 
+    //커스텀 예외 처리(메세지 수정시)
+    public static ErrorResponse of(ErrorCode errorCode, String message) {
+        return new ErrorResponse(errorCode.getStatus(), message, Collections.emptyList());
+    }
+
     public static ErrorResponse of(HttpStatus status, String message) {
         return new ErrorResponse(status.value(), message, Collections.emptyList());
     }

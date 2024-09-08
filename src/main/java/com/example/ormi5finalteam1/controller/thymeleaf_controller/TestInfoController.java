@@ -71,17 +71,6 @@ public class TestInfoController {
         return ResponseEntity.ok(testService.thymeleafSubmitLevelTests(user, grade, submitRequestVo));
     }
 
-
-    //Deprecate
-    @GetMapping("/test-result-data")
-    public String testResult(@AuthenticationPrincipal Provider provider,
-                             HttpSession session) {
-
-        User user = userService.loadUserByUsername(provider.email());
-        session.setAttribute("user", user);
-        return "redirect:/test-result";
-    }
-
     @GetMapping("/test-result")
     public String showTestResult(@AuthenticationPrincipal Provider provider, Model model) {
 
@@ -89,13 +78,6 @@ public class TestInfoController {
         model.addAttribute("user", user);
         return "tests/test-result";
     }
-
-    /*@GetMapping("/upgrade-tests")
-    public String getUpgradeTests(@AuthenticationPrincipal Provider provider) {
-        User user = getUser(provider);
-        if (user.getGrade() == null || !user.isReadyForUpgrade()) throw new BusinessException(ErrorCode.CANNOT_TAKE_TEST);
-        return "redirect:/tests/upgrade-tests";
-    }*/
 
     @GetMapping("/upgrade-tests")
     public String showUpgradeTests(@AuthenticationPrincipal Provider provider, Model model) {

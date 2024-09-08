@@ -77,7 +77,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public User loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = repository.findByEmail(email)
-            .orElseThrow(() -> new UsernameNotFoundException("User not found with username"));
+            .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
         if (user.getDeletedAt() != null) {
             throw new BusinessException(ErrorCode.USER_DEACTIVATED);
         }

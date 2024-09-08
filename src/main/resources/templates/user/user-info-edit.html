@@ -1,85 +1,77 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>내 게시글 목록</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap"
-          rel="stylesheet">
-    <link rel="stylesheet" href="/css/user-info-edit.css">
-    <!--    <link rel="stylesheet" href="/css/header.css">-->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="/js/my.js"></script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원정보 수정</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap"
+        rel="stylesheet">
+  <link rel="stylesheet" href="/css/user-info-edit.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="/js/my.js"></script>
 </head>
 <body>
 <!-- 메뉴 부분 -->
 <header th:replace="~{/layout/header::header}"></header>
 <!-- 메뉴 부분 끝 -->
 <main>
-    <div class="container">
-        <h1>마이페이지</h1>
+  <div class="container">
+    <h1>마이페이지</h1>
 
-        <div class="my-page-list">
-            <a href="" class="my-page-list-a">회원정보</a>
-            <a href="/my/posts" class="my-page-list-a">내 게시글 목록</a>
-            <a href="/my/edit" class="my-page-list-a-user">회원정보 변경</a>
-        </div>
-
-        <form>
-            <label>닉네임</label>
-            <div class="nickname">
-                <input type="text" required>
-                <button type="submit">중복확인</button>
-            </div>
-
-            <label>비밀번호</label>
-            <input type="text" required>
-
-            <label>비밀번호 확인</label>
-            <input type="password" required>
-
-            <button type="submit">회원정보 수정</button>
-        </form>
-
-        <hr/>
-        <div class="hr">
-            <a href="" class="hr-a">로그아웃하기 </a>
-            <a href="" class="hr-a">탈퇴하기</a>
-        </div>
+    <div class="my-page-list">
+      <a href="/my" class="my-page-list-a">회원정보</a>
+      <a href="/my/posts" class="my-page-list-a">내 게시글 목록</a>
+      <a href="/my/edit" class="my-page-list-a-user">회원정보 변경</a>
     </div>
+
+    <div class="update-form">
+      <form id="updateUserForm" th:data-current-nickname="${currentUser.nickname}">
+        <div class="form-group">
+          <label for="nickname">닉네임</label>
+          <input type="text" class="form-control" id="nickname" name="nickname"
+                 th:value="${currentUser.nickname}" required placeholder="2-12자 사이">
+          <span id="nicknameResult" class="validation-message"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="password">새 비밀번호</label>
+          <input type="password" class="form-control" id="password" name="password"
+                 required placeholder="8-16자 사이">
+          <span id="passwordResult" class="validation-message"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">비밀번호 확인</label>
+          <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
+                 required placeholder="비밀번호 재입력">
+          <span id="confirmPasswordResult" class="validation-message"></span>
+        </div>
+
+        <button type="submit" id="update-button-main">회원정보 수정</button>
+      </form>
+    </div>
+    <hr/>
+    <div class="hr">
+      <a href="/logout" class="hr-a">로그아웃하기</a>
+      <button id="withdrawLink" class="hr-a">탈퇴하기</button>
+    </div>
+  </div>
+  <script src="/js/user/user-info-edit.js"></script>
 </main>
-<script>
-    $(document).ready(function () {
-        $("a.mainMenu").mouseenter(function () {
-            $("header nav").stop().slideDown();
-        });
-        $("header nav a").mouseenter(function () {
-            $("a.mainMenu").removeClass('act');
-            $(this).parent().prev().addClass('act');
-        });
-        $("header ul").mouseleave(function () {
-            $("a.mainMenu").removeClass('act');
-            $("header nav").stop().slideUp();
-        });
 
-        //휠(스크롤) 위치에 따라 왼쪽메뉴 활성화.
-        $(document).scroll(function () {
-            //브라우저높이
-            const h2 = $(window).height();
+<!-- 탈퇴 확인 모달 -->
+<div id="withdrawalModal" class="modal">
+  <div class="modal-content">
+    <h2>회원 탈퇴</h2>
+    <p>정말로 탈퇴하시겠습니까? 이 작업은 취소할 수 없습니다.</p>
+    <div class="modal-buttons">
+      <button id="confirmWithdrawal">확인</button>
+      <button id="cancelWithdrawal">취소</button>
+    </div>
+  </div>
+</div>
 
-            const t1 = $(document).scrollTop();
-
-            const ht = Math.floor(t1 / h1);
-
-            //모든클래스 삭제
-            $("a").removeClass();
-            //해당 메뉴만 클래스 추가
-            $("li").eq(ht).children().addClass("menuOver " + "m" + (ht + 1));
-        });
-    });
-</script>
 </body>
 </html>
