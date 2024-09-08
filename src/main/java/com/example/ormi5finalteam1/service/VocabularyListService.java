@@ -42,6 +42,10 @@ public class VocabularyListService {
         user.addWordToVocabularyPoint();
     }
 
+    public boolean isVocabularyExist(Provider provider) {
+        return vocabularyListRepository.existsByUserId(provider.id());
+    }
+
     //내 단어장 가져오기
     @Transactional(readOnly = true)
     public VocabularyList getMyVocabularyList(Provider provider) {
