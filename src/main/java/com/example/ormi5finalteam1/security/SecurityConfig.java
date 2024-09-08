@@ -1,5 +1,7 @@
 package com.example.ormi5finalteam1.security;
 
+import com.example.ormi5finalteam1.security.CustomAuthenticationProvider;
+import com.example.ormi5finalteam1.security.ProviderBasicAuthenticationFilter;
 import com.example.ormi5finalteam1.security.handler.CustomAuthenticationFailureHandler;
 import com.example.ormi5finalteam1.security.handler.CustomAuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +34,7 @@ public class SecurityConfig {
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/static/**").permitAll()
                 .requestMatchers("/signup", "/login", "/", "/forgot-password").permitAll()
                 .requestMatchers("/*/signup","/*/login").permitAll()
-                .requestMatchers("/api/me").hasAnyRole("USER")
+                .requestMatchers("/api/me").hasRole("USER")
                 .requestMatchers("/my").hasRole("USER")
                     .requestMatchers("/tests", "/tests/level-tests", "/level-tests", "/test-result").authenticated()
                 .anyRequest().hasAnyRole("USER","ADMIN"))
