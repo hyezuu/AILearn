@@ -31,5 +31,5 @@ jobs:
             git pull origin develop
             
             # 도커 컴포즈를 사용하여 컨테이너 재시작
-            docker-compose down  # 기존 도커 컨테이너 중지
-            docker-compose up -d  # 도커 컨테이너 다시 시작
+#            docker-compose down  # 기존 도커 컨테이너 중지
+#            docker-compose up -d  # 도커 컨테이너 다시 시작
