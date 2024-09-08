@@ -107,7 +107,12 @@
             </div>
 
             <div class="move">
-                <a href="/vocabulary-list"><span>단어장 만들기 +</span></a>
+                <a th:if="${hasVocabularyList}" href="/vocabulary-list">
+                    <span>단어장 조회하기 →</span>
+                </a>
+                <a th:unless="${hasVocabularyList}" href="#" id="createVocabularyLink">
+                    <span>단어장 만들기 +</span>
+                </a>
                 <a href="/essays/new"><span>에세이 만들기 +</span></a>
                 <a href="/essays"><span>에세이 AI 첨삭받기 +</span></a>
                 <a href="/posts"><span>커뮤니티 공유하기 →</span></a>
@@ -118,74 +123,6 @@
 </main>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const userGrade = parseInt(document.getElementById("user-grade").textContent);
-
-        console.log(userGrade);
-        const userGradeSpan = document.getElementById("user-grade");
-        const gradeBox = document.getElementById("user-grade-box")
-        const gradeImg = document.getElementById("user-grade-image");
-
-        // 이미지 추가 함수
-        function addImage(imgSrc) {
-            const imgElement = document.createElement("img");
-            imgElement.src = imgSrc;
-            imgElement.alt = "User Grade Image";
-            imgElement.style.width = "70px";  // 이미지 크기를 원하는 대로 설정
-            gradeImg.appendChild(imgElement);
-        }
-
-        // userGrade에 따라 텍스트와 이미지를 설정
-        switch (userGrade) {
-            case 0:
-                userGradeSpan.innerText = "A1";
-                addImage("/images/bronze.png"); // 이미지 경로 설정
-                gradeBox.classList.replace("user-grade-box", "user-grade-box0");
-                break;
-            case 1:
-                userGradeSpan.innerText = "A2";
-                addImage("/images/silver.png");
-                gradeBox.classList.replace("user-grade-box", "user-grade-box1");
-                break;
-            case 2:
-                userGradeSpan.innerText = "B1";
-                addImage("/images/gold.png");
-                gradeBox.classList.replace("user-grade-box", "user-grade-box2");
-                break;
-            case 3:
-                userGradeSpan.innerText = "B2";
-                addImage("/images/platinum.png");
-                gradeBox.classList.replace("user-grade-box", "user-grade-box3");
-                break;
-            case 4:
-                userGradeSpan.innerText = "C1";
-                addImage("/images/diamond.png");
-                gradeBox.classList.replace("user-grade-box", "user-grade-box4");
-                break;
-            case 5:
-                userGradeSpan.innerText = "C2";
-                addImage("/images/diamond 2.png");
-                gradeBox.classList.toggle("user-grade-box", "user-grade-box5");
-                break;
-            default:
-                userGradeSpan.innerText = "Unknown";
-                break;
-        }
-
-
-        // 5단위 레벨에서만 테스트 가능
-        document.getElementById("test-button").addEventListener("click", function(event) {
-            event.preventDefault();
-
-            const ready = document.getElementById("ready-upgrade").innerText;
-
-            if(ready === "true"){
-                window.location.href = "/upgrade-tests";
-            } else {
-                window.alert("5단위 레벨에서만 테스트를 진행할 수 있습니다.\n(예시: Lv.5, Lv.10, Lv.15 에서만 가능)")
-            }
-        });
-    })
 </script>
 </body>
 </html>

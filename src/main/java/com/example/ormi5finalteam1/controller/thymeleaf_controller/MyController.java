@@ -63,6 +63,9 @@ public class MyController {
         model.addAttribute("totalVocaPages", vocabularyRsponseDtoPages.getTotalPages());
         model.addAttribute("totalVocaItems", vocabularyRsponseDtoPages.getTotalElements());
 
+        boolean hasVocabularyList = vocabularyListService.isVocabularyExist(provider);
+        model.addAttribute("hasVocabularyList", hasVocabularyList);
+
         return "user/my";
     }
 
