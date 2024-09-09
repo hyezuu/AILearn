@@ -39,7 +39,8 @@ document.addEventListener("DOMContentLoaded", function() {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
-        }
+        },
+
     })
         .then(response => {
             if (!response.ok) {
@@ -52,10 +53,15 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .catch(error => {
             console.error('Error fetching essay details:', error);
+            displayEssayError(error)
         });
 
     function displayEssayReview(review) {
         document.getElementById("review").innerHTML = review.reviewedContent;
+    }
+
+    function displayEssayError(error) {
+        document.getElementById("review").innerText = "에세이를 첨삭할 수 없습니다.\n" + error
     }
 
     // 사용자 정보를 요청하여 userId를 가져옴

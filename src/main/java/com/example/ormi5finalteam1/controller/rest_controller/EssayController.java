@@ -42,8 +42,8 @@ public class EssayController {
 
     /** 에세이 첨삭 */
     @PutMapping("/essays/{id}/review")
-    public ResponseEntity<ReviewedEssaysResponseDto> reviewEssay(@PathVariable Long id) {
-        ReviewedEssaysResponseDto reviewedEssay = essayProcessingService.processEssay(id);
+    public ResponseEntity<ReviewedEssaysResponseDto> reviewEssay(@PathVariable Long id, @AuthenticationPrincipal Provider provider) {
+        ReviewedEssaysResponseDto reviewedEssay = essayProcessingService.processEssay(id, provider);
         return new ResponseEntity<>(reviewedEssay, HttpStatusCode.valueOf(200));
     }
 
@@ -68,15 +68,17 @@ public class EssayController {
     /** 내 에세이 상세 조회 */
     @GetMapping("/essays/{id}")
     public ResponseEntity<EssayResponseDto> showEssay(
-            @PathVariable Long id) {
-        EssayResponseDto essayResponseDto = essayService.showEssay(id);
+            @PathVariable Long id,
+            @AuthenticationPrincipal Provider provider
+    ) {
+        EssayResponseDto essayResponseDto = essayService.showEssay(id, provider);
         return new ResponseEntity<>(essayResponseDto, HttpStatusCode.valueOf(200));
     }
 
     /** 에세이 삭제 */
     @DeleteMapping("/essays/{id}/delete")
-    public ResponseEntity<Void> deleteEssay(@PathVariable Long id) {
-        essayService.deleteEssay(id);
+    public ResponseEntity<Void> deleteEssay(@PathVariable Long id, @AuthenticationPrincipal Provider provider) {
+        essayService.deleteEssay(id, provider);
         return new ResponseEntity<>(HttpStatusCode.valueOf(200));
     }
 
