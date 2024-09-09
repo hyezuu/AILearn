@@ -1,0 +1,72 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+
+name: Java CI with Gradle
+
+on:
+  push:
+    branches: [ "develop" ]
+  pull_request:
+    branches: [ "develop" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+    - uses: actions/checkout@v4 # 4. 작성한 코드를 가상 머신에 복사해 갖다놓는 작업 그래야만 거기서 작업을 할 수 있다.
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+
+    - name: Build with Gradle Wrapper
+      run: ./gradlew build -x test
+
+    - name: Login into Docker Hub
+      env:
+        DOCKER_HUB_REGISTRY: ${{ secrets.DOCKER_HUB_REPO }}
+        DOCKER_HUB_ID: ${{ secrets.DOCKER_HUB_ID }}
+        DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+      run: echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_ID --password-stdin
+
+    - name: docker build
+      run: docker build -t ${{ secrets.DOCKER_HUB_ID }}/${{ secrets.DOCKER_HUB_REPO }}:latest .
+
+    - name: docker push
+      run: docker push ${{ secrets.DOCKER_HUB_ID }}/${{ secrets.DOCKER_HUB_REPO }}:latest
+        
+    - name: Test EC2 SSH Connection
+      id: test_ssh_connection
+      env:
+        SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+        SSH_USER: ${{ secrets.SSH_EC2_USER }}
+        SSH_HOST: ${{ secrets.SSH_EC2_HOST }}
+      run: |
+        echo "$SSH_KEY" > my-key-pair.pem
+        chmod 400 my-key-pair.pem
+        
+        ssh -i "my-key-pair.pem" -o StrictHostKeyChecking=no ${{secrets.SSH_EC2_USER}}@${{secrets.SSH_EC2_HOST}} << EOF
+        echo "hello world"
+        EOF
+
+    - name: Deploy to EC2
+      run: |  
+        ssh -i "my-key-pair.pem" -o StrictHostKeyChecking=no ${{secrets.SSH_EC2_USER}}@${{secrets.SSH_EC2_HOST}} << EOF
+          docker login -u ${{ secrets.DOCKER_HUB_ID }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
+          docker pull ${{ secrets.DOCKER_HUB_ID }}/${{ secrets.DOCKER_HUB_REPO }}:latest
+          docker stop app
+          docker rm app
+          docker run -d --name app -p 8080:8080 -e SPRING_PROFILES_ACTIVE=prod ${{ secrets.DOCKER_HUB_ID }}/${{ secrets.DOCKER_HUB_REPO }}:latest
+        EOF

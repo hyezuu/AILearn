@@ -114,7 +114,7 @@ textarea {
 
 .buttons button {
     padding : 6px 30px;
-    background-color: #2e5dbd;
+    background-color: #1d62f8;
     color: white;
     font-size: 1.1rem;
     font-weight: 600;
@@ -122,7 +122,7 @@ textarea {
     border-radius: 10px;
 }
 .buttons button:hover {
-    background-color: #103889;
+    background-color: #173db9;
 }
 
 #essay-content {

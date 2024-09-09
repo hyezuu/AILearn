@@ -58,7 +58,7 @@ class CommentServiceTest {
                 .nickname("testUser")
                 .build();
         Post post = new Post(user, "title", "content");
-        CommentDto commentDto = new CommentDto(null, 1L, "testUser", 1L, "comment content", LocalDateTime.now());
+        CommentDto commentDto = new CommentDto(null, 1L, "testUser", 1L, "test post title","comment content", LocalDateTime.now());
 
         when(userService.getUser(provider.id())).thenReturn(user);
         when(postService.getPost(commentDto.getPostId())).thenReturn(post);
@@ -82,9 +82,12 @@ class CommentServiceTest {
                 .password("password")
                 .nickname("testUser")
                 .build();
-        Post post = new Post(user, "title", "content");
+        Post post = new Post(user, "title", "content"); // deletedAt은 기본적으로 null
+
+        // 게시글이 삭제되지 않은 상태를 가정 (별도 설정 불필요)
         comments.add(new Comment(user, post, "comment content"));
 
+        when(postService.getPost(postId)).thenReturn(post);
         when(commentRepository.findByPostIdOrderByCreatedAtAsc(postId)).thenReturn(comments);
 
         // When
@@ -93,7 +96,33 @@ class CommentServiceTest {
         // Then
         assertEquals(1, commentDtos.size());
         assertEquals("comment content", commentDtos.get(0).getContent());
+        verify(postService, times(1)).getPost(postId);
         verify(commentRepository, times(1)).findByPostIdOrderByCreatedAtAsc(postId);
+    }
+
+    @Test
+    void getCommentsByPostId_삭제된_게시글의_댓글은_조회되지_않는다() {
+        // Given
+        Long postId = 1L;
+        User user = User.builder()
+                .email("test@example.com")
+                .password("password")
+                .nickname("testUser")
+                .build();
+        Post post = new Post(user, "title", "content");
+
+        // 게시글을 삭제된 상태로 변경
+        post.delete();
+
+        when(postService.getPost(postId)).thenReturn(post);
+
+        // When & Then
+        assertThrows(BusinessException.class, () -> {
+            commentService.getCommentsByPostId(postId);
+        });
+
+        verify(postService, times(1)).getPost(postId);
+        verify(commentRepository, never()).findByPostIdOrderByCreatedAtAsc(postId);
     }
 
     @Test

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class LikeService {
@@ -67,6 +68,12 @@ public class LikeService {
         return likeRepository.findByUserId(userId, pageable)
                 .map(like -> convertToDto(like.getPost()));
             }
+
+    // 사용자가 좋아요를 누른 게시글인지 확인
+    public boolean getLikedPost(Long postId, Provider provider) {
+        Optional<Like> byUserIdAndPostId = likeRepository.findByUserIdAndPostId(provider.id(), postId);
+        return byUserIdAndPostId.isPresent();
+    }
 
     private LikeDto convertToDto(Like like) {
         return new LikeDto(like.getId(), like.getUser().getId(), like.getPost().getId(), like.getCreatedAt());

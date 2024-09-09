@@ -29,9 +29,17 @@
                     <span id="post-createdAt">작성일</span>
                     <span id="post-viewCount">조회수</span>
                 </div>
-                <div class="button-container" style="display: none;">
-                    <a id="delete-post"><img src="/images/delete.png" alt="삭제버튼"></a>
-                    <a id="edit"><img src="/images/edit.png" alt="수정버튼"></a>
+                <div class="buttons">
+                    <div class="button-container" style="display: none;">
+                        <a id="delete-post"><img src="/images/delete.png" alt="삭제버튼"></a>
+                        <a id="edit"><img src="/images/edit.png" alt="수정버튼"></a>
+                    </div>
+                    <div class="button-like-unchecked" id="button-like-unchecked" style="display: none;">
+                        <a id="like-unchecked"><img src="/images/thumbup.png" alt="좋아요 누르기"></a>
+                    </div>
+                    <div class="button-like-checked" id="button-like-checked" style="display: none;">
+                        <a id="like-checked"><img src="/images/thumbup-check.png" alt="좋아요 취소하기"></a>
+                    </div>
                 </div>
             </div>
             <p id="post-content"></p>

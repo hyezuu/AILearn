@@ -85,7 +85,7 @@ textarea {
 /* 등록버튼 */
 button[type="submit"] {
     padding : 8px 40px;
-    background-color: #103889;
+    background-color: #1d62f8;
     color: white;
     font-weight: 600;
     font-size: 1.1rem;
@@ -93,8 +93,7 @@ button[type="submit"] {
     border-radius: 7px;
 }
 button[type="submit"]:hover {
-    background-color: #0f246c;
-    filter: drop-shadow(0px 0px 2px #103889 );
+    background-color: #173db9;
 }
 
 .essay-guide {

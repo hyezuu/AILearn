@@ -2,20 +2,31 @@
     margin: auto 0;
     padding: 0;
 }
-
-
 #layout {
     width: 100%;
     height: 100%;
-    font-family: "IBM Plex Sans KR", sans-serif;
-    font-weight: 400;
-    font-style: normal;
 }
-
-
 a {
     text-decoration: none;
-    color: black;
+    color: #777;
+}
+a:hover {
+    color: #000;
+}
+/* 로그인, 로그아웃, 회원가입 버튼  */
+#login-button, #logout-button, #signup-button {
+    font-family: "IBM Plex Sans KR", sans-serif;
+    font-weight: bold;
+    color: #777;
+}
+#login-button:hover {
+    color: #000;
+}
+#logout-button:hover {
+    color: #000;
+}
+#signup-button:hover {
+    color: #000;
 }
 
 
@@ -25,7 +36,7 @@ header {
     background: white;
     position: fixed;
     width: 100%;
-    filter:drop-shadow(0 1px 3px dodgerblue);
+    filter:drop-shadow(0 1px 3px #b2b6cb);
     z-index: 1000;
 }
 header h2 {
@@ -39,23 +50,21 @@ header h2 a {
 /* 로고 */
 header img {
     margin-top: 5px;
-    margin-left: 300px;
+    margin-left: 90px;
 }
-
 /* 로그인 */
 header li:first-child a {
-    font-weight: 600;
+    font-weight: bold;
     color: #777;
 }
 header li:nth-child(2) a {
-    font-weight: 600;
+    font-weight: bold;
     color: #777;
 }
 /* 메뉴 화살표 */
 header li span {
     margin-bottom: 5px;
 }
-
 /*메뉴*/
 header ul {
     flex: 0.3;
@@ -65,22 +74,18 @@ header ul {
     width: 200px;
 }
 header li { flex: 2; position: relative;}
-header li a:hover {
-    color: black;
-}
 header span { margin-top: 7px; display: inline-block; }
-
 /*메인메뉴*/
 a.mainMenu {
     color: #777;
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: bold;
     display: block;
     padding: 6px;
     text-align: center;
+    font-family: "IBM Plex Sans KR", sans-serif;
 }
-a.mainMenu:hover, a.mainMenu.act { color: #464646; }
-
+a.mainMenu:hover, a.mainMenu.act { color: #000; font-weight: bold; }
 /*서브메뉴*/
 header nav {
     background: #f9f9f9;
@@ -92,16 +97,16 @@ header nav {
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
 }
-
 header nav a {
-
     display: block;
     padding: 4px;
     text-align: center;
 }
-
 header nav a:hover {
     background: #e1e1e1;
     font-weight: bold;
     color: #000000;
+}
+header nav a:last-child {
+    display: none;
 }
