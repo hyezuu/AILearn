@@ -33,6 +33,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(api -> api
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/static/**").permitAll()
                 .requestMatchers("/signup", "/login", "/", "/forgot-password").permitAll()
+                .requestMatchers("/api/nickname-duplication","/api/email-duplication").permitAll()
+                .requestMatchers("/api/request-verification", "/api/verify-email").permitAll()
                 .requestMatchers("/*/signup","/*/login").permitAll()
                 .requestMatchers("/api/me").hasRole("USER")
                 .requestMatchers("/my").hasRole("USER")
