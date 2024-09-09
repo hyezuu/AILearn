@@ -2,8 +2,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const postId = window.location.pathname.split("/").pop(); // URL 에서 ID를 추출
     let userId = 0;
     let userIdByPost = 0;
-    fetchPostDetails(postId);
-    fetchComments();
 
     // 사용자 정보를 요청하여 userId를 가져옴
     fetch("/api/me", {
@@ -20,6 +18,9 @@ document.addEventListener("DOMContentLoaded", function() {
         .catch(error => {
             console.error('Error fetching user data:', error);
         });
+
+    fetchPostDetails(postId);
+    fetchComments();
 
     // 게시글 상세 불러오기
     function  fetchPostDetails(id) {
@@ -237,4 +238,107 @@ document.addEventListener("DOMContentLoaded", function() {
                 .catch(error => console.error("Error deleting comment:", error));
         }
     }
+
+    const unchecked = document.getElementById("button-like-unchecked");
+    const checked = document.getElementById("button-like-checked");
+    fetchLike(postId)
+
+
+    // 좋아요 상태 불러오기
+    function  fetchLike(id) {
+        fetch(`/api/posts/${id}/like`, {
+            method : 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(response.status.toString());
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("---Like Received data:", data); // 데이터를 콘솔에 출력해서 확인
+                unchecked.style.display = "none";
+                checked.style.display = "none";
+                displayLike(data);
+            })
+            .catch(error => {
+                console.error('Error fetching post details:', error);
+            });
+    }
+
+
+    function displayLike(isTrue) {
+
+        if(isTrue) {
+            checked.style.display = "block";
+        } else {
+            unchecked.style.display = "block";
+        }
+    }
+
+    // 게시글 좋아요 등록
+    unchecked.addEventListener("click", function(event) {
+        event.preventDefault();
+
+        fetch(`/api/posts/${postId}/like`, {
+            method: "POST",
+            headers: {
+                "Content-Type" : "application/json"
+            },
+            credentials: "include"
+        })
+            .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            // 응답 본문이 있을 경우에만 JSON 파싱
+            return response.text().then(text => {
+                return text ? JSON.parse(text) : {};
+            });
+        })
+            .then(data => {
+                console.log("Success:", data);
+
+                fetchLike(postId)
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+    })
+
+    // 게시글 좋아요 삭제
+    checked.addEventListener("click", function(event) {
+        event.preventDefault();
+
+        fetch(`/api/posts/${postId}/like`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type" : "application/json"
+            },
+            credentials: "include"
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                // 응답 본문이 있을 경우에만 JSON 파싱
+                return response.text().then(text => {
+                    return text ? JSON.parse(text) : {};
+                });
+            })
+            .then(data => {
+                console.log("Success:", data);
+
+                fetchLike(postId)
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+    })
+
 });
