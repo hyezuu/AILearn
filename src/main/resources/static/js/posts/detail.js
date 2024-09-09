@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function() {
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error(response.status.toString());
                 }
                 return response.json();
             })
@@ -40,6 +40,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 displayPostDetails(data);
             })
             .catch(error => {
+                displayPostError(error.message);
                 console.error('Error fetching post details:', error);
             });
     }
@@ -58,6 +59,17 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         console.log("postUI:"+ post.userId)
         console.log("userId: "+ userId);
+    }
+
+    function displayPostError(error) {
+        const errorCode = error.match(/\d{3}/)?.[0]; // 3자리 숫자를 매칭
+
+        if(errorCode === "404") {
+            document.getElementById("layout").innerHTML = `
+            <header th:replace="~{/layout/header::header}"></header>
+            <h3 class="error-404">삭제되었거나 존재하지 않는 게시글 입니다.</h3>
+        `;
+        }
     }
 
 
