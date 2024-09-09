@@ -52,8 +52,9 @@ public class SchedulerService {
   }
 
   @Async
-  @Scheduled(cron = "00 10 05 * * *")
+  @Scheduled(cron = "00 15 05 * * *")
   public void getGrammarExamplesQuery() {
+    log.info("grammar example scheduler running");
     for (String gradeStr : Grade.getGrades()) {
       try {
         alanAIService.getGrammarExamplesQuery(gradeStr);
