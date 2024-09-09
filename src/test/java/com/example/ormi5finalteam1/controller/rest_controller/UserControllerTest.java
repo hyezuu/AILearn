@@ -24,6 +24,7 @@ import com.example.ormi5finalteam1.common.exception.ErrorCode;
 import com.example.ormi5finalteam1.domain.Grade;
 import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.domain.user.Role;
+import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.domain.user.dto.CreateUserRequestDto;
 import com.example.ormi5finalteam1.domain.user.dto.UpdateUserRequestDto;
 import com.example.ormi5finalteam1.domain.vocabulary.dto.MyVocabularyListResponseDto;
@@ -61,6 +62,8 @@ class UserControllerTest {
     private VocabularyListService vocabularyListService;
     @MockBean
     private EmailService emailService;
+    @MockBean
+    private User mockUser;
 
     @Test
     void checkEmail_은_해당_email이_존재할_시_true_를_반환한다() throws Exception {
@@ -242,6 +245,8 @@ class UserControllerTest {
         //given
         Provider provider
             = new Provider(1L, "test@email.com", "testuser", Role.USER, Grade.A1, 10);
+        when(userService.getUser(1L)).thenReturn(mockUser);
+        when(mockUser.toProvider()).thenReturn(provider);
         //when
         ResultActions actions
             = mockMvc.perform(
@@ -313,6 +318,39 @@ class UserControllerTest {
             .andExpect(jsonPath("$.content[1].grade").value("A2"))
             .andExpect(jsonPath("$.content[1].createdAt").exists());
     }
+
+    @Test
+    void getUserVocabularyListStatus_는_유저가_단어장을_보유했을_시_true_를_반환한다() throws Exception {
+        //given
+        Provider provider = new Provider(1L, "test@email.com", "testuser", Role.USER, Grade.A1, 10);
+        when(vocabularyListService.isVocabularyExist(provider)).thenReturn(true);
+        //when
+        ResultActions actions = mockMvc.perform(
+            get("/api/me/vocabulary-list/status")
+                .with(csrf())
+                .with(authenticatedProvider(provider))
+                .accept(MediaType.APPLICATION_JSON));
+        //then
+        actions.andExpect(status().isOk())
+            .andExpect(content().string("true"));
+    }
+
+    @Test
+    void getUserVocabularyListStatus_는_유저가_단어장을_보유하지_않았을_시_false_를_반환한다() throws Exception {
+        //given
+        Provider provider = new Provider(1L, "test@email.com", "testuser", Role.USER, Grade.A1, 10);
+        when(vocabularyListService.isVocabularyExist(provider)).thenReturn(false);
+        //when
+        ResultActions actions = mockMvc.perform(
+            get("/api/me/vocabulary-list/status")
+                .with(csrf())
+                .with(authenticatedProvider(provider))
+                .accept(MediaType.APPLICATION_JSON));
+        //then
+        actions.andExpect(status().isOk())
+            .andExpect(content().string("false"));
+    }
+
 
     @Test
     void requestEmailVerification_은_이메일_인증_요청을_보낼_수_있다() throws Exception {
@@ -477,7 +515,8 @@ class UserControllerTest {
     @Test
     void update_는_유효한_데이터로_사용자_정보를_업데이트한다() throws Exception {
         // given
-        Provider provider = new Provider(1L, "test@email.com", "oldNickname", Role.USER, Grade.A1, 10);
+        Provider provider = new Provider(1L, "test@email.com", "oldNickname", Role.USER, Grade.A1,
+            10);
         UpdateUserRequestDto requestDto = new UpdateUserRequestDto("newNickname", "newPassword");
         // when
         ResultActions actions = mockMvc.perform(
@@ -494,7 +533,8 @@ class UserControllerTest {
     @Test
     void update_는_유효하지_않은_닉네임으로_요청시_400_에러를_반환한다() throws Exception {
         // given
-        Provider provider = new Provider(1L, "test@email.com", "oldNickname", Role.USER, Grade.A1, 10);
+        Provider provider = new Provider(1L, "test@email.com", "oldNickname", Role.USER, Grade.A1,
+            10);
         UpdateUserRequestDto requestDto = new UpdateUserRequestDto("a", "validPassword");
         // when
         ResultActions actions = mockMvc.perform(
@@ -511,7 +551,8 @@ class UserControllerTest {
     @Test
     void update_는_유효하지_않은_비밀번호로_요청시_400_에러를_반환한다() throws Exception {
         // given
-        Provider provider = new Provider(1L, "test@email.com", "oldNickname", Role.USER, Grade.A1, 10);
+        Provider provider = new Provider(1L, "test@email.com", "oldNickname", Role.USER, Grade.A1,
+            10);
         UpdateUserRequestDto requestDto = new UpdateUserRequestDto("validNickname", "short");
         // when
         ResultActions actions = mockMvc.perform(
@@ -528,7 +569,8 @@ class UserControllerTest {
     @Test
     void update_는_중복된_닉네임으로_요청시_409_에러를_반환한다() throws Exception {
         // given
-        Provider provider = new Provider(1L, "test@email.com", "oldNickname", Role.USER, Grade.A1, 10);
+        Provider provider = new Provider(1L, "test@email.com", "oldNickname", Role.USER, Grade.A1,
+            10);
         UpdateUserRequestDto requestDto = new UpdateUserRequestDto("duplicated", "validPassword");
         doThrow(new BusinessException(ErrorCode.DUPLICATE_NICKNAME))
             .when(userService).updateUser(provider.id(), requestDto);

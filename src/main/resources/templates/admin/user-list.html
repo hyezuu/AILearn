@@ -1,67 +1,60 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<html html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/user-list.css">
     <title>user-list</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/user-list.css">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/header.css">
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </head>
 <body>
-
 <!-- 메뉴 부분 -->
-<header>
-    <h2><a href="#"><img src="/images/ailearn-logo.png" alt="AILEARN" style="width: 80%;"></a></h2>
-    <ul>
-        <li><a href="/login">LOG OUT</a></li>
-        <li>
-            <a href="#" class="mainMenu">MENU v</a>
-            <nav>
-                <a href="/my">마이페이지</a>
-                <a href="/posts">커뮤니티</a>
-                <a href="/vocabulary-list">단어장</a>
-                <a href="/grammar-examples?keyword=">문법예문</a>
-                <a href="/essays">에세이</a>
-            </nav>
-        </li>
-    </ul>
-</header>
+<header th:replace="~{/layout/header::header}"></header>
+<!-- 메뉴 부분 끝 -->
 
-<div>
-    <strong>전체 유저 리스트</strong>
-<!--</div>-->
-<div class="search-container">
-    <input type="text" class="search-input" placeholder="search">
-    <button class="search-button">search</button>
-</div>
+<div class="container">
+    <h2>전체 유저 리스트</h2>
+    <!--</div>-->
+    <div class="search-container">
+        <input type="text" class="search-input" placeholder="search">
+        <button class="search-button">search</button>
+    </div>
 
-<table class="table">
-    <tr class="header">
-        <th class="num">번호</th>
-        <th class="user-email">유저 이메일</th>
-        <th>닉네임</th>
-        <th>레벨</th>
-        <th>테스트 응시 자격</th>
-        <th>상태</th>
-        <th>가입일</th>
-        <th>마지막 로그인</th>
-    </tr>
-<!--</table>-->
+    <table class="table">
+        <tr class="header">
+            <th class="num">번호</th>
+            <th class="user-email">유저 이메일</th>
+            <th>닉네임</th>
+            <th>레벨</th>
+            <th>테스트 응시 자격</th>
+            <th>상태</th>
+            <th>가입일</th>
+            <th>마지막 로그인</th>
+        </tr>
+        <!--</table>-->
+        <tbody id="post-list" class="post-list"></tbody>
+    </table>
 
-<tbody id="post-list" class="post-list"></tbody>
-</table>
-<div id="pagination" class="pagination"></div>
+    <div class="pagination">
+        <button id="prev-page" class="pagination-button"> <<</button>
+        <span id="page-info"></span>
+        <button id="next-page" class="pagination-button"> >></button>
+    </div>
+
 </div>
 <script>
 
     //헤더
-    $(document).ready(function() {
+    $(document).ready(function () {
         $("a.mainMenu").mouseenter(function () {
             $("header nav").stop().slideDown();
         });
@@ -75,110 +68,126 @@
         });
 
         //휠(스크롤) 위치에 따라 왼쪽메뉴 활성화.
-        $(document).scroll(function(){
+        $(document).scroll(function () {
             //브라우저높이
             const h2 = $(window).height();
 
             const t1 = $(document).scrollTop();
 
-            const ht = Math.floor(t1/h1);
+            const ht = Math.floor(t1 / h1);
 
             //모든클래스 삭제
             $("a").removeClass();
             //해당 메뉴만 클래스 추가
-            $("li").eq(ht).children().addClass("menuOver "+"m"+(ht+1));
+            $("li").eq(ht).children().addClass("menuOver " + "m" + (ht + 1));
         });
     });
 
-    //페이지
-    const posts = Array.from({ length: 100 }, (_, i) => ({
-        number: i + 1,
-        email: `user${i + 1}@example.com`,
-        nickname: `닉네임 ${i + 1}`,
-        level: `레벨 ${Math.ceil((i + 1) / 10)}`,
-        eligibility: i % 2 === 0 ? '응시 자격 있음' : '응시 자격 없음',
-        status: i % 2 === 0 ? '활성' : '비활성',
-        joinDate: new Date(new Date().setDate(new Date().getDate() - i)).toLocaleDateString(),
-        lastLogin: new Date().toLocaleDateString()
-    }));
+</script>
 
-    const postsPerPage = 10;
-    const pageButtonCount = 5; // 항상 표시할 페이지 번호 버튼 개수
-    let currentPage = 1;
+<script>
+    //페이징
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchForm = document.getElementById("search-container");
+        const searchInput = document.getElementById("search-input");
+        const postList = document.getElementById("post-list");
+        const paginationInfo = document.getElementById("page-info");
+        const prevPageButton = document.getElementById("prev-page");
+        const nextPageButton = document.getElementById("next-page");
 
-    function renderPosts() {
-        const postList = document.getElementById('post-list');
-        postList.innerHTML = '';
-        const start = (currentPage - 1) * postsPerPage;
-        const end = start + postsPerPage;
-        posts.slice(start, end).forEach(post => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-            <td class="number">${post.number}</td>
-            <td>${post.email}</td>
-            <td>${post.nickname}</td>
-            <td>${post.level}</td>
-            <td>${post.eligibility}</td>
-            <td>${post.status}</td>
-            <td>${post.joinDate}</td>
-            <td>${post.lastLogin}</td>
-        `;
-            postList.appendChild(tr);
+        let currentPage = 0; // 현재 페이지 번호
+        const pageSize = 12; // 한 페이지에 표시할 개수
+        let totalPages = 0; // 총 페이지 수
+
+        // 페이지 로드 시 초기 에세이 목록 로드
+        fetchPosts(currentPage, pageSize);
+
+        searchForm.addEventListener("submit", function (event) {
+            event.preventDefault(); // 페이지 새로고침 방지
+            console.log("search-submit")
+            const searchQuery = searchInput.value;
+            currentPage = 0; // 검색 시 페이지를 1페이지로 초기화
+            fetchPosts(currentPage, pageSize, searchQuery);
         });
-    }
 
-    function renderPagination() {
-        const pagination = document.getElementById('pagination');
-        pagination.innerHTML = '';
-        const totalPages = Math.ceil(posts.length / postsPerPage);
+        // 페이지네이션 버튼 클릭 이벤트 처리
+        prevPageButton.addEventListener("click", function () {
+            if (currentPage > 0) {
+                currentPage--;
+                fetchPosts(currentPage, pageSize, searchInput.value);
+            }
+        });
 
-        const createButton = (page, text, disabled = false, isActive = false) => {
-            const button = document.createElement('button');
-            button.textContent = text;
-            button.disabled = disabled;
-            button.className = disabled ? 'disabled' : (isActive ? 'active' : '');
-            button.addEventListener('click', () => {
-                if (!disabled) {
-                    currentPage = page;
-                    update();
-                }
+        nextPageButton.addEventListener("click", function () {
+            if (currentPage < totalPages - 1) {
+                currentPage++;
+                fetchPosts(currentPage, pageSize, searchInput.value);
+            }
+        });
+
+        // 게시글 목록 및 검색 기능 구현
+        function fetchPosts(page, pageSize, searchQuery = "") {
+
+            fetch(`/api/posts?page=${page}&size=${pageSize}&keyword=${searchQuery}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include' // 세션 포함
+            })
+                .then(response => response.json())
+                .then(data => {
+                    displayPosts(data.content);
+                    totalPages = data.totalPages; // 서버에서 받은 총 페이지 수 업데이트
+                    updatePagination(data.number, totalPages);
+                })
+                .catch(error => console.error("Error fetching posts:", error));
+        }
+
+        // 게시글 목록을 화면에 표시
+        function displayPosts(posts) {
+            postList.innerHTML = ""; // 기존 목록 초기화
+
+            posts.forEach(posts => {
+                const truncatedTitle = posts.title.length > 35
+                    ? posts.title.substring(0, 35) + "..."
+                    : posts.title
+
+                const nickname = posts.userName;
+
+                const date = new Date(posts.createdAt).toISOString().slice(2, 16).replace("T", " ");
+
+                const viewCount = posts.viewCount;
+
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                <td>${truncatedTitle}</td>
+                <td>${nickname}</td>
+                <td>${date}</td>
+                <td>${viewCount}</td>
+            `;
+
+                row.addEventListener("click", function () {
+                    window.location.href = `/posts/${posts.id}`; // 클릭 시 상세 페이지로 이동
+                });
+
+                postList.appendChild(row);
             });
-            return button;
-        };
-
-        // Add First and Previous Buttons
-        pagination.appendChild(createButton(1, '<<', currentPage === 1));
-        pagination.appendChild(createButton(currentPage - 1, '<', currentPage === 1));
-
-        // Add Page Number Buttons
-        const halfRange = Math.floor(pageButtonCount / 2);
-        let startPage = Math.max(1, currentPage - halfRange);
-        let endPage = Math.min(totalPages, currentPage + halfRange);
-
-        // Adjust range if there are not enough pages before or after the current page
-        if (currentPage - halfRange < 1) {
-            endPage = Math.min(totalPages, endPage + (halfRange - (currentPage - 1)));
-        }
-        if (currentPage + halfRange > totalPages) {
-            startPage = Math.max(1, startPage - ((currentPage + halfRange) - totalPages));
         }
 
-        for (let page = startPage; page <= endPage; page++) {
-            pagination.appendChild(createButton(page, page, false, page === currentPage));
+        // 페이지네이션 정보 업데이트 및 버튼 활성화/비활성화 처리
+        function updatePagination(currentPage, totalPages) {
+            paginationInfo.textContent = `Page ${currentPage + 1} of ${totalPages}`;
+
+            // 첫 페이지일 때 이전 버튼 비활성화
+            prevPageButton.disabled = currentPage === 0;
+
+            // 마지막 페이지일 때 다음 버튼 비활성화
+            nextPageButton.disabled = currentPage >= totalPages - 1;
         }
 
-        // Add Next and Last Buttons
-        pagination.appendChild(createButton(currentPage + 1, '>', currentPage === totalPages));
-        pagination.appendChild(createButton(totalPages, '>>', currentPage === totalPages));
-    }
 
-    function update() {
-        renderPosts();
-        renderPagination();
-    }
-
-    update();
-
+    })
 </script>
 
 </body>

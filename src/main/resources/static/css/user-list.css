@@ -1,11 +1,16 @@
-strong {
-    text-align: center;
+.container {
+    padding-top: 100px;
+}
+
+h2 {
     color: #333;
     font-size: 30px;
 }
 
 body {
     font-family: "IBM Plex Sans KR", sans-serif;
+    font-weight: 400;
+    font-style: normal;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -30,7 +35,7 @@ body {
 .search-button {
     padding: 10px 20px;
     cursor: pointer;
-    background-color: #2e5dbd;
+    background-color: #103889;
     color: white;
     font-size: 1.1rem;
     border: none;
@@ -39,10 +44,10 @@ body {
 
 }
 .search-button:hover {
-    background-color: #5688d9;
-    filter: drop-shadow(0px 0px 2px #0D6EFD );
-    border-color: #0D6EFD;
-    color: #0a2357;
+    background-color: #0f246c;
+    filter: drop-shadow(0px 0px 2px #0f246c );
+    border-color: #0f246c;
+    color: white;
 }
 
 table {

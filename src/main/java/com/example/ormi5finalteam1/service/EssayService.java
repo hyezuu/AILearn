@@ -30,22 +30,38 @@ public class EssayService {
     private final EssayGuideRepository essayGuideRepository;
 
     /** 에세이 생성 */
+    @Transactional
     public void createEssay(EssayRequestDto essayRequestDto) {
         Essay essay = convertRequestToEntity(essayRequestDto);
         essayRepository.save(essay);
     }
 
     /** 에세이 수정 */
+    @Transactional
     public Essay updateEssay(Long id, EssayRequestDto essayRequestDto) {
         Essay essay = essayRepository.findById(id).orElseThrow(() -> new BusinessException(ErrorCode.ESSAY_NOT_FOUND));
 
-        Essay updatedEssay = Essay.builder()
-                .id(id)
-                .user(essay.getUser())
-                .topic(essayRequestDto.topic())
-                .content(essayRequestDto.content())
-                .build();
-        return essayRepository.save(updatedEssay);
+        if(!essayRequestDto.userId().equals(essay.getUser().getId())) {
+            throw new BusinessException((ErrorCode.ESSAY_EDIT_FORBIDDEN));
+        }
+            Essay updatedEssay = Essay.builder()
+                    .id(id)
+                    .user(essay.getUser())
+                    .topic(essayRequestDto.topic())
+                    .content(essayRequestDto.content())
+                    .build();
+            return essayRepository.save(updatedEssay);
+    }
+
+    /** 에세이 삭제 */
+    @Transactional
+    public void deleteEssay(Long id, Provider provider) {
+        Essay essay = getEssayById(id);
+
+        if(!essay.getUser().getId().equals(provider.id())) {
+            throw new BusinessException((ErrorCode.ESSAY_EDIT_FORBIDDEN));
+        }
+        essay.delete();
     }
 
     /** 에세이 작성 가이드 조회 */
@@ -63,16 +79,18 @@ public class EssayService {
     }
 
     /** 에세이 상세 조회 */
-    public EssayResponseDto showEssay(Long id) {
-        Essay essayById = getEssayById(id);
-        return convertResponseToDto(essayById);
-    }
-
-    /** 에세이 삭제 */
-    @Transactional
-    public void deleteEssay(Long id) {
+    public EssayResponseDto showEssay(Long id, Provider provider) {
         Essay essay = getEssayById(id);
-        essay.delete();
+
+        if(!essay.getUser().getId().equals(provider.id())) { // 사용자 권한 확인 403
+            throw new BusinessException((ErrorCode.ESSAY_EDIT_FORBIDDEN));
+        }
+
+        if(essay.getDeletedAt() != null) { // 삭제된 에세이 404
+            throw new BusinessException((ErrorCode.ESSAY_NOT_FOUND));
+        }
+
+        return convertResponseToDto(essay);
     }
 
     /** 에세이 검색 */

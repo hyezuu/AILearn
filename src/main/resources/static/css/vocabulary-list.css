@@ -3,95 +3,323 @@
     padding: 0;
 }
 
+
 #layout {
     width: 100%;
     height: 100%;
+}
+
+body {
     font-family: "IBM Plex Sans KR", sans-serif;
     font-weight: 400;
     font-style: normal;
 }
+
 
 a {
     text-decoration: none;
     color: black;
 }
 
-h1 {
-    margin: 80px;
-    margin-bottom: 60px;
-    display: inline-block;
+
+header {
+    display: flex;
+    padding-right: 30px;
+    background: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    filter:drop-shadow(0 1px 3px #A8A8A8);
+    z-index: 1000;
+}
+header h2 {
+    flex: 1;
+    padding: 0 60px;
+}
+
+header h2 a {
+    width: 200px;
+    height: 40px;
+    display: block;
+}
+/* 로고 */
+header img {
+    margin-top: 5px;
+    /*margin-left: 0;*/
+}
+
+/* 로그인 */
+header li:first-child a {
+    font-weight: 600;
+    color: #777;
+}
+header li:nth-child(2) a {
+    font-weight: 600;
+    color: #777;
+}
+/* 메뉴 화살표 */
+header li span {
+    margin-bottom: 5px;
+}
+
+/*메뉴*/
+header ul {
+    flex: 0.3;
+    list-style: none;
+    display: flex;
+    padding-top: 2px;
+    width: 200px;
+}
+header li { flex: 2; position: relative;}
+header li a:hover {
+    color: black;
+}
+header span { margin-top: 7px; display: inline-block; }
+
+/*메인메뉴*/
+a.mainMenu {
+    color: #777;
+    font-size: 1rem;
+    font-weight: 600;
+    display: block;
+    padding: 6px;
+    text-align: center;
+}
+a.mainMenu:hover, a.mainMenu.act { color: #464646; }
+
+/*서브메뉴*/
+header nav {
+    background: #f9f9f9;
+    top: 35px;
+    position: absolute;
+    width: 100%;
+    display: none;
+    z-index: 10;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+header nav a {
+
+    display: block;
+    padding: 4px;
     text-align: center;
 }
 
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0;
-    font-family: "IBM Plex Sans KR", sans-serif;
+header nav a:hover {
+    background: #e1e1e1;
+    font-weight: bold;
+    color: #000000;
 }
 
-/* 검색창 */
-.search-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 20px;
+
+/*메인메뉴*/
+a.mainMenu {
+    color: #777;
+    font-size: 1rem;
+    font-weight: 600;
+    display: block;
+    padding: 6px;
+    text-align: center;
 }
-.search-input {
-    padding: 10px;
-    font-size: 16px;
-    border: 2px solid #666666;
-    border-radius: 10px;
-    width: 300px;
-    margin-right: 10px;
-}
-.search-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #103889;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-}
-.search-button:hover {
-    background-color: #0f246c;
+a.mainMenu:hover, a.mainMenu.act { color: #464646; }
+
+/*서브메뉴*/
+header nav {
+    background: #f9f9f9;
+    top: 35px;
+    position: absolute;
+    width: 100%;
+    display: none;
+    z-index: 10;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
+header nav a {
+
+    display: block;
+    padding: 4px;
+    text-align: center;
+}
+
+header nav a:hover {
+    background: #e1e1e1;
+    font-weight: bold;
+    color: #000000;
+}
+
+h1 {
+    margin: 80px 0 60px;
+    text-align: center;
+    color: #333;
+}
+
+.container {
+    max-width: 880px;
+    margin: 90px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+hr {
+    margin-top: 20px;
+    margin-bottom: 5px;
+    width: 95%;
+    border: 0;
+    border-top: 1px solid #b9b9b9;
+    margin-left: 0; /* 이전의 margin-left 제거 */
+}
 
 /* 단어 */
+#vocabularyContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+}
 
 .vocabulary {
-    width: 800px;
-    margin: 80px auto;
-    border: 1px solid #d4e9f7;
-    background: rgb(212,233,247);
+    width: 100%;
+    max-width: inherit;
+    margin: 15px 0;
+    border: #dfe4ea 1px solid;
     padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 5px;
+    border-radius: 7px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #f4f5fa;
 }
+
 .vocabulary-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
 }
+
 .vocabulary-header p {
     margin: 0;
     font-weight: bold;
-    font-size: 16pt;
-}
-.delete-vocabulary img {
-    width: 16px;  /* 이미지 크기 조정 */
-    height: 16px;
-    vertical-align: middle;
-}
-.vocabulary-content {
-    margin: 0;
-    font-size: 13pt;
+    font-size: 18px;
 }
 
-#voca-box {
-    filter: drop-shadow(1px 1px 2px dodgerblue);
+.delete-vocabulary img {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+button {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    outline: none;
+    box-shadow: none;
+    cursor: pointer; /* 선택사항: 클릭 가능한 버튼으로 유지 */
+}
+
+.vocabulary-content {
+    margin: 10px 0;
+    font-size: 14px;
+}
+
+/* 페이지네이션 */
+#paginationContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#paginationContainer button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    background-color: #fff; /* 선택되지 않은 버튼의 배경 */
+    border: 1px solid #103889; /* 선택되지 않은 버튼의 테두리 */
+    color: #103889; /* 선택되지 않은 버튼의 글씨 색 */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s; /* 색상 변화에 대한 애니메이션 */
+}
+
+#paginationContainer button.selected {
+    background-color: #103889; /* 선택된 버튼의 배경 색상 */
+    color: #fff; /* 선택된 버튼의 글씨 색상 */
+}
+
+#paginationContainer button:hover {
+    background-color: #e0e0e0; /* 선택되지 않은 버튼에 대한 hover 효과 */
+}
+
+#paginationContainer button:disabled {
+    background-color: #103889;
+    color: #fff;
+}
+
+.my-list {
+    width: 95%;
+    display: flex;
+    margin-top: 0;
+    justify-content: start;
+    flex-direction: column;
+}
+
+#addVocabularyButton {
+    align-self: end;
+    width: 115px;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #103889;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.my-list div{
+    display: flex;
+    flex-direction: row;
+}
+
+.my-list a {
+    display: block;
+    text-align: center;
+    margin: 5px 20px;
+    color: #858585;
+    width: 110px;
+    border-bottom: 1px solid #A8A8A8;
+}
+
+.my-list a:first-child {
+    color: black;
+    font-size: 17px;
+    font-weight: bolder;
+    border-bottom: 3px solid #2b2b2b;
+}
+
+.toggle-example {
+    background-color: #103889;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-top: 10px;
+}
+.example {
+    background-color: #f9f9f9;
+    border: 1px solid #b9b9b9;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
 }

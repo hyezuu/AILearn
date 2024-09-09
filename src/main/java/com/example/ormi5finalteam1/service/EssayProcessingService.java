@@ -1,8 +1,11 @@
 package com.example.ormi5finalteam1.service;
 
+import com.example.ormi5finalteam1.common.exception.BusinessException;
+import com.example.ormi5finalteam1.common.exception.ErrorCode;
 import com.example.ormi5finalteam1.domain.essay.Essay;
 import com.example.ormi5finalteam1.domain.essay.ReviewedEssays;
 import com.example.ormi5finalteam1.domain.essay.dto.response.ReviewedEssaysResponseDto;
+import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.external.api.util.ContentParser;
 import com.example.ormi5finalteam1.external.constants.AlanAIRequestPrompt;
@@ -26,9 +29,12 @@ public class EssayProcessingService {
     private String clientId;
 
     @Transactional
-    public ReviewedEssaysResponseDto processEssay(Long essayId) {
+    public ReviewedEssaysResponseDto processEssay(Long essayId, Provider provider) {
         /* 1. DB에서 Essay 가져오기 */
         Essay essay = essayService.getEssayById(essayId);
+        if(!essay.getUser().getId().equals(provider.id())) { // 에세이 ID로 불러온 UserID와 현재 User의 ID가 같지 않으면 403
+            throw new BusinessException((ErrorCode.ESSAY_EDIT_FORBIDDEN));
+        }
         String sendEssayContent = essay.getContent() + AlanAIRequestPrompt.ESSAY_REVIEW_PROMPT.getPromptTemplate(); // AI에게 전송할 문장
 
         /* 2. Essay.content를 Alan에 보내고 응답 받기 */
@@ -43,7 +49,6 @@ public class EssayProcessingService {
         /* 4. 해당 user의 포인트 3증가 */
         User user = essay.getUser();
         user.addEssayWriteAndReviewPoint();
-//        userRepository.save(user);
 
         /* 5. ReviewedEssaysResponseDto로 첨삭된 데이터, 기존에세이 데이터 반환 */
         return ReviewedEssaysResponseDto.builder()

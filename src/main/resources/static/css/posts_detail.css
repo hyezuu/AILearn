@@ -227,3 +227,7 @@ textarea {
     gap: 20px;
 }
 
+.error-404 {
+    margin: 70px auto;
+    text-align: center;
+}
