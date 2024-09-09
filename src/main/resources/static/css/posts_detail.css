@@ -88,9 +88,49 @@ input[name="title"] {
     vertical-align: middle;
     margin-top: 20px;
     opacity: 50%;
+    cursor: pointer;
 }
 .button-container img:hover {
     opacity: 100%;
+}
+
+.button-like-checked img{
+    width: 28px;
+    height: 28px;
+    vertical-align: middle;
+    margin-top: 20px;
+    opacity: 50%;
+    cursor: pointer;
+}
+
+.button-like-checked img:hover {
+    opacity: 100%;
+}
+
+.button-like-checked a {
+    margin-left: 22px;
+}
+
+.button-like-unchecked img{
+    width: 28px;
+    height: 28px;
+    vertical-align: middle;
+    margin-top: 20px;
+    opacity: 50%;
+    cursor: pointer;
+}
+
+.button-like-unchecked img:hover {
+    opacity: 100%;
+}
+
+.button-like-unchecked a {
+    margin-left: 22px;
+}
+
+.buttons {
+    display: flex;
+    margin: 20px;
 }
 
 /* 내용 */
@@ -210,7 +250,6 @@ textarea {
 .title-container {
     display: flex;
     justify-content: space-between;
-    padding-bottom: 10px;
     border-bottom: 1px solid #A8A8A8;
 }
 
@@ -231,3 +270,4 @@ textarea {
     margin: 70px auto;
     text-align: center;
 }
+
