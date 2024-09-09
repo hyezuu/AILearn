@@ -11,6 +11,8 @@ import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.domain.user.dto.UserInfoDto;
 import com.example.ormi5finalteam1.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,10 +28,9 @@ public class AdminService {
     private final PostService postService;
     private final CommentService commentService;
 
-    public List<UserInfoDto> getAllUserList() {
+    public Page<UserInfoDto> getAllUserList(Pageable pageable) {
 
-        return userRepository.findAllByOrderByRoleAscId().stream()
-                .map(UserInfoDto::toDto).collect(Collectors.toList());
+        return userRepository.findAllByOrderByRoleAscId(pageable).map(UserInfoDto::toDto);
     }
     public void changeUserStatus(Long userId) {
 

@@ -10,6 +10,8 @@ import com.example.ormi5finalteam1.domain.user.Role;
 import com.example.ormi5finalteam1.domain.user.dto.UserInfoDto;
 import com.example.ormi5finalteam1.service.AdminService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,10 +25,10 @@ public class AdminController {
     private final AdminService adminService;
 
     @GetMapping("/users")
-    public List<UserInfoDto> getAllUserList(@AuthenticationPrincipal Provider provider) {
+    public Page<UserInfoDto> getAllUserList(@AuthenticationPrincipal Provider provider, Pageable pageable) {
 
         if (!provider.role().equals(Role.ADMIN)) throw new BusinessException(ErrorCode.HAS_NO_AUTHORITY);
-        return adminService.getAllUserList();
+        return adminService.getAllUserList(pageable);
     }
 
     @PutMapping("/users/{id}")
