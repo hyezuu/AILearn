@@ -1,13 +1,20 @@
 package com.example.ormi5finalteam1;
 
+import com.example.ormi5finalteam1.domain.Grade;
 import com.example.ormi5finalteam1.domain.comment.dto.CommentDto;
 import com.example.ormi5finalteam1.domain.post.dto.PostDto;
+import com.example.ormi5finalteam1.domain.user.Provider;
+import com.example.ormi5finalteam1.domain.user.Role;
 import com.example.ormi5finalteam1.domain.user.dto.CreateUserRequestDto;
 import com.example.ormi5finalteam1.domain.user.dto.UpdateUserRequestDto;
+import com.example.ormi5finalteam1.domain.vocabulary.dto.MyVocabularyListResponseDto;
 import com.example.ormi5finalteam1.service.CommentService;
 import com.example.ormi5finalteam1.service.EmailService;
 import com.example.ormi5finalteam1.service.PostService;
+import com.example.ormi5finalteam1.service.VocabularyListService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -15,9 +22,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
@@ -25,10 +36,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
+import static com.example.ormi5finalteam1.util.TestSecurityContextFactory.authenticatedProvider;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -52,6 +69,9 @@ public class Ormi5FinalTeam1ApplicationTests {
 
     @MockBean
     private CommentService commentService;
+
+    @MockBean
+    private VocabularyListService vocabularyListService;
 
     private CreateUserRequestDto createUserRequestDto;
     private PostDto postDto;
@@ -187,12 +207,96 @@ public class Ormi5FinalTeam1ApplicationTests {
             .andExpect(status().isNoContent());
 
         // 댓글 삭제 확인
-        Mockito.verify(commentService).deleteComment(anyLong(), any());
+        verify(commentService).deleteComment(anyLong(), any());
 
         // 10. 로그아웃 테스트
         ResultActions logoutResult = mockMvc.perform(post("/logout")
                 .with(csrf())
                 .session(session))
             .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    @WithMockUser(username = "testuser@example.com", roles = "USER")
+    public void testVocabularyListScenario() throws Exception {
+        // Provider 객체 생성
+        Provider provider = new Provider(1L, "testuser@example.com", "testuser", Role.USER, Grade.A1, 10);
+
+        // 1. 단어장 생성
+        doNothing().when(vocabularyListService).create(any(Provider.class));
+
+        ResultActions createVocabularyListResult = mockMvc.perform(post("/api/vocabulary-list")
+                .with(csrf())
+                .with(authenticatedProvider(provider)))
+            .andExpect(status().isOk());
+
+        // 2. 단어장에 단어 추가
+        doNothing().when(vocabularyListService).addVocabulary(any(Provider.class));
+
+        ResultActions addVocabularyResult = mockMvc.perform(post("/api/vocabulary-list/me/vocabularies")
+                .with(csrf())
+                .with(authenticatedProvider(provider)))
+            .andExpect(status().isOk());
+
+        // 3. 내 단어장 단어 조회
+        LocalDateTime now = LocalDateTime.now();
+        List<MyVocabularyListResponseDto> vocabularyList = List.of(
+            new MyVocabularyListResponseDto(1L, "apple", "사과", "I ate an apple.", "A1", now),
+            new MyVocabularyListResponseDto(2L, "banana", "바나나", "The monkey likes bananas.", "A2", now)
+        );
+        Page<MyVocabularyListResponseDto> mockedPage = new PageImpl<>(vocabularyList);
+
+        when(vocabularyListService.getMyVocabularies(any(Provider.class), any(Pageable.class))).thenReturn(mockedPage);
+
+        ResultActions getMyVocabulariesResult = mockMvc.perform(get("/api/me/vocabulary-list")
+                .with(csrf())
+                .with(authenticatedProvider(provider))
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content", hasSize(2)))
+            .andExpect(jsonPath("$.content[0].id").value(1))
+            .andExpect(jsonPath("$.content[0].word").value("apple"))
+            .andExpect(jsonPath("$.content[0].meaning").value("사과"))
+            .andExpect(jsonPath("$.content[0].exampleSentence").value("I ate an apple."))
+            .andExpect(jsonPath("$.content[0].grade").value("A1"))
+            .andExpect(jsonPath("$.content[0].createdAt").exists())
+            .andExpect(jsonPath("$.content[1].id").value(2))
+            .andExpect(jsonPath("$.content[1].word").value("banana"))
+            .andExpect(jsonPath("$.content[1].meaning").value("바나나"))
+            .andExpect(jsonPath("$.content[1].exampleSentence").value("The monkey likes bananas."))
+            .andExpect(jsonPath("$.content[1].grade").value("A2"))
+            .andExpect(jsonPath("$.content[1].createdAt").exists());
+
+        // 4. 특정 단어 삭제
+        doNothing().when(vocabularyListService).delete(any(Provider.class), anyLong());
+
+        ResultActions deleteVocabularyResult = mockMvc.perform(delete("/api/vocabulary-list/me/vocabularies/1")
+                .with(csrf())
+                .with(authenticatedProvider(provider)))
+            .andExpect(status().isOk());
+
+        // 5. 단어 삭제 후 다시 조회
+        List<MyVocabularyListResponseDto> updatedVocabularyList = List.of(
+            new MyVocabularyListResponseDto(2L, "banana", "바나나", "The monkey likes bananas.", "A2", now)
+        );
+        Page<MyVocabularyListResponseDto> updatedMockedPage = new PageImpl<>(updatedVocabularyList);
+
+        when(vocabularyListService.getMyVocabularies(any(Provider.class), any(Pageable.class))).thenReturn(updatedMockedPage);
+
+        ResultActions finalGetResult = mockMvc.perform(get("/api/me/vocabulary-list")
+                .with(csrf())
+                .with(authenticatedProvider(provider))
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content", hasSize(1)))
+            .andExpect(jsonPath("$.content[0].id").value(2))
+            .andExpect(jsonPath("$.content[0].word").value("banana"))
+            .andExpect(jsonPath("$.content[0].meaning").value("바나나"));
+
+        // 서비스 메소드 호출 확인
+        verify(vocabularyListService).create(any(Provider.class));
+        verify(vocabularyListService).addVocabulary(any(Provider.class));
+        verify(vocabularyListService, times(2)).getMyVocabularies(any(Provider.class), any(Pageable.class));
+        verify(vocabularyListService).delete(any(Provider.class), eq(1L));
     }
 }
