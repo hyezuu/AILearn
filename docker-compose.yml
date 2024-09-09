@@ -21,10 +21,10 @@ services:
       retries: 5
 
   app:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-    image: elma98/ai-learn:v.1.0.0
+    build:
+      context: .
+      dockerfile: Dockerfile
+#    image: elma98/ai-learn:v.1.0.0
     container_name: ai-learn
     depends_on:
       - mysql

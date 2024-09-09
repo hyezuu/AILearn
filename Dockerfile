@@ -1,5 +1,4 @@
 FROM openjdk:17-jdk-slim
-ADD /build/libs/*.jar app.jar
 COPY /build/libs/*.jar app.jar
 
 # 환경변수 설정
