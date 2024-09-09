@@ -36,9 +36,12 @@ spring:
     properties:
       mail:
         smtp:
+          auth: true
           starttls:
             enable: true
-          auth: true
+          socketFactory:
+            port: 587
+            class: javax.net.ssl.SSLSocketFactory
 
 logging:
   level:
