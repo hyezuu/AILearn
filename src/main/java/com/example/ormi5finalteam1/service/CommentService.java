@@ -46,6 +46,10 @@ public class CommentService {
 
     // 게시글에 작성된 댓글들을 목록으로 볼 수 있다.
     public List<CommentDto> getCommentsByPostId(Long postId) {
+        Post post = postService.getPost(postId);
+        if (post.getDeletedAt() != null) {
+            throw new BusinessException(ErrorCode.POST_NOT_FOUND);
+        }
         return commentRepository.findByPostIdOrderByCreatedAtAsc(postId).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
