@@ -50,7 +50,7 @@ jobs:
     - name: Test EC2 SSH Connection
       id: test_ssh_connection
       env:
-        SSH_KEY: ${{ secrets.SSH_EC2_KEY }}
+        SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
         SSH_USER: ${{ secrets.SSH_EC2_USER }}
         SSH_HOST: ${{ secrets.SSH_EC2_HOST }}
       run: |
