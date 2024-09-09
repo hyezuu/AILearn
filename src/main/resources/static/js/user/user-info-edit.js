@@ -203,6 +203,14 @@ document.addEventListener('DOMContentLoaded', function() {
   if (confirmWithdrawal) {
     confirmWithdrawal.addEventListener('click', withdrawUser);
   }
+  function logout() {
+    const form = document.createElement('form');
+    form.method = 'post';
+    form.action = '/logout';
+
+    document.body.appendChild(form);
+    form.submit();
+  }
 
   async function withdrawUser() {
     try {
@@ -212,7 +220,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
       if (response.ok) {
         alert('회원 탈퇴가 완료되었습니다. 이용해 주셔서 감사합니다.');
-        window.location.href = '/'; // 메인 페이지로 리다이렉트
+
+        logout();
       } else {
         const errorData = await response.json();
         alert('탈퇴 처리 중 오류가 발생했습니다: ' + errorData.message);
