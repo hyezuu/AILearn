@@ -42,14 +42,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if(errorCode === "404") {
             document.getElementById("layout").innerHTML = `
-            <header th:replace="~{/layout/header::header}"></header>
+            <header th:replace="~{layout/header::header}"></header>
             <h3 class="error-404">삭제되었거나 존재하지 않는 에세이 입니다.</h3>
         `;
         }
 
         if(errorCode === "403") {
             document.getElementById("layout").innerHTML = `
-            <header th:replace="~{/layout/header::header}"></header>
+            <header th:replace="~{layout/header::header}"></header>
             <h3 class="error-404">접근 권한이 없는 에세이 입니다.</h3>
         `;
         }

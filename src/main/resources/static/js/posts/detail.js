@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if(errorCode === "404") {
             document.getElementById("layout").innerHTML = `
-            <header th:replace="~{/layout/header::header}"></header>
+            <header th:replace="~{layout/header::header}"></header>
             <h3 class="error-404">삭제되었거나 존재하지 않는 게시글 입니다.</h3>
         `;
         }
