@@ -49,4 +49,12 @@ public class LikeController {
         Page<PostDto> likedPosts = likeService.getLikedPosts(page, size, provider);
         return new ResponseEntity<>(likedPosts, HttpStatus.valueOf(200));
     }
+
+    // 사용자가 이미 좋아요를 누른 게시글인지 조회
+    @GetMapping("/posts/{postId}/like")
+    public ResponseEntity<Boolean> getLikedPost(@PathVariable Long postId, @AuthenticationPrincipal Provider provider) {
+        boolean isLikedPost = likeService.getLikedPost(postId, provider);
+        return new ResponseEntity<>(isLikedPost, HttpStatus.valueOf(200));
+    }
+
 }
