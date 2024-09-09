@@ -1,58 +1,57 @@
 package com.example.ormi5finalteam1;
 
+import static com.example.ormi5finalteam1.util.TestSecurityContextFactory.authenticatedProvider;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.example.ormi5finalteam1.domain.Grade;
+import com.example.ormi5finalteam1.domain.comment.Comment;
 import com.example.ormi5finalteam1.domain.comment.dto.CommentDto;
+import com.example.ormi5finalteam1.domain.post.Post;
 import com.example.ormi5finalteam1.domain.post.dto.PostDto;
 import com.example.ormi5finalteam1.domain.user.Provider;
-import com.example.ormi5finalteam1.domain.user.Role;
+import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.domain.user.dto.CreateUserRequestDto;
 import com.example.ormi5finalteam1.domain.user.dto.UpdateUserRequestDto;
-import com.example.ormi5finalteam1.domain.vocabulary.dto.MyVocabularyListResponseDto;
+import com.example.ormi5finalteam1.domain.vocabulary.Vocabulary;
+import com.example.ormi5finalteam1.repository.CommentRepository;
+import com.example.ormi5finalteam1.repository.PostRepository;
+import com.example.ormi5finalteam1.repository.UserRepository;
 import com.example.ormi5finalteam1.service.CommentService;
 import com.example.ormi5finalteam1.service.EmailService;
 import com.example.ormi5finalteam1.service.PostService;
-import com.example.ormi5finalteam1.service.VocabularyListService;
+import com.example.ormi5finalteam1.service.VocabularyService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Arrays;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-
-import static com.example.ormi5finalteam1.util.TestSecurityContextFactory.authenticatedProvider;
-import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Transactional
+@ActiveProfiles("test")
 public class Ormi5FinalTeam1ApplicationTests {
 
     @Autowired
@@ -64,14 +63,23 @@ public class Ormi5FinalTeam1ApplicationTests {
     @MockBean
     private EmailService emailService;
 
-    @MockBean
+    @Autowired
     private PostService postService;
 
-    @MockBean
+    @Autowired
     private CommentService commentService;
 
-    @MockBean
-    private VocabularyListService vocabularyListService;
+    @Autowired
+    private VocabularyService vocabularyService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PostRepository postRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     private CreateUserRequestDto createUserRequestDto;
     private PostDto postDto;
@@ -80,14 +88,12 @@ public class Ormi5FinalTeam1ApplicationTests {
 
     @BeforeEach
     public void setUp() {
+        // 테스트 데이터 초기화
         createUserRequestDto = new CreateUserRequestDto(
             "testuser@example.com",
             "testUser",
             "password123"
         );
-
-        // 이메일 인증 모킹
-        Mockito.when(emailService.isEmailVerified(anyString())).thenReturn(true);
 
         // 게시글 DTO 초기화
         postDto = new PostDto(1L, 1L, "testUser", "Test Title", "Test Content", 0,
@@ -102,13 +108,20 @@ public class Ormi5FinalTeam1ApplicationTests {
     }
 
     @Test
-    public void testUserAndPostAndCommentOperationsInOrder() throws Exception {
-        // 1. 회원가입 테스트
-        ResultActions signupResult = mockMvc.perform(post("/api/signup")
+    public void 유저_회원가입_로그인_커뮤니티_기능_테스트() throws Exception {
+        // 1. 회원가입 테스트 - 실제 데이터베이스와 상호작용
+
+        when(emailService.isEmailVerified("testuser@example.com")).thenReturn(true);
+
+        mockMvc.perform(post("/api/signup")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createUserRequestDto)))
             .andExpect(status().isOk());
+
+        User user = userRepository.findByEmail("testuser@example.com").orElseThrow();
+
+        Provider provider = user.toProvider();
 
         // 2. 로그인 테스트
         MvcResult loginResult = mockMvc.perform(post("/login")
@@ -132,18 +145,16 @@ public class Ormi5FinalTeam1ApplicationTests {
         // 리다이렉트 URL에 따른 페이지 로드 테스트
         String redirectedUrl = loginResult.getResponse().getRedirectedUrl();
         if ("/tests".equals(redirectedUrl)) {
-            // 새 사용자의 경우 (grade가 null)
             mockMvc.perform(get("/tests").session(session))
                 .andExpect(status().isOk());
         } else {
-            // 기존 사용자의 경우 (grade가 설정됨)
             mockMvc.perform(get("/").session(session))
                 .andExpect(status().isOk());
         }
 
         // 3. 사용자 정보 조회 테스트
-        ResultActions getUserResult = mockMvc.perform(get("/api/me")
-            .session(session))
+        mockMvc.perform(get("/api/me")
+                .session(session))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.email").value("testuser@example.com"))
             .andExpect(jsonPath("$.nickname").value("testUser"));
@@ -152,7 +163,7 @@ public class Ormi5FinalTeam1ApplicationTests {
         UpdateUserRequestDto updateUserRequestDto = new UpdateUserRequestDto("newNickname",
             "newPassword123");
 
-        ResultActions updateResult = mockMvc.perform(put("/api/me")
+        mockMvc.perform(put("/api/me")
                 .with(csrf())
                 .session(session)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -160,15 +171,15 @@ public class Ormi5FinalTeam1ApplicationTests {
             .andExpect(status().isOk());
 
         // 5. 수정된 회원 정보 확인 테스트
-        ResultActions getUpdatedUserResult = mockMvc.perform(get("/api/me")
+        mockMvc.perform(get("/api/me")
                 .session(session))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.nickname").value("newNickname"));
 
         // 6. 게시글 작성 테스트
-        Mockito.when(postService.createPost(any(PostDto.class), any())).thenReturn(postDto);
+        postDto = postService.createPost(postDto, provider);
 
-        ResultActions createPostResult = mockMvc.perform(post("/api/posts")
+        mockMvc.perform(post("/api/posts")
                 .with(csrf())
                 .session(session)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -177,20 +188,10 @@ public class Ormi5FinalTeam1ApplicationTests {
             .andExpect(jsonPath("$.title").value("Test Title"))
             .andExpect(jsonPath("$.content").value("Test Content"));
 
-        // 7. 게시글 삭제 테스트
-        doNothing().when(postService).deletePost(anyLong(), any());
+        // 7. 댓글 작성 테스트
+        commentDto = commentService.createComment(commentDto, provider);
 
-        ResultActions deletePostResult = mockMvc.perform(delete("/api/posts/1")
-                .with(csrf())
-                .session(session)
-                .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isNoContent());
-
-        // 8. 댓글 작성 테스트
-        Mockito.when(commentService.createComment(any(CommentDto.class), any()))
-            .thenReturn(commentDto);
-
-        ResultActions createCommentResult = mockMvc.perform(post("/api/posts/1/comments")
+        mockMvc.perform(post("/api/posts/" + postDto.getId() + "/comments")
                 .with(csrf())
                 .session(session)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -198,105 +199,92 @@ public class Ormi5FinalTeam1ApplicationTests {
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$.content").value("Test Comment"));
 
-        // 9. 댓글 삭제 테스트
-        doNothing().when(commentService).deleteComment(anyLong(), any());
-
-        ResultActions deleteCommentResult = mockMvc.perform(delete("/api/posts/1/comments/1")
+        // 8. 댓글 삭제 테스트
+        mockMvc.perform(delete("/api/posts/" + postDto.getId() + "/comments/" + commentDto.getId())
                 .with(csrf())
                 .session(session))
             .andExpect(status().isNoContent());
 
-        // 댓글 삭제 확인
-        verify(commentService).deleteComment(anyLong(), any());
+        Optional<Comment> comment = commentRepository.findById(commentDto.getId());
+        assertThat(comment).isEmpty();
+
+        // 9. 게시글 삭제 테스트
+        mockMvc.perform(delete("/api/posts/" + postDto.getId())
+                .with(csrf())
+                .session(session)
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNoContent());
+        // 소프트 딜리트 확인
+        Post post = postRepository.findById(postDto.getId()).orElseThrow();
+        assertThat(post.getDeletedAt()).isNotNull();
 
         // 10. 로그아웃 테스트
-        ResultActions logoutResult = mockMvc.perform(post("/logout")
+        mockMvc.perform(post("/logout")
                 .with(csrf())
                 .session(session))
             .andExpect(status().is3xxRedirection());
     }
 
+
     @Test
-    @WithMockUser(username = "testuser@example.com", roles = "USER")
-    public void testVocabularyListScenario() throws Exception {
-        // Provider 객체 생성
-        Provider provider = new Provider(1L, "testuser@example.com", "testuser", Role.USER, Grade.A1, 10);
+    @WithMockUser(username = "test@example.com", roles = "USER")
+    public void 유저_단어장_기능_테스트() throws Exception {
+
+        // 테스트용 사용자 생성
+        User user = User.builder()
+            .email("test@example.com")
+            .password("password")
+            .nickname("testUser")
+            .build();
+
+        user = userRepository.save(user);
+        user.changeGrade(Grade.A1);
+
+        // Provider 객체 초기화
+        Provider provider = user.toProvider();
 
         // 1. 단어장 생성
-        doNothing().when(vocabularyListService).create(any(Provider.class));
-
-        ResultActions createVocabularyListResult = mockMvc.perform(post("/api/vocabulary-list")
+        mockMvc.perform(post("/api/vocabulary-list")
                 .with(csrf())
-                .with(authenticatedProvider(provider)))
+                .with(authenticatedProvider(provider))
+                .session(session))
             .andExpect(status().isOk());
 
         // 2. 단어장에 단어 추가
-        doNothing().when(vocabularyListService).addVocabulary(any(Provider.class));
+        Vocabulary vocabulary1 = new Vocabulary("apple", "사과", Grade.A1, "I ate an apple.");
+        Vocabulary vocabulary2 = new Vocabulary("banana", "바나나", Grade.A1,
+            "The monkey likes bananas.");
 
-        ResultActions addVocabularyResult = mockMvc.perform(post("/api/vocabulary-list/me/vocabularies")
+        List<Vocabulary> vocabularies = new ArrayList<>();
+        vocabularies.add(vocabulary1);
+        vocabularies.add(vocabulary2);
+
+        vocabularyService.saveVocabularies(vocabularies); // Vocabulary 엔티티 저장
+        mockMvc.perform(post("/api/vocabulary-list/me/vocabularies")
                 .with(csrf())
-                .with(authenticatedProvider(provider)))
+                .session(session))
             .andExpect(status().isOk());
 
         // 3. 내 단어장 단어 조회
-        LocalDateTime now = LocalDateTime.now();
-        List<MyVocabularyListResponseDto> vocabularyList = List.of(
-            new MyVocabularyListResponseDto(1L, "apple", "사과", "I ate an apple.", "A1", now),
-            new MyVocabularyListResponseDto(2L, "banana", "바나나", "The monkey likes bananas.", "A2", now)
-        );
-        Page<MyVocabularyListResponseDto> mockedPage = new PageImpl<>(vocabularyList);
-
-        when(vocabularyListService.getMyVocabularies(any(Provider.class), any(Pageable.class))).thenReturn(mockedPage);
-
-        ResultActions getMyVocabulariesResult = mockMvc.perform(get("/api/me/vocabulary-list")
+        mockMvc.perform(get("/api/me/vocabulary-list")
                 .with(csrf())
-                .with(authenticatedProvider(provider))
+                .session(session)
                 .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.content", hasSize(2)))
-            .andExpect(jsonPath("$.content[0].id").value(1))
-            .andExpect(jsonPath("$.content[0].word").value("apple"))
-            .andExpect(jsonPath("$.content[0].meaning").value("사과"))
-            .andExpect(jsonPath("$.content[0].exampleSentence").value("I ate an apple."))
-            .andExpect(jsonPath("$.content[0].grade").value("A1"))
-            .andExpect(jsonPath("$.content[0].createdAt").exists())
-            .andExpect(jsonPath("$.content[1].id").value(2))
-            .andExpect(jsonPath("$.content[1].word").value("banana"))
-            .andExpect(jsonPath("$.content[1].meaning").value("바나나"))
-            .andExpect(jsonPath("$.content[1].exampleSentence").value("The monkey likes bananas."))
-            .andExpect(jsonPath("$.content[1].grade").value("A2"))
-            .andExpect(jsonPath("$.content[1].createdAt").exists());
+            .andExpect(jsonPath("$.content", hasSize(2)));
 
         // 4. 특정 단어 삭제
-        doNothing().when(vocabularyListService).delete(any(Provider.class), anyLong());
-
-        ResultActions deleteVocabularyResult = mockMvc.perform(delete("/api/vocabulary-list/me/vocabularies/1")
+        mockMvc.perform(delete("/api/vocabulary-list/me/vocabularies/1")
                 .with(csrf())
-                .with(authenticatedProvider(provider)))
+                .session(session))
             .andExpect(status().isOk());
 
         // 5. 단어 삭제 후 다시 조회
-        List<MyVocabularyListResponseDto> updatedVocabularyList = List.of(
-            new MyVocabularyListResponseDto(2L, "banana", "바나나", "The monkey likes bananas.", "A2", now)
-        );
-        Page<MyVocabularyListResponseDto> updatedMockedPage = new PageImpl<>(updatedVocabularyList);
-
-        when(vocabularyListService.getMyVocabularies(any(Provider.class), any(Pageable.class))).thenReturn(updatedMockedPage);
-
-        ResultActions finalGetResult = mockMvc.perform(get("/api/me/vocabulary-list")
+        mockMvc.perform(get("/api/me/vocabulary-list")
                 .with(csrf())
-                .with(authenticatedProvider(provider))
+                .session(session)
                 .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.content", hasSize(1)))
-            .andExpect(jsonPath("$.content[0].id").value(2))
-            .andExpect(jsonPath("$.content[0].word").value("banana"))
-            .andExpect(jsonPath("$.content[0].meaning").value("바나나"));
-
-        // 서비스 메소드 호출 확인
-        verify(vocabularyListService).create(any(Provider.class));
-        verify(vocabularyListService).addVocabulary(any(Provider.class));
-        verify(vocabularyListService, times(2)).getMyVocabularies(any(Provider.class), any(Pageable.class));
-        verify(vocabularyListService).delete(any(Provider.class), eq(1L));
+            .andExpect(jsonPath("$.content", hasSize(1)));
     }
 }
