@@ -1,8 +1,11 @@
 package com.example.ormi5finalteam1.service;
 
+import com.example.ormi5finalteam1.domain.Grade;
 import com.example.ormi5finalteam1.domain.essay.Essay;
 import com.example.ormi5finalteam1.domain.essay.ReviewedEssays;
 import com.example.ormi5finalteam1.domain.essay.dto.response.ReviewedEssaysResponseDto;
+import com.example.ormi5finalteam1.domain.user.Provider;
+import com.example.ormi5finalteam1.domain.user.Role;
 import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.external.api.util.ContentParser;
 import com.example.ormi5finalteam1.repository.ReviewedEssaysRepository;
@@ -41,11 +44,13 @@ public class EssayProcessingServiceTest {
 
     private Essay essay;
     private ReviewedEssays reviewedEssays;
+    private Provider provider;
 
     @BeforeEach
     void setUp() {
         User user = new User(1L);
         essay = new Essay(1L, user, "Test Topic", "Test Content");
+        provider = new Provider(user.getId(), "email@email.com","nickname", Role.ADMIN, Grade.A2, 0);
 
         reviewedEssays = ReviewedEssays.builder()
                 .id(1L)
@@ -66,7 +71,7 @@ public class EssayProcessingServiceTest {
         when(reviewedEssaysRepository.save(any(ReviewedEssays.class))).thenReturn(reviewedEssays);
 
         // When
-        ReviewedEssaysResponseDto response = essayProcessingService.processEssay(1L);
+        ReviewedEssaysResponseDto response = essayProcessingService.processEssay(1L, provider);
 
         // Then
         assertThat(response).isNotNull();
@@ -91,7 +96,7 @@ public class EssayProcessingServiceTest {
         when(reviewedEssaysRepository.save(any(ReviewedEssays.class))).thenReturn(reviewedEssays);
 
         // When
-        ReviewedEssaysResponseDto response = essayProcessingService.processEssay(1L);
+        ReviewedEssaysResponseDto response = essayProcessingService.processEssay(1L, provider);
 
         // Then
         assertThat(response).isNotNull();

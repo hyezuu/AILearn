@@ -80,14 +80,14 @@ public class EssayControllerTest {
     void reviewEssay_는_에세이를_첨삭하고_200_응답을_반환한다() throws Exception {
         //given
         ReviewedEssaysResponseDto responseDto = new ReviewedEssaysResponseDto("Original Content", "Reviewed Content");
-        Mockito.when(essayProcessingService.processEssay(anyLong())).thenReturn(responseDto);
+        Mockito.when(essayProcessingService.processEssay(anyLong(), any())).thenReturn(responseDto);
 
         //when & then
         mockMvc.perform(put("/api/essays/1/review").with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.reviewedContent").value("Reviewed Content"));
 
-        Mockito.verify(essayProcessingService).processEssay(anyLong());
+        Mockito.verify(essayProcessingService).processEssay(anyLong(), any());
     }
 
     @Test
