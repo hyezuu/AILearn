@@ -162,6 +162,65 @@ document.addEventListener('DOMContentLoaded', function () {
   password.addEventListener('blur', validatePassword);
   confirmPassword.addEventListener('blur', checkPasswordMatch);
 
+  requestVerificationButton.addEventListener('click', async function () {
+    const email = document.getElementById('email').value;
+    const emailResultElement = document.getElementById('emailResult');
+    try {
+      const response = await fetch('/api/request-verification', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `email=${encodeURIComponent(email)}`
+      });
+      if (response.ok) {
+        document.getElementById('toggle-content').style.display = 'block';
+        emailResultElement.textContent = '인증 코드가 이메일로 전송되었습니다.';
+        emailResultElement.classList.remove('error-message');
+        emailResultElement.classList.add('success-message');
+      } else {
+        emailResultElement.textContent = '인증 코드 전송에 실패했습니다.';
+        emailResultElement.classList.remove('success-message');
+        emailResultElement.classList.add('error-message');
+      }
+    } catch (error) {
+      emailResultElement.textContent = '인증 코드 전송 중 오류가 발생했습니다.';
+      emailResultElement.classList.remove('success-message');
+      emailResultElement.classList.add('error-message');
+    }
+  });
+
+  document.getElementById('verify-email').addEventListener('click',
+      async function () {
+        const email = document.getElementById('email').value;
+        const code = document.getElementById('authenticationCode').value;
+        try {
+          const response = await fetch('/api/verify-email', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `email=${encodeURIComponent(email)}&code=${encodeURIComponent(
+                code)}`
+          });
+          const emailVerificationElement = document.getElementById(
+              'emailVerification');
+          if (response.ok) {
+            emailVerificationElement.textContent = '이메일이 인증되었습니다.';
+            emailVerificationElement.classList.remove('error-message');
+            emailVerificationElement.classList.add('success-message');
+            emailVerified = true;
+          } else {
+            emailVerificationElement.textContent = '인증에 실패했습니다.';
+            emailVerificationElement.classList.remove('success-message');
+            emailVerificationElement.classList.add('error-message');
+            emailVerified = false;
+          }
+        } catch (error) {
+          alert('이메일 인증 중 오류가 발생했습니다.');
+        }
+      });
+
   // 제출 시 모든 유효성 및 중복 검사 확인
   document.getElementById('signupForm').addEventListener('submit', async function (e) {
     e.preventDefault();
