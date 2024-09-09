@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .catch(error => {
                 console.error('Error fetching essay details:', error);
+                displayEssayError(error.message);
             });
     }
 
@@ -34,6 +35,24 @@ document.addEventListener("DOMContentLoaded", function() {
         const date = new Date(essay.createdAt);
         const formattedDate = date.toISOString().slice(0, 16).replace('T', ' ');
         document.getElementById("essay-date").textContent = formattedDate;
+    }
+
+    function displayEssayError(error) {
+        const errorCode = error.match(/\d{3}/)?.[0]; // 3자리 숫자를 매칭
+
+        if(errorCode === "404") {
+            document.getElementById("layout").innerHTML = `
+            <header th:replace="~{/layout/header::header}"></header>
+            <h3 class="error-404">삭제되었거나 존재하지 않는 에세이 입니다.</h3>
+        `;
+        }
+
+        if(errorCode === "403") {
+            document.getElementById("layout").innerHTML = `
+            <header th:replace="~{/layout/header::header}"></header>
+            <h3 class="error-404">접근 권한이 없는 에세이 입니다.</h3>
+        `;
+        }
     }
 
 

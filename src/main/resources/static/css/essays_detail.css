@@ -140,3 +140,9 @@ textarea {
 #back-to-list span {
     font-size: 1.6rem;
 }
+
+
+.error-404 {
+    margin: 70px auto;
+    text-align: center;
+}
