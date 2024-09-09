@@ -55,8 +55,9 @@ public class VocabularyListService {
 
     //브릿지 테이블에서 마지막 단어 id 가져오기
     private Long getLastVocabularyId(Provider provider, VocabularyList myVocabularyList) {
+        User user = userService.getUser(provider.id());
         return vocabularyListVocabularyRepository.findMaxVocabularyIdByVocabularyListIdAndGrade(
-            myVocabularyList.getId(), provider.grade()).orElse(0L);
+            myVocabularyList.getId(), user.getGrade()).orElse(0L);
     }
 
     //마지막 단어 id 보다 큰 값중에서 조건에 맞는 단어 가지고오기
