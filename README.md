@@ -65,6 +65,9 @@ Alan AI를 통해 개인화된 학습 경험을 제공하며, 사용자의 영�
 
 <img src="https://img.shields.io/badge/amazonaws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white"> <img src="https://img.shields.io/badge/AWS RDS-527FFF?style=for-the-badge&logo=AmazonRDS&logoColor=white"> <img src="https://img.shields.io/badge/AWS EC2-FF9900?style=for-the-badge&logo=AmazonEC2&logoColor=white"> <img src="https://img.shields.io/badge/githubactions-2088ff?style=for-the-badge&logo=githubactions&logoColor=white"> <img src="https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white"> 
 
+## 🌐 아키텍처
+<img width="907" alt="2024-09-10_2 39 08" src="https://github.com/user-attachments/assets/03134fde-e6c2-4a27-838e-bc2020c883ce">
+
 
 ## 📋 요구사항 정의서
 
@@ -391,10 +394,6 @@ Alan AI를 통해 개인화된 학습 경험을 제공하며, 사용자의 영�
 | 관리자 - 전체 사용자 조회  | GET     | `/admin/users`                                       |
 | 관리자 - 전체 게시글 조회  | GET     | `/admin/posts`                                       |
 | 관리자 - 게시글 단일 조회  | GET     | `/admin/posts/{id}`                                  |
-
-
-## 🌐 아키텍처
-<img width="827" alt="스크린샷 2024-09-09 오후 2 04 51" src="https://github.com/user-attachments/assets/c3d053b2-6aef-4697-9168-458348671d30">
 
 ## 🖥 화면 구성
 
