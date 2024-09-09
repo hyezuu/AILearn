@@ -3,6 +3,7 @@ package com.example.ormi5finalteam1.service;
 import com.example.ormi5finalteam1.common.exception.BusinessException;
 import com.example.ormi5finalteam1.common.exception.ErrorCode;
 import com.example.ormi5finalteam1.domain.post.Post;
+import com.example.ormi5finalteam1.domain.post.dto.AdminPostListDto;
 import com.example.ormi5finalteam1.domain.post.dto.PostDto;
 import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.domain.user.User;
@@ -102,8 +103,14 @@ public class PostService {
     }
 
     // 관리자가 전체 게시글 조회 시 호출되는 메서드
-    public List<Post> getAllPostsByAdmin() {
-        return postRepository.findAll();
+    public Page<AdminPostListDto> getAllPostsByAdmin(Pageable pageable, String keyword) {
+
+        // 키워드가 null 이거나 빈 문자열이면 전체 조회, 그렇지 않으면 검색
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return postRepository.findAll(pageable).map(AdminPostListDto::toDto);
+        } else {
+            return postRepository.findAllByTitleContaining(keyword, pageable).map(AdminPostListDto::toDto);
+        }
     }
 
     // 관리자가 게시글 상세 조회시 호출되는 메서드

@@ -62,9 +62,9 @@ public class AdminService {
         commentService.deleteCommentByAdmin(postId, commentId);
     }
 
-    public List<AdminPostListDto> getAllPostList() {
+    public Page<AdminPostListDto> getAllPostList(Pageable pageable, String keyword) {
 
-        return postService.getAllPostsByAdmin().stream().map(AdminPostListDto::toDto).collect(Collectors.toList());
+        return postService.getAllPostsByAdmin(pageable, keyword);
     }
 
     public AdminPostDetailDto getPostById(Long postId) {

@@ -47,10 +47,12 @@ public class AdminController {
     }
 
     @GetMapping("/posts")
-    public List<AdminPostListDto> getAllPosts(@AuthenticationPrincipal Provider provider) {
+    public Page<AdminPostListDto> getAllPosts(@AuthenticationPrincipal Provider provider,
+                                              Pageable pageable,
+                                              @RequestParam(required = false) String keyword) {
 
         if (!provider.role().equals(Role.ADMIN)) throw new BusinessException(ErrorCode.HAS_NO_AUTHORITY);
-        return adminService.getAllPostList();
+        return adminService.getAllPostList(pageable, keyword);
     }
 
     @GetMapping("/posts/{id}")

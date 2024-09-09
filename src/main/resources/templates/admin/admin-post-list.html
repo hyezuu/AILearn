@@ -14,8 +14,8 @@
           rel="stylesheet">
 
     <link rel="stylesheet" href="/css/header.css">
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/admin/post-list.js"></script>
 
 </head>
 <body>
@@ -37,8 +37,10 @@
         <tr class="header">
             <th class="num">번호</th>
             <th class="post-title">제목</th>
+            <th>조회수</th>
             <th>작성자</th>
             <th>작성일</th>
+            <th>삭제일</th>
         </tr>
         <tbody id="post-list" class="post-list"></tbody>
     </table>
@@ -50,144 +52,5 @@
     </div>
 
 </div>
-
-
-<script>
-    // 헤더
-    $(document).ready(function () {
-        $("a.mainMenu").mouseenter(function () {
-            $("header nav").stop().slideDown();
-        });
-        $("header nav a").mouseenter(function () {
-            $("a.mainMenu").removeClass('act');
-            $(this).parent().prev().addClass('act');
-        });
-        $("header ul").mouseleave(function () {
-            $("a.mainMenu").removeClass('act');
-            $("header nav").stop().slideUp();
-        });
-
-        //휠(스크롤) 위치에 따라 왼쪽메뉴 활성화.
-        $(document).scroll(function () {
-            //브라우저높이
-            const h2 = $(window).height();
-
-            const t1 = $(document).scrollTop();
-
-            const ht = Math.floor(t1 / h1);
-
-            //모든클래스 삭제
-            $("a").removeClass();
-            //해당 메뉴만 클래스 추가
-            $("li").eq(ht).children().addClass("menuOver " + "m" + (ht + 1));
-        });
-    });
-</script>
-
-<script>
-    //페이징
-    document.addEventListener("DOMContentLoaded", function () {
-        const searchForm = document.getElementById("search-container");
-        const searchInput = document.getElementById("search-input");
-        const postList = document.getElementById("post-list");
-        const paginationInfo = document.getElementById("page-info");
-        const prevPageButton = document.getElementById("prev-page");
-        const nextPageButton = document.getElementById("next-page");
-
-        let currentPage = 0; // 현재 페이지 번호
-        const pageSize = 12; // 한 페이지에 표시할 개수
-        let totalPages = 0; // 총 페이지 수
-
-        // 페이지 로드 시 초기 에세이 목록 로드
-        fetchPosts(currentPage, pageSize);
-
-        searchForm.addEventListener("submit", function(event) {
-            event.preventDefault(); // 페이지 새로고침 방지
-            console.log("search-submit")
-            const searchQuery = searchInput.value;
-            currentPage = 0; // 검색 시 페이지를 1페이지로 초기화
-            fetchPosts(currentPage, pageSize, searchQuery);
-        });
-
-        // 페이지네이션 버튼 클릭 이벤트 처리
-        prevPageButton.addEventListener("click", function() {
-            if (currentPage > 0) {
-                currentPage--;
-                fetchPosts(currentPage, pageSize, searchInput.value);
-            }
-        });
-
-        nextPageButton.addEventListener("click", function() {
-            if (currentPage < totalPages - 1) {
-                currentPage++;
-                fetchPosts(currentPage, pageSize, searchInput.value);
-            }
-        });
-
-        // 게시글 목록 및 검색 기능 구현
-        function fetchPosts(page, pageSize, searchQuery = "") {
-
-            fetch(`/api/posts?page=${page}&size=${pageSize}&keyword=${searchQuery}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include' // 세션 포함
-            })
-                .then(response => response.json())
-                .then(data => {
-                    displayPosts(data.content);
-                    totalPages = data.totalPages; // 서버에서 받은 총 페이지 수 업데이트
-                    updatePagination(data.number, totalPages);
-                })
-                .catch(error => console.error("Error fetching posts:", error));
-        }
-
-        // 게시글 목록을 화면에 표시
-        function displayPosts(posts) {
-            postList.innerHTML = ""; // 기존 목록 초기화
-
-            posts.forEach(posts => {
-                const truncatedTitle = posts.title.length > 35
-                    ? posts.title.substring(0, 35) + "..."
-                    : posts.title
-
-                const nickname = posts.userName;
-
-                const date = new Date(posts.createdAt).toISOString().slice(2, 16).replace("T"," ");
-
-                const viewCount = posts.viewCount;
-
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                <td>${truncatedTitle}</td>
-                <td>${nickname}</td>
-                <td>${date}</td>
-                <td>${viewCount}</td>
-            `;
-
-                row.addEventListener("click", function() {
-                    window.location.href = `/posts/${posts.id}`; // 클릭 시 상세 페이지로 이동
-                });
-
-                postList.appendChild(row);
-            });
-        }
-
-        // 페이지네이션 정보 업데이트 및 버튼 활성화/비활성화 처리
-        function updatePagination(currentPage, totalPages) {
-            paginationInfo.textContent = `Page ${currentPage + 1} of ${totalPages}`;
-
-            // 첫 페이지일 때 이전 버튼 비활성화
-            prevPageButton.disabled = currentPage === 0;
-
-            // 마지막 페이지일 때 다음 버튼 비활성화
-            nextPageButton.disabled = currentPage >= totalPages - 1;
-        }
-
-
-    })
-</script>
-
 </body>
 </html>
