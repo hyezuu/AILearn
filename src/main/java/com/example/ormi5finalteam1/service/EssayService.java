@@ -82,8 +82,12 @@ public class EssayService {
     public EssayResponseDto showEssay(Long id, Provider provider) {
         Essay essay = getEssayById(id);
 
-        if(!essay.getUser().getId().equals(provider.id())) {
+        if(!essay.getUser().getId().equals(provider.id())) { // 사용자 권한 확인 403
             throw new BusinessException((ErrorCode.ESSAY_EDIT_FORBIDDEN));
+        }
+
+        if(essay.getDeletedAt() != null) { // 삭제된 에세이 404
+            throw new BusinessException((ErrorCode.ESSAY_NOT_FOUND));
         }
 
         return convertResponseToDto(essay);
