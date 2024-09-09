@@ -13,8 +13,28 @@
         }
         a {
             text-decoration: none;
-            color: black;
+            color: #777;
         }
+        a:hover {
+            color: #000;
+        }
+        /* 로그인, 로그아웃, 회원가입 버튼  */
+        #login-button, #logout-button, #signup-button {
+            font-family: "IBM Plex Sans KR", sans-serif;
+            font-weight: bold;
+            color: #777;
+        }
+        #login-button:hover {
+            color: #000;
+        }
+        #logout-button:hover {
+            color: #000;
+        }
+        #signup-button:hover {
+            color: #000;
+        }
+
+
         header {
             display: flex;
             padding-right: 30px;
@@ -39,11 +59,11 @@
         }
         /* 로그인 */
         header li:first-child a {
-            font-weight: 600;
+            font-weight: bold;
             color: #777;
         }
         header li:nth-child(2) a {
-            font-weight: 600;
+            font-weight: bold;
             color: #777;
         }
         /* 메뉴 화살표 */
@@ -64,12 +84,13 @@
         a.mainMenu {
             color: #777;
             font-size: 1rem;
-            font-weight: 600;
+            font-weight: bold;
             display: block;
             padding: 6px;
             text-align: center;
+            font-family: "IBM Plex Sans KR", sans-serif;
         }
-        a.mainMenu:hover, a.mainMenu.act { color: #464646; }
+        a.mainMenu:hover, a.mainMenu.act { color: #000; font-weight: bold; }
         /*서브메뉴*/
         header nav {
             background: #f9f9f9;
@@ -82,7 +103,6 @@
             border-bottom-right-radius: 10px;
         }
         header nav a {
-
             display: block;
             padding: 4px;
             text-align: center;

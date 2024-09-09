@@ -32,4 +32,24 @@ $(document).ready(function(){
     });
 
 
+    // 페이지 로드시 로그인 확인해서 LOGOUT 출력
+    window.onload = function () {
+        fetch('/api/me')
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            })
+            .then(user => {
+                document.getElementById('logout-button').style.display = 'block';
+                document.getElementById('logout-button').style.color = '#777';
+            })
+            .catch(error => {
+                document.getElementById('login-button').style.display = 'block';
+                document.getElementById('signup-button').style.display = 'block';
+            });
+    };
+
 });/////////end
