@@ -37,7 +37,7 @@ services:
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
 #      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL8Dialect
     ports:
-      - "8443:8443"
+      - "8080:8080"
     networks:
       - docker-network
 
