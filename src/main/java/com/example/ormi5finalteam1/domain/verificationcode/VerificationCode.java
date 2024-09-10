@@ -12,6 +12,9 @@ public class VerificationCode {
     private final long expirationTimeInMinutes;
 
     public VerificationCode(String code, String email, long expirationTimeInMinutes) {
+        if (expirationTimeInMinutes <= 0) {
+            throw new IllegalArgumentException("expirationTimeInMinutes must be greater than 0");
+        }
         this.code = code;
         this.email = email;
         this.createAt = LocalDateTime.now();
