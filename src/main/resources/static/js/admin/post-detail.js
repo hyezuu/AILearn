@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function displayPostDetails(post) {
         document.getElementById("post-title").textContent = post.title;
         document.getElementById("post-viewCount").textContent = "조회수: " + post.viewCount;
-        document.getElementById("post-content").textContent = post.contents;
+        document.getElementById("post-content").innerHTML = post.contents.replace(/\n/g, "<br>");
 
         const date = new Date(post.createdAt);
         document.getElementById("post-createdAt").textContent = "작성일: " + date.toISOString().slice(0, 16).replace('T', ' ');
