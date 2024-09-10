@@ -3,6 +3,7 @@ package com.example.ormi5finalteam1.service;
 import com.example.ormi5finalteam1.common.exception.BusinessException;
 import com.example.ormi5finalteam1.common.exception.ErrorCode;
 import com.example.ormi5finalteam1.domain.comment.Comment;
+import com.example.ormi5finalteam1.domain.comment.dto.AdminCommentDto;
 import com.example.ormi5finalteam1.domain.comment.dto.CommentDto;
 import com.example.ormi5finalteam1.domain.post.Post;
 import com.example.ormi5finalteam1.domain.post.dto.PostDto;
@@ -72,6 +73,13 @@ public class CommentService {
         Pageable pageable = PageRequest.of(page, size);
         return commentRepository.findByUserIdOrderByCreatedAtDesc(user.getId(), pageable)
                 .map(this::convertToDto);
+    }
+
+    // 관리자가 게시글에 달린 댓글을 조회하는 메서드
+    public List<CommentDto> getCommentsByPostIdWithAdmin(Long postId) {
+        return commentRepository.findByPostId(postId).stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     // 관리자가 댓글을 삭제할 때 호출하는 메서드

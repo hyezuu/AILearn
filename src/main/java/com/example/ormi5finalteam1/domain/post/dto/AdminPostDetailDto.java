@@ -14,6 +14,7 @@ public class AdminPostDetailDto {
 
     private String nickname;
     private String title;
+    private String contents;
     private int viewCount;
     private List<AdminCommentDto> comments;
     private LocalDateTime createdAt;
@@ -23,6 +24,7 @@ public class AdminPostDetailDto {
         return AdminPostDetailDto.builder()
                 .nickname(post.getUser().getNickname())
                 .title(post.getTitle())
+                .contents(post.getContent())
                 .viewCount(post.getViewCount())
                 .comments(comments)
                 .createdAt(post.getCreatedAt())

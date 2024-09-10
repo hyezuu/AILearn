@@ -13,12 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserPointService {
   private final UserRepository userRepository;
 
-  public void addPointsToUser(Long id, int points) {
+  public void addGrammarExamplePointsToUser(Long id) {
     User user =
         userRepository
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException("User not found"));
-    user.addUserPoint(points);
+    user.addGrammarProblemCorrectPoint();
     userRepository.save(user);
   }
 }

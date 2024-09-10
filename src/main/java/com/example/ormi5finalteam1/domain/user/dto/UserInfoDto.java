@@ -1,6 +1,6 @@
 package com.example.ormi5finalteam1.domain.user.dto;
 
-import com.example.ormi5finalteam1.domain.Grade;
+import com.example.ormi5finalteam1.domain.user.Role;
 import com.example.ormi5finalteam1.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +14,8 @@ public class UserInfoDto {
     private Long userId;
     private String email;
     private String nickname;
-    private boolean isActivate;
+    private Role role;
+    private boolean isActive;
     private int level;
     private boolean isReadyForUpgrade;
     private LocalDateTime createdAt;
@@ -26,9 +27,10 @@ public class UserInfoDto {
                 .userId(user.getId())
                 .email(user.getEmail())
                 .nickname(user.getNickname())
-                .isActivate(user.isActive())
+                .role(user.getRole())
+                .isActive(user.isActive())
                 .level(user.getLevel())
-                .isActivate(user.isReadyForUpgrade())
+                .isReadyForUpgrade(user.isReadyForUpgrade())
                 .createdAt(user.getCreatedAt())
                 .lastLoginedAt(user.getLastLoginedAt())
                 .deletedAt(user.getDeletedAt())

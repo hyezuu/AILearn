@@ -11,9 +11,12 @@ import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.domain.user.dto.UserInfoDto;
 import com.example.ormi5finalteam1.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,29 +29,30 @@ public class AdminService {
     private final PostService postService;
     private final CommentService commentService;
 
-    public List<UserInfoDto> getAllUserList() {
+    public Page<UserInfoDto> getAllUserList(Pageable pageable) {
 
-        return userRepository.findAllByOrderByRoleAscId().stream()
-                .map(UserInfoDto::toDto).collect(Collectors.toList());
+        return userRepository.findAllByOrderByRoleAscId(pageable).map(UserInfoDto::toDto);
     }
     public void changeUserStatus(Long userId) {
 
         User normalUser = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
         if (normalUser.getRole() == Role.ADMIN) throw new BusinessException(ErrorCode.HAS_ADMIN_AUTHORITY);
-        if(normalUser.getDeletedAt() == null) {
+        if (normalUser.getDeletedAt() == null) {
             if (normalUser.isActive()) normalUser.deactivateUser();
             else normalUser.activateUser();
         }
     }
 
-    public void deleteUser(Long userId) {
+    public LocalDateTime deleteUser(Long userId) {
 
         User normalUser = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
         if (normalUser.getRole() == Role.ADMIN) throw new BusinessException(ErrorCode.HAS_ADMIN_AUTHORITY);
         if (normalUser.getDeletedAt() == null) normalUser.delete();
         else throw new BusinessException(ErrorCode.ALREADY_DELETED);
+
+        return normalUser.getDeletedAt();
     }
 
     public void deletePost(Long postId) {
@@ -61,14 +65,14 @@ public class AdminService {
         commentService.deleteCommentByAdmin(postId, commentId);
     }
 
-    public List<AdminPostListDto> getAllPostList() {
+    public Page<AdminPostListDto> getAllPostList(Pageable pageable, String keyword) {
 
-        return postService.getAllPostsByAdmin().stream().map(AdminPostListDto::toDto).collect(Collectors.toList());
+        return postService.getAllPostsByAdmin(pageable, keyword);
     }
 
     public AdminPostDetailDto getPostById(Long postId) {
 
         return AdminPostDetailDto.toDto(postService.getPostByAdmin(postId),
-                commentService.getCommentsByPostId(postId).stream().map(AdminCommentDto::toDto).toList());
+                commentService.getCommentsByPostIdWithAdmin(postId).stream().map(AdminCommentDto::toDto).toList());
     }
 }
