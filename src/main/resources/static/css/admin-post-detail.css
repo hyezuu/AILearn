@@ -17,8 +17,7 @@ a {
 }
 
 h1 {
-    margin: 80px;
-    margin-bottom: 0;
+    margin: 80px 80px 0 80px;
     display: inline-block;
     text-align: center;
 }
@@ -101,23 +100,6 @@ textarea {
     color: black;
     border-bottom: 2px solid #ccc;
 }
-
-/* 뒤로가기와 등록 버튼 */
-.buttons {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 40px;
-}
-
-/* 등록 버튼 */
-.buttons {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 40px;
-}
-
 
 /* 댓글 부분 */
 .comment-section {

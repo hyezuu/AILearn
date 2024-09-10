@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", async function() {
     let userID = 0;
     let currentPage = 0;
     const pageSize = 5; // 페이지당 아이템 수
+    getUserId();
+
 
     // SweetAlert2 라이브러리 추가
     loadScript('https://cdn.jsdelivr.net/npm/sweetalert2@11', initializeApp);
@@ -21,14 +23,6 @@ document.addEventListener("DOMContentLoaded", async function() {
         fetchGrammarExamples(currentPage);
     }
 
-    // searchForm.addEventListener("submit", function(event) {
-    //     event.preventDefault(); // 페이지 새로고침 방지
-    //     const searchQuery = searchInput.value;
-    //     currentPage = 0; // 검색 시 페이지를 1페이지로 초기화
-    //     console.log(searchQuery);
-    //     fetchGrammarExamples(currentPage, searchQuery);
-    // });
-
     // 사용자 정보를 요청하여 userId를 가져옴 (비동기 처리)
     async function getUserId() {
         try {
@@ -43,9 +37,6 @@ document.addEventListener("DOMContentLoaded", async function() {
             const data = await response.json();
             userGrammarExamples = data.grammarExampleCount;
             userID = data.id;
-
-            console.log("userGramExam after fetch:", userGrammarExamples);
-            console.log("userID after fetch:", userID);
 
         } catch (error) {
             console.error('Error fetching user data:', error);
@@ -70,7 +61,6 @@ document.addEventListener("DOMContentLoaded", async function() {
             const data = await response.json();
             await renderGrammarExamples(data.data);
             await renderPagination(data);
-            // addSubmitEventListeners();
         } catch (error) {
             console.error('Error fetching grammar examples:', error);
         }
@@ -122,7 +112,7 @@ document.addEventListener("DOMContentLoaded", async function() {
                     console.log('Grading result:', data);
 
                     if (data.correct) {
-                        showAlert('정답', `${data.data.commentary}`, 'success');
+                        Swal.fire('정답', `${data.data.commentary}`, 'success');
                     } else {
                         Swal.fire('오답', `${data.data.commentary}`, 'error');
                     }
@@ -139,8 +129,6 @@ document.addEventListener("DOMContentLoaded", async function() {
         document.getElementById("addGrammarExampleButton").addEventListener("click", async function (event) {
             event.preventDefault();
 
-            console.log("문법예문 추가하기 버튼 클릭성공");
-
             try {
                 const response = await fetch("/api/grammar-examples/more", {
                     method: "POST",
@@ -154,6 +142,7 @@ document.addEventListener("DOMContentLoaded", async function() {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
 
+                Swal.fire('문법 예문', `문법 예문을 5개 추가하였습니다.`, 'success');
                 window.location.reload();
 
             } catch (error) {
@@ -191,5 +180,4 @@ document.addEventListener("DOMContentLoaded", async function() {
         });
     }
 
-    getUserId();
 });
