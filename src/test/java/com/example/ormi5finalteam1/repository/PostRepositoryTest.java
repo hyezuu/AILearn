@@ -84,4 +84,33 @@ class PostRepositoryTest {
         assertTrue(result.getContent().get(0).getTitle().contains(keyword));
         assertNull(result.getContent().get(0).getDeletedAt());
     }
+
+    @Test
+    void findAllByTitleContainingAndDeletedAtIsNullOrderByCreatedAtDesc_키워드가_없는_경우에도_검색이_가능하다() {
+        // Given
+        String emptyKeyword = "";
+        Pageable pageable = PageRequest.of(0, 10);
+
+        // When
+        Page<Post> result = postRepository.findAllByTitleContainingAndDeletedAtIsNullOrderByCreatedAtDesc(emptyKeyword, pageable);
+
+        // Then
+        assertFalse(result.isEmpty());
+        assertEquals(post.getTitle(), result.getContent().get(0).getTitle());
+    }
+
+    @Test
+    void findAllByDeletedAtIsNullOrderByCreatedAtDesc_삭제된_게시글은_검색되지_않는다() {
+        // Given
+        post.delete();
+        postRepository.save(post);
+
+        Pageable pageable = PageRequest.of(0, 10);
+
+        // When
+        Page<Post> result = postRepository.findAllByDeletedAtIsNullOrderByCreatedAtDesc(pageable);
+
+        // Then
+        assertTrue(result.isEmpty());
+    }
 }
