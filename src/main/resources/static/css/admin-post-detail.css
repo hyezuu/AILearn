@@ -3,117 +3,7 @@
     padding: 0;
 }
 
-
 #layout {
-    width: 100%;
-    height: 100%;
-}
-
-body {
-    font-family: "IBM Plex Sans KR", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-}
-
-
-a {
-    text-decoration: none;
-    color: black;
-}
-
-
-header {
-    display: flex;
-    padding-right: 30px;
-    background: white;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    filter:drop-shadow(0 1px 3px #A8A8A8);
-    z-index: 1000;
-}
-
-header h2 {
-    flex: 1;
-    padding: 0 60px;
-}
-
-header h2 a {
-    width: 200px;
-    height: 40px;
-    display: block;
-}
-/* 로고 */
-header img {
-    margin-top: 5px;
-    /*margin-left: 0;*/
-}
-
-/* 로그인 */
-header li:first-child a {
-    font-weight: 600;
-    color: #777;
-}
-header li:nth-child(2) a {
-    font-weight: 600;
-    color: #777;
-}
-/* 메뉴 화살표 */
-header li span {
-    margin-bottom: 5px;
-}
-
-/*메뉴*/
-header ul {
-    flex: 0.3;
-    list-style: none;
-    display: flex;
-    padding-top: 2px;
-    width: 200px;
-}
-header li { flex: 2; position: relative;}
-header li a:hover {
-    color: black;
-}
-header span { margin-top: 7px; display: inline-block; }
-
-/*메인메뉴*/
-a.mainMenu {
-    color: #777;
-    font-size: 1rem;
-    font-weight: 600;
-    display: block;
-    padding: 6px;
-    text-align: center;
-}
-a.mainMenu:hover, a.mainMenu.act { color: #464646; }
-
-/*서브메뉴*/
-header nav {
-    background: #f9f9f9;
-    top: 35px;
-    position: absolute;
-    width: 100%;
-    display: none;
-    z-index: 10;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-}
-
-header nav a {
-    display: block;
-    padding: 4px;
-    text-align: center;
-}
-
-header nav a:hover {
-    background: #e1e1e1;
-    font-weight: bold;
-    color: #000000;
-}
-
-body {
     width: 100%;
     height: 100%;
     font-family: "IBM Plex Sans KR", sans-serif;
@@ -153,7 +43,6 @@ label>a {
     align-items: center;
     margin-left: 10px;
 }
-
 /* 제목과 내용 공통 */
 input[type="text"], textarea {
     width: 100%;
@@ -171,10 +60,7 @@ label[for="content"] {
 /* 제목 */
 .input-container {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%; /* 컨테이너의 전체 너비를 사용 */
-
+    flex-direction: column;
 }
 
 input[name="title"] {
@@ -202,14 +88,8 @@ input[name="title"] {
     margin-top: 20px;
     opacity: 50%;
 }
-
 .button-container img:hover {
     opacity: 100%;
-}
-
-.container {
-    max-width: 80%;
-    margin: auto;
 }
 
 /* 내용 */
@@ -220,7 +100,6 @@ textarea {
     color: black;
     border-bottom: 2px solid #ccc;
 }
-
 
 /* 댓글 부분 */
 .comment-section {
@@ -239,7 +118,7 @@ textarea {
     text-orientation: mixed;  /* 텍스트 방향을 기본값으로 설정 */
     white-space: nowrap;  /* 텍스트가 한 줄로 표시되도록 설정 */
     padding : 6px 30px;
-    background-color: #1d62f8;
+    background-color: #2e5dbd;
     color: white;
     font-size: 1.1rem;
     font-weight: 600;
@@ -248,9 +127,8 @@ textarea {
     margin-left: 20px;
 }
 .comment-form button:hover {
-    background-color: #173db9;
+    background-color: #103889;
 }
-
 
 /* 새 댓글 */
 .comment {
@@ -276,20 +154,58 @@ textarea {
 .delete-comment {
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
 
 .delete-comment img {
     width: 16px;  /* 이미지 크기 조정 */
     height: 16px;
     vertical-align: middle;
+    opacity: 50%;
 }
 
-.comment-content {
-    margin-bottom: 10px;
+.delete-comment img:hover {
+    opacity: 100%;
 }
 
 .comment-date {
     display: block;
     color: #777;
     font-size: 0.8em;
+}
+
+.comment-container {
+    border-bottom: 1px solid #dadada;
+    padding-bottom: 10px;
+    margin: 7px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.post {
+    margin: 70px;
+}
+
+.title-container {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #A8A8A8;
+}
+
+#post-content {
+    margin-top: 30px;
+}
+
+#post-viewCount {
+    margin-left: 20px;
+}
+
+.comment-info {
+    display: flex;
+    gap: 20px;
+}
+
+#post-deletedAt {
+    margin-left: 20px;
 }
