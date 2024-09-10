@@ -17,14 +17,14 @@ public class AdminInfoController {
     public String getUserList(@AuthenticationPrincipal Provider provider) {
 
         if (!provider.role().equals(Role.ADMIN)) throw new BusinessException(ErrorCode.HAS_NO_AUTHORITY);
-        return "/admin/user-list";
+        return "admin/user-list";
     }
 
     @GetMapping("/posts")
     public String getPostList(@AuthenticationPrincipal Provider provider) {
 
         if (!provider.role().equals(Role.ADMIN)) throw new BusinessException(ErrorCode.HAS_NO_AUTHORITY);
-        return "/admin/admin-post-list";
+        return "admin/admin-post-list";
     }
 
     @GetMapping("/posts/{id}")
