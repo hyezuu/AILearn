@@ -35,7 +35,7 @@ body {
 .search-button {
     padding: 10px 20px;
     cursor: pointer;
-    background-color: #103889;
+    background-color: #1d62f8;
     color: white;
     font-size: 1.1rem;
     border: none;
@@ -44,9 +44,8 @@ body {
 
 }
 .search-button:hover {
-    background-color: #0f246c;
-    filter: drop-shadow(0px 0px 2px #0f246c );
-    border-color: #0f246c;
+    background-color: #173db9;
+    border-color: #173db9;
     color: white;
 }
 

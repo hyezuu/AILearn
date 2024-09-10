@@ -33,6 +33,7 @@ header {
     filter:drop-shadow(0 1px 3px #A8A8A8);
     z-index: 1000;
 }
+
 header h2 {
     flex: 1;
     padding: 0 60px;
@@ -126,8 +127,7 @@ a {
 }
 
 h1 {
-    margin: 80px;
-    margin-bottom: 0;
+    margin: 80px 80px 0 80px;
     display: inline-block;
     text-align: center;
 }
@@ -202,6 +202,7 @@ input[name="title"] {
     margin-top: 20px;
     opacity: 50%;
 }
+
 .button-container img:hover {
     opacity: 100%;
 }
@@ -220,25 +221,8 @@ textarea {
     border-bottom: 2px solid #ccc;
 }
 
-/* 뒤로가기와 등록 버튼 */
-.buttons {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 40px;
-}
-
-/* 등록 버튼 */
-.buttons {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 40px;
-}
-
 
 /* 댓글 부분 */
-
 .comment-section {
     margin: 70px;
 }
@@ -255,7 +239,7 @@ textarea {
     text-orientation: mixed;  /* 텍스트 방향을 기본값으로 설정 */
     white-space: nowrap;  /* 텍스트가 한 줄로 표시되도록 설정 */
     padding : 6px 30px;
-    background-color: #2e5dbd;
+    background-color: #1d62f8;
     color: white;
     font-size: 1.1rem;
     font-weight: 600;
@@ -264,7 +248,7 @@ textarea {
     margin-left: 20px;
 }
 .comment-form button:hover {
-    background-color: #103889;
+    background-color: #173db9;
 }
 
 
