@@ -6,7 +6,6 @@ import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.domain.user.Role;
 import com.example.ormi5finalteam1.domain.Grade;
 import com.example.ormi5finalteam1.service.LikeService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
@@ -42,9 +41,6 @@ class LikeControllerTest {
     @MockBean
     private LikeService likeService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
     private Provider provider;
 
     @BeforeEach
@@ -52,7 +48,6 @@ class LikeControllerTest {
         MockitoAnnotations.openMocks(this);
         provider = new Provider(1L, "test@example.com", "test", Role.USER, Grade.A1, 0);
 
-        // 인증된 사용자 설정
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(provider, null, Collections.emptyList());
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -67,11 +62,11 @@ class LikeControllerTest {
 
         // When & Then
         mockMvc.perform(post("/api/posts/{postId}/like", 1L)
-                        .with(csrf())  // CSRF 토큰 추가
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())  // 201 응답 상태 코드 확인
-                .andExpect(jsonPath("$.userId").value(provider.id()))  // 응답 JSON에서 "userId" 필드 확인
-                .andExpect(jsonPath("$.postId").value(1L));  // 응답 JSON에서 "postId" 필드 확인
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.userId").value(provider.id()))
+                .andExpect(jsonPath("$.postId").value(1L));
 
         verify(likeService, times(1)).likePost(anyLong(), anyLong());
     }
@@ -80,9 +75,9 @@ class LikeControllerTest {
     void unlikePost_사용자는_게시글에_좋아요를_취소할_수_있다() throws Exception {
         // When & Then
         mockMvc.perform(delete("/api/posts/{postId}/like", 1L)
-                        .with(csrf())  // CSRF 토큰 추가
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent());  // 204 응답 상태 코드 확인
+                .andExpect(status().isNoContent());
 
         verify(likeService, times(1)).unlikePost(anyLong(), any(Provider.class));
     }
@@ -94,9 +89,9 @@ class LikeControllerTest {
 
         // When & Then
         mockMvc.perform(delete("/api/posts/{postId}/like", 1L)
-                        .with(csrf())  // CSRF 토큰 추가
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isForbidden());  // 403 응답 상태 코드 확인
+                .andExpect(status().isForbidden());
 
         verify(likeService, times(1)).unlikePost(anyLong(), any(Provider.class));
     }
@@ -114,9 +109,23 @@ class LikeControllerTest {
                         .param("page", "0")
                         .param("size", "12")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())  // 200 응답 상태 코드 확인
-                .andExpect(jsonPath("$.content[0].title").value("title"));  // 응답 JSON에서 "title" 필드 확인
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[0].title").value("title"));
 
         verify(likeService, times(1)).getLikedPosts(anyInt(), anyInt(), any(Provider.class));
+    }
+
+    @Test
+    void getLikedPost_좋아요가_되지_않은_게시글에_대한_조회시_false를_반환한다() throws Exception {
+        // Given
+        when(likeService.getLikedPost(anyLong(), any(Provider.class))).thenReturn(false);
+
+        // When & Then
+        mockMvc.perform(get("/api/posts/{postId}/like", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value(false));
+
+        verify(likeService, times(1)).getLikedPost(anyLong(), any(Provider.class));
     }
 }
