@@ -73,5 +73,11 @@ jobs:
           docker pull ${{ secrets.DOCKER_HUB_ID }}/${{ secrets.DOCKER_HUB_REPO }}:latest
           docker stop app
           docker rm app
-          docker run -d --name app -p 8080:8080 -e SPRING_PROFILES_ACTIVE=prod ${{ secrets.DOCKER_HUB_ID }}/${{ secrets.DOCKER_HUB_REPO }}:latest
+          docker run -d --name app -p 8080:8080 \
+            -e SPRING_PROFILES_ACTIVE=prod \
+            -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
+            -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            -e MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }} \
+            -e ALANAI_API_KEY=${{ secrets.ALANAI_API_KEY }} \
+            ${{ secrets.DOCKER_HUB_ID }}/${{ secrets.DOCKER_HUB_REPO }}:latest
         EOF
