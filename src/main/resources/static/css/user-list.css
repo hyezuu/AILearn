@@ -52,36 +52,29 @@ body {
 }
 
 table {
-    margin: auto;
-    width: 85%;
+    width: 100%;
     border-radius: 5px;
     border-collapse: collapse;
     border-top: none;
     text-align: center;
+    margin: 2rem auto;
 }
 .header {
     background-color: #F2F2F2;
     text-align: center;
     border: 1px solid #ABABAB;
 }
-.table td, .table th {
-    border-bottom: 1px lightgray solid;
+
+td, th {
+    /*border-bottom: 1px lightgray solid;*/
     height: 30px;
     font-size: 14px;
+    padding: 0.75rem;
+    border-bottom: 1px solid #ddd;
 }
-.num {
-    width: 50px;
+tr:not(:last-child) {
+    margin-bottom: 1rem;
 }
-.title {
-    width: 60px;
-}
-.body {
-    text-align: center;
-}
-.body .title {
-    text-align: left;
-}
-
 
 /*페이징*/
 .container {
@@ -89,30 +82,9 @@ table {
     margin: auto;
 }
 
-.post-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.post-table th, .post-table td {
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: left;
-}
-
-.post-table td.number {
-    font-weight: bold; /* 번호 열을 굵게 표시 */
-}
-
-.post-table th {
-    background-color: #f4f4f4;
-}
-
 .pagination {
     text-align: center;
-    margin-top: 20px;
+    margin: 30px 0;
 }
 
 .pagination button, .pagination span {
@@ -141,4 +113,20 @@ table {
 .pagination span {
     opacity: 0.7;
     font-weight: normal;
+}
+
+/* 버튼 스타일 */
+.stop-btn, .delete-btn {
+    background: none;
+    border: none;
+    color: #2e5dbd;
+    text-decoration: underline;
+    cursor: pointer;
+    font: inherit;
+}
+
+
+.stop-btn:hover, .delete-btn:hover {
+    color: #e35e5e;
+    text-decoration: underline;
 }

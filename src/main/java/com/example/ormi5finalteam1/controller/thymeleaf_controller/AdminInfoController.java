@@ -26,4 +26,11 @@ public class AdminInfoController {
         if (!provider.role().equals(Role.ADMIN)) throw new BusinessException(ErrorCode.HAS_NO_AUTHORITY);
         return "/admin/admin-post-list";
     }
+
+    @GetMapping("/posts/{id}")
+    public String getPostById(@AuthenticationPrincipal Provider provider) {
+
+        if (!provider.role().equals(Role.ADMIN)) throw new BusinessException(ErrorCode.HAS_NO_AUTHORITY);
+        return "admin/admin-post-detail";
+    }
 }

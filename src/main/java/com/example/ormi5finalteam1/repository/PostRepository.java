@@ -12,8 +12,6 @@ public interface PostRepository extends JpaRepository<Post, Long>, PagingAndSort
     Page<Post> findAllByDeletedAtIsNullOrderByCreatedAtDesc(Pageable pageable);
     Page<Post> findAllByUserIdAndDeletedAtIsNullOrderByCreatedAtDesc(Long userId, Pageable pageable);
     Page<Post> findAllByTitleContainingAndDeletedAtIsNullOrderByCreatedAtDesc(String keyword, Pageable pageable);
-    Page<Post> findAllByOrderByCreatedAtDesc(Pageable pageable);
-    Page<Post> findAllByUserId(Long userId, Pageable pageable);
     Page<Post> findAllByTitleContaining(String keyword, Pageable pageable);
 
 }

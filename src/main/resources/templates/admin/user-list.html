@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="/css/header.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/js/admin/user-list.js"></script>
+    <script src="/js/main.js"></script>
 
 </head>
 <body>
@@ -25,7 +26,7 @@
     <h2>전체 유저 리스트</h2>
     <!--</div>-->
     <div class="search-container">
-        <input type="text" class="search-input" placeholder="search">
+        <input type="text" class="search-input" placeholder="search by nickname">
         <button class="search-button">search</button>
     </div>
 
@@ -34,14 +35,16 @@
             <th class="num">번호</th>
             <th class="user-email">유저 이메일</th>
             <th>닉네임</th>
+            <th>권한</th>
             <th>레벨</th>
             <th>테스트 응시 자격</th>
             <th>상태</th>
             <th>가입일</th>
             <th>마지막 로그인</th>
             <th>삭제 일시</th>
+            <th>정지</th>
+            <th>탈퇴</th>
         </tr>
-        <!--</table>-->
         <tbody id="user-list" class="post-list"></tbody>
     </table>
 

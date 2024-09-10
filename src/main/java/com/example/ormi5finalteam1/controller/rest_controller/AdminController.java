@@ -12,9 +12,11 @@ import com.example.ormi5finalteam1.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -39,11 +41,11 @@ public class AdminController {
     }
 
     @DeleteMapping("/users/{id}")
-    public void deleteUser(@AuthenticationPrincipal Provider provider,
-                           @PathVariable("id") Long userId) {
+    public LocalDateTime deleteUser(@AuthenticationPrincipal Provider provider,
+                                    @PathVariable("id") Long userId) {
 
         if (!provider.role().equals(Role.ADMIN)) throw new BusinessException(ErrorCode.HAS_NO_AUTHORITY);
-        adminService.deleteUser(userId);
+        return adminService.deleteUser(userId);
     }
 
     @GetMapping("/posts")
@@ -70,6 +72,7 @@ public class AdminController {
     }
 
     @DeleteMapping("/posts/{postId}/comments/{commentId}")
+    @ResponseStatus(HttpStatus.OK)
     public void deleteComment(@AuthenticationPrincipal Provider provider,
                               @PathVariable("postId") Long postId,
                               @PathVariable("commentId") Long commentId) {

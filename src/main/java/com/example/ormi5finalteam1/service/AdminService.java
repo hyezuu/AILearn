@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,19 +38,21 @@ public class AdminService {
         User normalUser = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
         if (normalUser.getRole() == Role.ADMIN) throw new BusinessException(ErrorCode.HAS_ADMIN_AUTHORITY);
-        if(normalUser.getDeletedAt() == null) {
+        if (normalUser.getDeletedAt() == null) {
             if (normalUser.isActive()) normalUser.deactivateUser();
             else normalUser.activateUser();
         }
     }
 
-    public void deleteUser(Long userId) {
+    public LocalDateTime deleteUser(Long userId) {
 
         User normalUser = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
         if (normalUser.getRole() == Role.ADMIN) throw new BusinessException(ErrorCode.HAS_ADMIN_AUTHORITY);
         if (normalUser.getDeletedAt() == null) normalUser.delete();
         else throw new BusinessException(ErrorCode.ALREADY_DELETED);
+
+        return normalUser.getDeletedAt();
     }
 
     public void deletePost(Long postId) {
@@ -70,6 +73,6 @@ public class AdminService {
     public AdminPostDetailDto getPostById(Long postId) {
 
         return AdminPostDetailDto.toDto(postService.getPostByAdmin(postId),
-                commentService.getCommentsByPostId(postId).stream().map(AdminCommentDto::toDto).toList());
+                commentService.getCommentsByPostIdWithAdmin(postId).stream().map(AdminCommentDto::toDto).toList());
     }
 }

@@ -6,8 +6,6 @@
     <link rel="stylesheet" href="/css/admin-post-list.css">
     <title>admin-post-list</title>
 
-    <link rel="stylesheet" href="/css/admin-post-list.css">
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap"
@@ -16,6 +14,7 @@
     <link rel="stylesheet" href="/css/header.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/js/admin/post-list.js"></script>
+    <script src="/js/main.js"></script>
 
 </head>
 <body>
@@ -29,18 +28,17 @@
     <div class="search-container">
         <input type="text" class="search-input" placeholder="search">
         <button type="submit" class="search-button">search</button>
-
-        <button type="submit" class="post-button">글쓰기</button>
     </div>
 
     <table class="table">
         <tr class="header">
             <th class="num">번호</th>
-            <th class="post-title">제목</th>
+            <th>제목</th>
             <th>조회수</th>
             <th>작성자</th>
             <th>작성일</th>
             <th>삭제일</th>
+            <th>삭제하기</th>
         </tr>
         <tbody id="post-list" class="post-list"></tbody>
     </table>
