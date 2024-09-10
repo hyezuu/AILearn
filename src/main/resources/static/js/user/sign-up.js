@@ -165,6 +165,12 @@ document.addEventListener('DOMContentLoaded', function () {
   requestVerificationButton.addEventListener('click', async function () {
     const email = document.getElementById('email').value;
     const emailResultElement = document.getElementById('emailResult');
+
+    emailResultElement.textContent = '';
+    emailResultElement.classList.remove('error-message', 'success-message');
+    requestVerificationButton.disabled = true;
+    requestVerificationButton.textContent = '인증 코드 전송 중...';
+
     try {
       const response = await fetch('/api/request-verification', {
         method: 'POST',
@@ -187,6 +193,9 @@ document.addEventListener('DOMContentLoaded', function () {
       emailResultElement.textContent = '인증 코드 전송 중 오류가 발생했습니다.';
       emailResultElement.classList.remove('success-message');
       emailResultElement.classList.add('error-message');
+    } finally {
+      requestVerificationButton.disabled = false;
+      requestVerificationButton.textContent = '메일 인증';
     }
   });
 
