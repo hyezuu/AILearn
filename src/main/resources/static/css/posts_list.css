@@ -132,50 +132,11 @@ td {
     font-size: 17px;
     font-weight: bold;
 }
-/*.pagination-container {*/
-/*    position: fixed;*/
-/*    bottom: 20px;*/
-/*    left: 50%;*/
-/*    transform: translateX(-50%);*/
-/*}*/
-
-/*.pagination-container .pagination {*/
-/*    display: flex;*/
-/*    justify-content: center;*/
-/*    align-items: center;*/
-/*    list-style-type: none;*/
-/*    padding: 0;*/
-/*    margin: 0;*/
-/*}*/
-
-/*.pagination-container .page-item {*/
-/*    width: 20px;*/
-/*    height: 20px;*/
-/*    margin: 0 5px;*/
-/*}*/
-
-/*.pagination-container .page-link {*/
-/*    display: flex;*/
-/*    justify-content: center;*/
-/*    align-items: center;*/
-/*    width: 100%;*/
-/*    height: 100%;*/
-/*    padding: 0;*/
-/*    font-size: 10px;*/
-/*    text-decoration: none;*/
-/*    border: 1px solid #dee2e6;*/
-/*}*/
-
-/*.pagination-container .page-item.active .page-link {*/
-/*    background-color: #007bff;*/
-/*    color: white;*/
-/*}*/
-
-/*!* 화살표 아이콘을 위한 추가 스타일 *!*/
-/*.pagination-container .page-link[aria-label] {*/
-/*    font-size: 8px;*/
-/*}*/
 
 thead tr th:first-child {
     width: 350px;
+}
+
+tr {
+    cursor: pointer;
 }
