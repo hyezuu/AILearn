@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function displayEssayDetails(essay) {
         document.getElementById("essay-topic").textContent = essay.topic;
-        document.getElementById("essay-content").textContent = essay.content;
+        document.getElementById("essay-content").innerHTML = essay.content.replace(/\n/g, "<br>");
 
         // 작성일을 원하는 형식으로 변환
         const date = new Date(essay.createdAt);
