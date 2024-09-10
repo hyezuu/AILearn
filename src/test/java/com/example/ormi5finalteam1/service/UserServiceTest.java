@@ -26,6 +26,8 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -292,8 +294,10 @@ class UserServiceTest {
         when(user.getNickname()).thenReturn("oldNickname");
         when(repository.existsByNickname("newNickname")).thenReturn(false);
         when(passwordEncoder.encode("newPassword")).thenReturn("encodedNewPassword");
+
         // when
-        assertThatCode(() -> userService.updateUser(userId, requestDto)).doesNotThrowAnyException();
+        userService.updateUser(userId, requestDto);
+
         // then
         verify(user).updateNickname("newNickname");
         verify(user).updatePassword("encodedNewPassword");
@@ -308,28 +312,47 @@ class UserServiceTest {
         when(repository.findById(userId)).thenReturn(Optional.of(user));
         when(user.getNickname()).thenReturn("oldNickname");
         when(repository.existsByNickname("duplicateNickname")).thenReturn(true);
+
         // when & then
         assertThatThrownBy(() -> userService.updateUser(userId, requestDto))
             .isInstanceOf(BusinessException.class)
             .hasFieldOrPropertyWithValue("errorCode", ErrorCode.DUPLICATE_NICKNAME);
+
         verify(user, never()).updateNickname(anyString());
         verify(user, never()).updatePassword(anyString());
     }
 
-    @Test
-    void updateUser_는_비밀번호가_null이거나_비어있을_경우_비밀번호를_업데이트하지_않는다() {
+    @ParameterizedTest
+    @NullAndEmptySource
+    void updateUser_는_비밀번호가_null이거나_비어있을_경우_비밀번호를_업데이트하지_않는다(String password) {
         // given
         long userId = 1L;
-        UpdateUserRequestDto requestDto = new UpdateUserRequestDto("newNickname", null);
+        UpdateUserRequestDto requestDto = new UpdateUserRequestDto("newNickname", password);
         User user = mock(User.class);
         when(repository.findById(userId)).thenReturn(Optional.of(user));
         when(user.getNickname()).thenReturn("oldNickname");
         when(repository.existsByNickname("newNickname")).thenReturn(false);
         // when
-        assertThatCode(() -> userService.updateUser(userId, requestDto)).doesNotThrowAnyException();
+        userService.updateUser(userId, requestDto);
         // then
         verify(user).updateNickname("newNickname");
         verify(user, never()).updatePassword(anyString());
     }
 
+    @Test
+    void updateUser_는_닉네임이_변경되지_않은_경우_닉네임_업데이트를_수행하지_않는다() {
+        // given
+        long userId = 1L;
+        String unchangedNickname = "unchangedNickname";
+        UpdateUserRequestDto requestDto = new UpdateUserRequestDto(unchangedNickname, "newPassword");
+        User user = mock(User.class);
+        when(repository.findById(userId)).thenReturn(Optional.of(user));
+        when(user.getNickname()).thenReturn(unchangedNickname);
+        when(passwordEncoder.encode("newPassword")).thenReturn("encodedNewPassword");
+        // when
+        userService.updateUser(userId, requestDto);
+        // then
+        verify(user, never()).updateNickname(anyString());
+        verify(user).updatePassword("encodedNewPassword");
+    }
 }
