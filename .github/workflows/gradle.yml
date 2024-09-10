@@ -70,7 +70,6 @@ jobs:
       run: |  
         ssh -i "my-key-pair.pem" -o StrictHostKeyChecking=no ${{secrets.SSH_EC2_USER}}@${{secrets.SSH_EC2_HOST}} << EOF
           docker login -u ${{ secrets.DOCKER_HUB_ID }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
-          docker rmi -f ${{ secrets.DOCKER_HUB_ID }}/${{ secrets.DOCKER_HUB_REPO }}:latest
           docker pull ${{ secrets.DOCKER_HUB_ID }}/${{ secrets.DOCKER_HUB_REPO }}:latest
           docker stop app
           docker rm app
