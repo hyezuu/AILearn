@@ -37,7 +37,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function displayPostDetails(post) {
-        console.log(post);
         document.getElementById("post-title").textContent = post.title;
         document.getElementById("post-viewCount").textContent = "조회수: " + post.viewCount;
         document.getElementById("post-content").textContent = post.contents;
