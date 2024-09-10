@@ -42,7 +42,7 @@ jobs:
       run: echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_ID --password-stdin
 
     - name: docker build
-      run: docker build -t ai-learn-image .
+      run: docker build -t ${{ secrets.DOCKER_HUB_ID }}/${{ secrets.DOCKER_HUB_REPO }}:latest .
 
     - name: docker push
       run: docker push ${{ secrets.DOCKER_HUB_ID }}/${{ secrets.DOCKER_HUB_REPO }}:latest
@@ -70,10 +70,10 @@ jobs:
       run: |  
         ssh -i "my-key-pair.pem" -o StrictHostKeyChecking=no ${{secrets.SSH_EC2_USER}}@${{secrets.SSH_EC2_HOST}} << EOF
           docker login -u ${{ secrets.DOCKER_HUB_ID }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
+          docker rmi -f ${{ secrets.DOCKER_HUB_ID }}/${{ secrets.DOCKER_HUB_REPO }}:latest
           docker pull ${{ secrets.DOCKER_HUB_ID }}/${{ secrets.DOCKER_HUB_REPO }}:latest
           docker stop app
           docker rm app
-          docker rmi -f ai-learn-image
           docker run -d --name app -p 8080:8080 \
             -e SPRING_PROFILES_ACTIVE=prod \
             -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
