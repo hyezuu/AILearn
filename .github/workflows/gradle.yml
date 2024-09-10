@@ -77,6 +77,7 @@ jobs:
             -e SPRING_PROFILES_ACTIVE=prod \
             -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
             -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            -e MAIL_USERNAME=${{ secrets.MAIL_USERNAME }} \
             -e MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }} \
             -e ALANAI_API_KEY=${{ secrets.ALANAI_API_KEY }} \
             ${{ secrets.DOCKER_HUB_ID }}/${{ secrets.DOCKER_HUB_REPO }}:latest
