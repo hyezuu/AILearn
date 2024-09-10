@@ -4,10 +4,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class grammerExamplesInfoController {
+public class GrammarExamplesInfoController {
 
     @GetMapping("/grammar-examples")
-    public String getGrammerExamplesInfo() {
+    public String getGrammarExamplesInfo() {
         return "grammar-examples/index";
     }
 }
