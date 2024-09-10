@@ -3,7 +3,6 @@ package com.example.ormi5finalteam1.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.ormi5finalteam1.domain.verificationcode.VerificationCode;
-import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
