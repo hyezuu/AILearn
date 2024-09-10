@@ -4,8 +4,8 @@ spring:
 
   datasource:
     url: jdbc:mysql://ai-learn-mysql.czjvlvg6odpf.ap-northeast-2.rds.amazonaws.com:3306/ai_learn
-    username: admin
-    password: adminpassword
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   sql:
@@ -32,7 +32,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: "duudu0704@gmail.com"
-    password: "pehm qcgn owbv muix"
+    password: ${MAIL_PASSWORD}
     properties:
       mail:
         smtp:
@@ -55,4 +55,4 @@ alanai:
   api:
     question_url: https://kdt-api-function.azurewebsites.net/api/v1/question
     sse_streaming_url: https://kdt-api-function.azurewebsites.net/api/v1/sse-streaming
-    key: 5f7e6b7f-dcee-4151-b97e-9063effd27c5
+    key: ${ALANAI_API_KEY}
