@@ -8,6 +8,6 @@ public class grammerExamplesInfoController {
 
     @GetMapping("/grammar-examples")
     public String getGrammerExamplesInfo() {
-        return "/grammar-examples/index";
+        return "grammar-examples/index";
     }
 }
