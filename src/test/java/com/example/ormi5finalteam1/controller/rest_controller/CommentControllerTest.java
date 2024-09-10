@@ -52,7 +52,6 @@ class CommentControllerTest {
         MockitoAnnotations.openMocks(this);
         provider = new Provider(1, "test@example.com", "test", Role.USER, Grade.A1, 0);
 
-        // 인증된 사용자 설정
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(provider, null, Collections.emptyList());
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -68,11 +67,11 @@ class CommentControllerTest {
 
         // When & Then
         mockMvc.perform(post("/api/posts/{postId}/comments", 1L)
-                        .with(csrf())  // CSRF 토큰 추가
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(commentDto)))
-                .andExpect(status().isCreated())  // 201 응답 상태 코드 확인
-                .andExpect(jsonPath("$.content").value("comment content"));  // 응답 JSON에서 "content" 필드 확인
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.content").value("comment content"));
 
         verify(commentService, times(1)).createComment(any(CommentDto.class), any(Provider.class));
     }
@@ -98,7 +97,7 @@ class CommentControllerTest {
     void deleteComment_사용자는_댓글을_삭제할_수_있다() throws Exception {
         // When & Then
         mockMvc.perform(delete("/api/posts/{postId}/comments/{id}", 1L, 1L)
-                        .with(csrf())  // CSRF 토큰 추가
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
@@ -123,4 +122,19 @@ class CommentControllerTest {
 
         verify(commentService, times(1)).getCommentsByUserId(0, 12, provider);
     }
+
+    @Test
+    void deleteComment_권한이_없는_사용자는_댓글을_삭제할_수_없다() throws Exception {
+        // Given
+        doThrow(new SecurityException("No permission")).when(commentService).deleteComment(anyLong(), any(Provider.class));
+
+        // When & Then
+        mockMvc.perform(delete("/api/posts/{postId}/comments/{id}", 1L, 1L)
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+
+        verify(commentService, times(1)).deleteComment(anyLong(), any(Provider.class));
+    }
+
 }

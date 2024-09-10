@@ -95,4 +95,17 @@ class CommentRepositoryTest {
         // Then
         assertNull(result);
     }
+
+    @Test
+    void findByPostIdOrderByCreatedAtAsc_댓글이_없는_게시글일_경우_빈_리스트를_반환한다() {
+        // Given
+        Post newPost = new Post(user, "new title", "new content");
+        newPost = postRepository.save(newPost);
+
+        // When
+        List<Comment> result = commentRepository.findByPostIdOrderByCreatedAtAsc(newPost.getId());
+
+        // Then
+        assertTrue(result.isEmpty());
+    }
 }

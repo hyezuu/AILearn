@@ -95,4 +95,24 @@ class LikeRepositoryTest {
         // Then
         assertTrue(result.isEmpty());
     }
+
+    @Test
+    void findByUserId_페이징이_적용된_경우_올바른_페이지를_반환한다() {
+        // Given
+        Post post2 = new Post(user, "title2", "content2");
+        post2 = postRepository.save(post2);
+
+        Like like2 = new Like(user, post2, LocalDateTime.now());
+        likeRepository.save(like2);
+
+        Pageable pageable = PageRequest.of(0, 1);
+
+        // When
+        Page<Like> result = likeRepository.findByUserId(user.getId(), pageable);
+
+        // Then
+        assertEquals(1, result.getSize());
+        assertEquals(2, result.getTotalElements());
+        assertEquals(2, result.getTotalPages());
+    }
 }
