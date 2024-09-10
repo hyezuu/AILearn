@@ -42,7 +42,7 @@ jobs:
       run: echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_ID --password-stdin
 
     - name: docker build
-      run: docker build -t ${{ secrets.DOCKER_HUB_ID }}/${{ secrets.DOCKER_HUB_REPO }}:latest .
+      run: docker build -t ai-learn-image .
 
     - name: docker push
       run: docker push ${{ secrets.DOCKER_HUB_ID }}/${{ secrets.DOCKER_HUB_REPO }}:latest
@@ -73,6 +73,7 @@ jobs:
           docker pull ${{ secrets.DOCKER_HUB_ID }}/${{ secrets.DOCKER_HUB_REPO }}:latest
           docker stop app
           docker rm app
+          docker rmi -f ai-learn-image
           docker run -d --name app -p 8080:8080 \
             -e SPRING_PROFILES_ACTIVE=prod \
             -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
