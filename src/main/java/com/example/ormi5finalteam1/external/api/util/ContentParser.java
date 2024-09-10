@@ -66,6 +66,7 @@ public class ContentParser {
         String parsedContent = contentValue.substring(startIndex,endIndex);
         parsedContent = parsedContent.replace("\\n", "");
         parsedContent = parsedContent.replace("\\\"", "\"");
+        parsedContent = parsedContent.replace("\\", "");
         return parsedContent;
     }
 
