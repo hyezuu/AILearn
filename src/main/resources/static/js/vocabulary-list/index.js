@@ -166,7 +166,9 @@ function showAlert(title, text, icon) {
   Swal.fire({
     title: title,
     text: text,
-    icon: icon
+    icon: icon,
+    confirmButtonColor: '#3085d6',
+    confirmButtonText: '확인'
   });
 }
 
