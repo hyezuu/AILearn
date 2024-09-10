@@ -67,7 +67,7 @@ public class GrammarExampleService {
       grammarExampleGradingDto.setCorrect(true);
 
       // 정답일 경우 사용자 경험치 포인트 상승
-      userPointService.addPointsToUser(userId, 1); // todo: 포인트 상수관리
+      userPointService.addGrammarExamplePointsToUser(userId);
     }
 
     grammarExampleGradingDto.setData(grammarExampleDto);
