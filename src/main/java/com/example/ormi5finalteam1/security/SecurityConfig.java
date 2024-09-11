@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -31,13 +30,15 @@ public class SecurityConfig {
             .authorizeHttpRequests(api -> api
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/static/**").permitAll()
                 .requestMatchers("/signup", "/login", "/", "/forgot-password").permitAll()
-                .requestMatchers("/api/nickname-duplication","/api/email-duplication").permitAll()
-                .requestMatchers("/api/request-verification", "/api/verify-email", "/api/auth/password").permitAll()
-                .requestMatchers("/*/signup","/*/login").permitAll()
+                .requestMatchers("/api/nickname-duplication", "/api/email-duplication").permitAll()
+                .requestMatchers("/api/request-verification", "/api/verify-email",
+                    "/api/auth/password").permitAll()
+                .requestMatchers("/*/signup", "/*/login").permitAll()
                 .requestMatchers("/api/me").hasRole("USER")
                 .requestMatchers("/my").hasRole("USER")
-                    .requestMatchers("/tests", "/tests/level-tests", "/level-tests", "/test-result").authenticated()
-                .anyRequest().hasAnyRole("USER","ADMIN"))
+                .requestMatchers("/tests", "/tests/level-tests", "/level-tests", "/test-result")
+                .authenticated()
+                .anyRequest().hasAnyRole("USER", "ADMIN"))
             .formLogin(form -> form
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
@@ -47,14 +48,6 @@ public class SecurityConfig {
             )
             .logout(logout -> logout.logoutUrl("/logout"))
             .authenticationProvider(provider)
-//            .requiresChannel(channel -> channel.anyRequest().requiresSecure()) // HTTPS 리다이렉트 설정 추가
-            .with(new MyCustomDsl(), myCustomDsl -> {
-                try {
-                    myCustomDsl.init(http);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            })
             .exceptionHandling(exceptions -> exceptions
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 .authenticationEntryPoint((request, response, authException) -> {
@@ -72,18 +65,5 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(
         AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
-    }
-
-    public static class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurity> {
-
-        @Override
-        public void configure(HttpSecurity http) {
-            AuthenticationManager authenticationManager = http.getSharedObject(
-                AuthenticationManager.class);
-            http
-                .addFilterBefore(
-                    new ProviderBasicAuthenticationFilter(authenticationManager),
-                    BasicAuthenticationFilter.class);
-        }
     }
 }
