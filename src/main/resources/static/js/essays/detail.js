@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
     const essayId = window.location.pathname.split("/").pop(); // URL에서 ID를 추출
-    console.log(essayId);
     fetchEssayDetails(essayId);
 
     function fetchEssayDetails(id) {
@@ -18,7 +17,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 return response.json();
             })
             .then(data => {
-                console.log("Received data:", data); // 데이터를 콘솔에 출력해서 확인
                 displayEssayDetails(data);
             })
             .catch(error => {

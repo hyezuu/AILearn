@@ -37,7 +37,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 return response.json();
             })
             .then(data => {
-                console.log("Received data:", data); // 데이터를 콘솔에 출력해서 확인
                 displayPostDetails(data);
             })
             .catch(error => {
@@ -58,8 +57,6 @@ document.addEventListener("DOMContentLoaded", function() {
         if(post.userId === userId && post.userId !== 0) {
             document.querySelector(".button-container").style.display = "block";
         }
-        console.log("postUI:"+ post.userId)
-        console.log("userId: "+ userId);
     }
 
     function displayPostError(error) {
@@ -107,7 +104,6 @@ document.addEventListener("DOMContentLoaded", function() {
                     });
                 })
                 .then(data => {
-                    console.log("Success:", data);
                     window.location.href = "/posts";
                 })
                 .catch(error => {
@@ -147,7 +143,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 });
             })
             .then(data => {
-                console.log("Success:", data);
                 document.getElementById("input-comment-value").value = "";
                 fetchComments();
             })
@@ -259,7 +254,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 return response.json();
             })
             .then(data => {
-                console.log("---Like Received data:", data); // 데이터를 콘솔에 출력해서 확인
                 unchecked.style.display = "none";
                 checked.style.display = "none";
                 displayLike(data);
@@ -301,7 +295,6 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         })
             .then(data => {
-                console.log("Success:", data);
 
                 fetchLike(postId)
             })
@@ -332,7 +325,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 });
             })
             .then(data => {
-                console.log("Success:", data);
 
                 fetchLike(postId)
             })

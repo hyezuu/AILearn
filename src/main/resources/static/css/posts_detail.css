@@ -39,17 +39,20 @@ label {
     font-size: 18pt;
     font-weight: 600;
 }
-label>a {
+
+label > a {
     display: inline-flex;
     align-items: center;
     margin-left: 10px;
 }
+
 /* 제목과 내용 공통 */
 input[type="text"], textarea {
     width: 100%;
     padding: 8px;
     margin-top: 5px;
 }
+
 label[for="content"], label[for="title"] {
     margin-top: 30px;
 }
@@ -90,11 +93,12 @@ input[name="title"] {
     opacity: 50%;
     cursor: pointer;
 }
+
 .button-container img:hover {
     opacity: 100%;
 }
 
-.button-like-checked img{
+.button-like-checked img {
     width: 28px;
     height: 28px;
     vertical-align: middle;
@@ -111,7 +115,7 @@ input[name="title"] {
     margin-left: 22px;
 }
 
-.button-like-unchecked img{
+.button-like-unchecked img {
     width: 28px;
     height: 28px;
     vertical-align: middle;
@@ -173,10 +177,10 @@ textarea {
 }
 
 .comment-form button {
-    writing-mode: horizontal-tb;  /* 텍스트를 가로로 표시 */
-    text-orientation: mixed;  /* 텍스트 방향을 기본값으로 설정 */
-    white-space: nowrap;  /* 텍스트가 한 줄로 표시되도록 설정 */
-    padding : 6px 30px;
+    writing-mode: horizontal-tb; /* 텍스트를 가로로 표시 */
+    text-orientation: mixed; /* 텍스트 방향을 기본값으로 설정 */
+    white-space: nowrap; /* 텍스트가 한 줄로 표시되도록 설정 */
+    padding: 6px 30px;
     background-color: #2e5dbd;
     color: white;
     font-size: 1.1rem;
@@ -185,6 +189,7 @@ textarea {
     border-radius: 10px;
     margin-left: 20px;
 }
+
 .comment-form button:hover {
     background-color: #103889;
 }
@@ -194,7 +199,7 @@ textarea {
 .comment {
     margin-bottom: 20px;
     border: 1px solid #d4e9f7;
-    background: rgba(212,233,247,0.3);
+    background: rgba(212, 233, 247, 0.3);
     padding: 15px;
     border-radius: 5px;
 }
@@ -217,7 +222,7 @@ textarea {
 }
 
 .delete-comment img {
-    width: 16px;  /* 이미지 크기 조정 */
+    width: 16px; /* 이미지 크기 조정 */
     height: 16px;
     vertical-align: middle;
     opacity: 50%;
@@ -226,7 +231,6 @@ textarea {
 .delete-comment img:hover {
     opacity: 100%;
 }
-
 
 
 .comment-date {

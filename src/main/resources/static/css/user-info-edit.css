@@ -18,18 +18,6 @@ a {
     color: black;
 }
 
-header {
-    display: flex;
-    padding-right: 30px;
-    background: white;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    filter: drop-shadow(0 1px 3px #A8A8A8);
-    z-index: 1000;
-}
-
 /* main 내용 */
 .container {
     max-width: 880px;
@@ -150,7 +138,7 @@ hr {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 .modal-content {
@@ -210,6 +198,7 @@ hr {
 #cancelWithdrawal:hover {
     background-color: #5a6268;
 }
+
 /* 마이페이지 리스트 스타일 유지 */
 .my-page-list {
     display: flex;

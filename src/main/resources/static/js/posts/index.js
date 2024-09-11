@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     searchForm.addEventListener("submit", function(event) {
         event.preventDefault(); // 페이지 새로고침 방지
-        console.log("search-submit")
         const searchQuery = searchInput.value;
         currentPage = 0; // 검색 시 페이지를 1페이지로 초기화
         fetchPosts(currentPage, pageSize, searchQuery);

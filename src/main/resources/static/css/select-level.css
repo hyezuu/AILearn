@@ -39,9 +39,10 @@ p {
     gap: 20px;
 }
 
-#gradeForm{
+#gradeForm {
     margin: 50px;
 }
+
 .card {
     background-color: #f9f9f9;
     border: 1px solid #ddd;
