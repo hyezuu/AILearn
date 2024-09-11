@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -30,6 +31,7 @@ import com.example.ormi5finalteam1.service.EmailService;
 import com.example.ormi5finalteam1.service.PostService;
 import com.example.ormi5finalteam1.service.VocabularyService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -123,34 +125,28 @@ public class Ormi5FinalTeam1ApplicationTests {
 
         Provider provider = user.toProvider();
 
-        // 2. 로그인 테스트
-        MvcResult loginResult = mockMvc.perform(post("/login")
-                .with(csrf())
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("username", "testuser@example.com")
-                .param("password", "password123")
-                .session(session))
-            .andExpect(status().is3xxRedirection())
-            .andExpect(result -> {
-                String redirectedUrl = result.getResponse().getRedirectedUrl();
-                if (!"/tests".equals(redirectedUrl) && !"/".equals(redirectedUrl)) {
-                    throw new AssertionError("Unexpected redirect URL: " + redirectedUrl);
-                }
-            })
-            .andReturn();
+		// 2. 로그인 테스트
+		MvcResult loginResult = mockMvc.perform(post("/login")
+				.with(csrf())
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("username", "testuser@example.com")
+				.param("password", "password123")
+				.session(session))
+			.andExpect(status().isOk())
+			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+			.andExpect(jsonPath("$.redirectUrl").exists())
+			.andReturn();
 
-        // 로그인 후 세션 업데이트
-        session = (MockHttpSession) loginResult.getRequest().getSession();
+		// 로그인 후 세션 업데이트
+		session = (MockHttpSession) loginResult.getRequest().getSession();
 
-        // 리다이렉트 URL에 따른 페이지 로드 테스트
-        String redirectedUrl = loginResult.getResponse().getRedirectedUrl();
-        if ("/tests".equals(redirectedUrl)) {
-            mockMvc.perform(get("/tests").session(session))
-                .andExpect(status().isOk());
-        } else {
-            mockMvc.perform(get("/").session(session))
-                .andExpect(status().isOk());
-        }
+		// JSON 응답에서 redirectUrl 추출
+		String responseContent = loginResult.getResponse().getContentAsString();
+		String redirectUrl = JsonPath.parse(responseContent).read("$.redirectUrl");
+
+		// 리다이렉트 URL에 따른 페이지 로드 테스트
+		mockMvc.perform(get(redirectUrl).session(session))
+			.andExpect(status().isOk());
 
         // 3. 사용자 정보 조회 테스트
         mockMvc.perform(get("/api/me")
