@@ -10,31 +10,29 @@
 </defs>
 </svg>
 
-# AILearn - 온라인 영어 학습 서비스
+# AILearn - AI를 활용한 온라인 영어 학습 서비스
 <img width="1320" alt="스크린샷 2024-09-09 오후 1 58 59" src="https://github.com/user-attachments/assets/e61d757f-faba-46cb-9365-f3af51d3ff25">
+<br>
 
-# AILearn - 온라인 영어 학습 서비스
+## 📚 목차 
+[![프로젝트 소개](https://img.shields.io/badge/📌-프로젝트_소개-blue)](#-프로젝트-소개) 
+[![프로젝트 개요](https://img.shields.io/badge/🚩-프로젝트_개요-green)](#-프로젝트-개요) 
+[![주요 기능](https://img.shields.io/badge/🎯-주요_기능-yellow)](#-주요-기능) 
+[![팀 구성](https://img.shields.io/badge/👥-팀_구성-orange)](#-팀-구성-및-역할) 
+[![기술 스택](https://img.shields.io/badge/🛠-기술_스택-red)](#-기술-스택) 
+[![아키텍처](https://img.shields.io/badge/🌐-아키텍처-purple)](#-아키텍처) 
+[![요구사항](https://img.shields.io/badge/📋-요구사항-lightgrey)](#-요구사항-정의서) 
+[![UI/UX](https://img.shields.io/badge/🖥-UI/UX-brightgreen)](#-화면-구성) 
+[![ERD](https://img.shields.io/badge/🔗-ERD-lightblue)](#-erd) 
+[![API](https://img.shields.io/badge/📜-API-pink)](#-api-명세서) 
 
-## 📚 목차
-
-[![프로젝트 소개](https://img.shields.io/badge/📌-프로젝트_소개-blue)](#-프로젝트-소개)
-[![프로젝트 개요](https://img.shields.io/badge/🚩-프로젝트_개요-green)](#-프로젝트-개요)
-[![주요 기능](https://img.shields.io/badge/🎯-주요_기능-yellow)](#-주요-기능)
-[![팀 구성](https://img.shields.io/badge/👥-팀_구성-orange)](#-팀-구성-및-역할)
-[![기술 스택](https://img.shields.io/badge/🛠-기술_스택-red)](#-기술-스택)
-[![아키텍처](https://img.shields.io/badge/🌐-아키텍처-purple)](#-아키텍처)
-[![요구사항](https://img.shields.io/badge/📋-요구사항-lightgrey)](#-요구사항-정의서)
-[![UI/UX](https://img.shields.io/badge/🖥-UI/UX-brightgreen)](#-화면-구성)
-[![ERD](https://img.shields.io/badge/🔗-ERD-lightblue)](#-erd)
-[![API](https://img.shields.io/badge/📜-API-pink)](#-api-명세서)
-
----
-
+<br>
 
 ## 📌 프로젝트 소개
 
-AILearn은 AI 기술을 활용한 혁신적인 온라인 영어 학습 플랫폼입니다. 
-Alan AI를 통해 개인화된 학습 경험을 제공하며, 사용자의 영어 실력 향상을 효과적으로 지원합니다.
+AILearn은 AI 기술을 활용한 혁신적인 온라인 영어 학습 플랫폼입니다.
+<br>
+ Alan AI를 통해 개인화된 학습 경험을 제공하며, 사용자의 영어 실력 향상을 효과적으로 지원합니다.
 
 ## 🚩 프로젝트 개요
 - 프로젝트 이름: AILearn
@@ -56,13 +54,13 @@ Alan AI를 통해 개인화된 학습 경험을 제공하며, 사용자의 영�
 
 | 이름            | 역할                           | 담당 업무 |
 |-----------------|--------------------------------|-----------|
-| **문순려** <br> (팀장)  | **Backend / DevOps**            | - CI/CD 파이프라인 구축 및 배포 환경 설정<br>- AlanAI 기능 구현<br>- 문법 예문 API 개발 |
-| **이상윤** <br> (서기)  | **Frontend / Backend**         | - AlanAI 기능 구현<br>- 에세이 작성 및 수정 기능 개발<br>- 게시글, 댓글, 좋아요, 문법 예문 API 연동 및 CSS 작업<br>- 마이페이지 - 회원 정보 페이지 구현<br>- 에세이 도메인 슬라이스 테스트 작성 |
-| **강혜주**      | **Frontend / Backend**         | - AlanAI 기능 구현<br>- 단어장 기능 개발<br>- 인증, 인가 및 회원 관리 기능 개발<br>- 단어장 및 유저 도메인 슬라이스 테스트 작성<br>- 로그인, 회원가입, 비밀번호 찾기 페이지 개발 및 API 연동<br>- 통합 시나리오 테스트 작성 |
-| **안정민**      | **Frontend / Backend**         | - 게시글 기능 개발<br>- 댓글 기능 개발<br>- 좋아요 기능 개발<br>- 게시글, 댓글, 좋아요 도메인 슬라이스 테스트 작성<br>- 통합 시나리오 테스트 작성 |
-| **유나영**      | **Frontend / Backend**         | - 관리자 기능 개발<br>- 레벨테스트 기능 개발<br>- 레벨테스트 페이지(등급 선택, 문제 출제, 결과 확인) 구현<br>- 관리자 및 레벨테스트 API 연동<br>- 레벨테스트 도메인 슬라이스 테스트 작성 |
-| **김성연**      | **Frontend / Design**          | - Figma 디자인 및 웹 퍼블리싱<br>- 마이페이지(내 게시글, 회원 정보 수정) 페이지 구현<br>- 관리자 페이지(사용자 및 게시글 조회) 구현<br>- 로그인, 회원가입, 비밀번호 찾기 페이지 구현 |
-| **이소정**      | **Frontend / Design**          | - Figma 디자인 및 웹 퍼블리싱<br>- 홈 페이지 및 자유게시판(게시글 등록, 수정, 조회) 페이지 구현<br>- 내 단어장 및 문법 예문 목록 조회 페이지 구현<br>- 에세이 작성, 수정 및 첨삭 페이지 구현 |
+| **[문순려](https://github.com/Sunryeo)** <br> (팀장) | **DevOps / Backend **      | - CI/CD 파이프라인 구축 및 배포 환경 설정<br> - AlanAI 기능 구현<br>- 문법 예문 API 개발 |
+| **[이상윤](https://github.com/nigoleto)**  <br> (서기)  | **Backend/Frontend**           | - AlanAI 기능 구현<br>- 에세이 작성 및 수정 기능 개발<br>- 게시글, 댓글, 좋아요, 문법 예문 API 연동 및 CSS 작업<br>- 마이페이지 - 회원 정보 페이지 구현<br>- 에세이 도메인 슬라이스 테스트 작성 |
+| **[강혜주](https://github.com/hyezuu)**   | **Backend/Frontend**         | - AlanAI 기능 구현<br>- 단어장 기능 개발<br>- 인증, 인가 및 회원 관리 기능 개발<br>- 단어장 및 유저 도메인 슬라이스 테스트 작성<br>- 로그인, 회원가입, 비밀번호 찾기 페이지 개발 및 API 연동<br>- 통합 시나리오 테스트 작성 |
+| **[안정민](https://github.com/jminiiiz)**       | **Backend/Frontend**          | - 게시글 기능 개발<br>- 댓글 기능 개발<br>- 좋아요 기능 개발<br>- 게시글, 댓글, 좋아요 도메인 슬라이스 테스트 작성<br>- 통합 시나리오 테스트 작성 |
+| **[유나영](https://github.com/fjeos)**      | **Backend/Frontend**        | - 관리자 기능 개발<br>- 레벨테스트 기능 개발<br>- 레벨테스트 페이지(등급 선택, 문제 출제, 결과 확인) 구현<br>- 관리자 및 레벨테스트 API 연동<br>- 레벨테스트 도메인 슬라이스 테스트 작성 |
+| **[김성연](https://github.com/ttt0342)**       | **Frontend / Design**          | - Figma 디자인 및 웹 퍼블리싱<br>- 마이페이지(내 게시글, 회원 정보 수정) 페이지 구현<br>- 관리자 페이지(사용자 및 게시글 조회) 구현<br>- 로그인, 회원가입, 비밀번호 찾기 페이지 구현 |
+| **[이소정](https://github.com/dubu77)**       | **Frontend / Design**          | - Figma 디자인 및 웹 퍼블리싱<br>- 홈 페이지 및 자유게시판(게시글 등록, 수정, 조회) 페이지 구현<br>- 내 단어장 및 문법 예문 목록 조회 페이지 구현<br>- 에세이 작성, 수정 및 첨삭 페이지 구현 |
 
 ---
 
@@ -98,7 +96,6 @@ Alan AI를 통해 개인화된 학습 경험을 제공하며, 사용자의 영�
 <img width="1278" alt="스크린샷 2024-09-09 오후 1 51 36" src="https://github.com/user-attachments/assets/d727e542-9607-4ab2-b256-2822476baac0">
 
 ---
-<br>
 
 ## 📋 요구사항 정의서
 
@@ -185,13 +182,11 @@ Alan AI를 통해 개인화된 학습 경험을 제공하며, 사용자의 영�
     
 ---
 
-<br>
-
 ## 🖥 화면 구성
 
 | 홈화면 | 회원가입 |
 | :---: | :---: |
-| ![홈화면](https://github.com/user-attachments/assets/851fef8d-d16b-4e1f-a612-2cdefefd29dd) | ![회원가입](https://github.com/user-attachments/assets/fd2f0221-3361-4205-aefa-5a204c429455) |
+| ![홈화면](https://github.com/user-attachments/assets/4d0f1072-c7d5-46d8-83f1-dde0fa26ee0a) | ![회원가입](https://github.com/user-attachments/assets/fd2f0221-3361-4205-aefa-5a204c429455) |
 
 | 메일인증 | 비밀번호찾기 |
 | :---: | :---: |
@@ -254,9 +249,6 @@ Alan AI를 통해 개인화된 학습 경험을 제공하며, 사용자의 영�
 | ![사용자 계정 정지](https://github.com/user-attachments/assets/6db67378-c488-4832-9091-ff712a0ed098) | ![사용자 계정 탈퇴](https://github.com/user-attachments/assets/12916a0f-766d-46ed-b863-939438869ff3) |
 
 ---
-<br>
-
-
 
 ## 📜 API 명세서
 
