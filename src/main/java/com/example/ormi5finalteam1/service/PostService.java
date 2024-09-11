@@ -116,10 +116,7 @@ public class PostService {
     // 관리자가 게시글 상세 조회시 호출되는 메서드
     public Post getPostByAdmin(Long postId) {
 
-        System.out.println("getPostByAdmin");
-        Post post = postRepository.findById(postId).orElseThrow(() -> new BusinessException(ErrorCode.POST_NOT_FOUND));
-        System.out.println(post.getTitle() + "   " + post.getId() + "   " + post.getUser().getNickname());
-        return post;
+        return postRepository.findById(postId).orElseThrow(() -> new BusinessException(ErrorCode.POST_NOT_FOUND));
     }
 
 

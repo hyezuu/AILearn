@@ -34,8 +34,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/nickname-duplication","/api/email-duplication").permitAll()
                 .requestMatchers("/api/request-verification", "/api/verify-email", "/api/auth/password").permitAll()
                 .requestMatchers("/*/signup","/*/login").permitAll()
-                .requestMatchers("/api/me").hasRole("USER")
-                .requestMatchers("/my").hasRole("USER")
+                .requestMatchers("/api/me").hasAnyRole("USER","ADMIN")
+                .requestMatchers("/my").hasAnyRole("USER","ADMIN")
                     .requestMatchers("/tests", "/tests/level-tests", "/level-tests", "/test-result").authenticated()
                 .anyRequest().hasAnyRole("USER","ADMIN"))
             .formLogin(form -> form
