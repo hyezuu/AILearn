@@ -81,7 +81,7 @@ textarea {
 /* 삭제 버튼 */
 .delete-button {
     padding : 6px 30px;
-    background-color: #de3939;
+    background-color: #891010;
     color: white;
     font-size: 1.1rem;
     font-weight: 600;
@@ -90,12 +90,12 @@ textarea {
     margin-left: 20px;
 }
 .delete-button:hover {
-    background-color: #c61515;
+    background-color: #630c0c;
 }
 /* 수정 버튼 */
 .edit-button {
     padding : 6px 30px;
-    background-color: #1d62f8;
+    background-color: #103889;
     color: white;
     font-size: 1.1rem;
     font-weight: 600;
