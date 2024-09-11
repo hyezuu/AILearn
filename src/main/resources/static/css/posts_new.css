@@ -78,13 +78,14 @@ textarea {
     font-weight: 600;
     padding-bottom: 5px;
 }
+
 #back-to-list span {
     font-size: 1.6rem;
 }
 
 /* 등록버튼 */
 button[type="submit"] {
-    padding : 8px 40px;
+    padding: 8px 40px;
     background-color: #103889;
     color: white;
     font-weight: 600;
@@ -92,6 +93,7 @@ button[type="submit"] {
     border: none;
     border-radius: 7px;
 }
+
 button[type="submit"]:hover {
     background-color: #173db9;
 }

@@ -23,56 +23,25 @@ $(document).ready(function() {
     });
 });
 
-// 페이지 로드시 로그인 확인해서 LOGOUT 출력
-window.onload = function () {
-fetch('/api/me')
-    .then(response => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error('Network response was not ok');
-        }
-    })
-    .then(user => {
-        document.getElementById('logout-button').style.display = 'block';
-        displayProfile(user);
-    })
-    .catch(error => {
-        document.getElementById('login-button').style.display = 'block';
-        document.getElementById('signup-button').style.display = 'block';
-    });
 
-    function displayProfile(user) {
-        const imageElement = document.getElementById('profile-img');
 
-        console.log(user.id);
-        if(user.id % 3 === 2) {
-            imageElement.src = '/images/profile1.png';
-        } else if (user.id % 3 === 0) {
-            imageElement.src = '/images/profile2.png';
-        } else {
-            imageElement.src = '/images/profile.png';
-        }
-
-    }
-};
-
-// 프로필 경험치 바
 document.addEventListener("DOMContentLoaded", function () {
-const pointValue = document.getElementById("point-text").textContent;
-const point = parseInt(pointValue, 10); // point 값을 정수로 변환
-const progressBar = document.getElementById("progress-bar");
-const pointDisplay = document.getElementById("point-display");
+    getUserId();
+    // 프로필 경험치 바
+    const pointValue = document.getElementById("point-text").textContent;
+    const point = parseInt(pointValue, 10); // point 값을 정수로 변환
+    const progressBar = document.getElementById("progress-bar");
+    const pointDisplay = document.getElementById("point-display");
 
-// 포인트에 따른 진행 바의 너비를 계산 (포인트가 0에서 10 사이이므로 10%씩 증가)
-const progressPercentage = (point / 10) * 100;
+    // 포인트에 따른 진행 바의 너비를 계산 (포인트가 0에서 10 사이이므로 10%씩 증가)
+    const progressPercentage = (point / 10) * 100;
 
-// 진행 바 업데이트
-progressBar.style.width = progressPercentage + "%";
+    // 진행 바 업데이트
+    progressBar.style.width = progressPercentage + "%";
 
-// point 값을 progress-bar의 오른쪽 끝 부분에 표시
-pointDisplay.style.left = progressPercentage + "%";
-pointDisplay.textContent = `${point} p`;
+    // point 값을 progress-bar의 오른쪽 끝 부분에 표시
+    pointDisplay.style.left = progressPercentage + "%";
+    pointDisplay.textContent = `${point} p`;
 
 
     // SweetAlert2 라이브러리 추가
@@ -87,6 +56,38 @@ pointDisplay.textContent = `${point} p`;
     }
 
     function initializeApp() {
+    }
+
+    // User 불러오기
+    async function getUserId() {
+        try {
+            const response = await fetch("/api/me", {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'  // 세션 쿠키를 포함하여 요청
+            });
+            const data = await response.json();
+            displayProfile(data);
+            document.getElementById('logout-button').style.display = 'block';
+            document.getElementById('logout-button').style.color = '#777';
+
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+        }
+    }
+
+    function displayProfile(user) {
+        const imageElement = document.getElementById('profile-img');
+
+        if(user.id % 3 === 2) {
+            imageElement.src = '/images/profile1.png';
+        } else if (user.id % 3 === 0) {
+            imageElement.src = '/images/profile2.png';
+        } else {
+            imageElement.src = '/images/profile.png';
+        }
     }
 });
 

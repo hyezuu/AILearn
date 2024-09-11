@@ -39,17 +39,20 @@ label {
     font-size: 18pt;
     font-weight: 600;
 }
-label>a {
+
+label > a {
     display: inline-flex;
     align-items: center;
     margin-left: 10px;
 }
+
 /* 제목과 내용 공통 */
 input[type="text"], textarea {
     width: 100%;
     padding: 8px;
     margin-top: 5px;
 }
+
 label[for="content"], label[for="title"] {
     margin-top: 30px;
 }
@@ -91,6 +94,7 @@ input[name="title"] {
     margin-top: 20px;
     opacity: 50%;
 }
+
 .button-container img:hover {
     opacity: 100%;
 }
@@ -113,7 +117,7 @@ textarea {
 }
 
 .buttons button {
-    padding : 6px 30px;
+    padding: 6px 30px;
     background-color: #103889;
     color: white;
     font-size: 1.1rem;
@@ -121,6 +125,7 @@ textarea {
     border: none;
     border-radius: 10px;
 }
+
 .buttons button:hover {
     background-color: #173db9;
 }
@@ -137,6 +142,7 @@ textarea {
     font-weight: 600;
     padding-bottom: 5px;
 }
+
 #back-to-list span {
     font-size: 1.6rem;
 }

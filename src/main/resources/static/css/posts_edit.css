@@ -25,6 +25,7 @@ h1 {
 /* 게시글 폼 */
 form {
     margin: 70px;
+    max-width: 800px;
     display: flex;
     flex-direction: column;
 }

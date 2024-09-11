@@ -28,7 +28,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 return response.json();
             })
             .then(data => {
-                console.log("Received data:", data); // 데이터를 콘솔에 출력해서 확인
                 displayEssayData(data);
             })
             .catch(error => {
@@ -89,7 +88,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 });
             })
             .then(data => {
-                console.log("Success:", data);
                 window.location.href = `/essays/${essayId}`;
             })
             .catch(error => {

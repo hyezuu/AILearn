@@ -1,112 +1,127 @@
 * {
-    margin: auto 0;
+    margin: 0;
     padding: 0;
 }
+
 #layout {
     width: 100%;
     height: 100%;
 }
+
 a {
     text-decoration: none;
     color: #777;
 }
+
 a:hover {
     color: #000;
 }
+
 /* 로그인, 로그아웃, 회원가입 버튼  */
 #login-button, #logout-button, #signup-button {
     font-family: "IBM Plex Sans KR", sans-serif;
     font-weight: bold;
     color: #777;
 }
+
 #login-button:hover {
     color: #000;
 }
+
 #logout-button:hover {
     color: #000;
 }
+
 #signup-button:hover {
     color: #000;
 }
 
-
 header {
     display: flex;
-    padding-right: 30px;
     background: white;
     position: fixed;
-    width: 100%;
-    filter:drop-shadow(0 1px 3px #b2b6cb);
+    font-family: "IBM Plex Sans KR", sans-serif;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    filter: drop-shadow(0 1px 3px #b2b6cb);
     z-index: 1000;
 }
-header h2 {
-    flex: 1;
-}
-header h2 a {
-    width: 200px;
-    height: 40px;
+
+/* 로고 */
+h2 img {
     display: block;
 }
-/* 로고 */
-header img {
-    margin-top: 5px;
-    margin-left: 90px;
+
+header li {
+    padding: 8px;
 }
-/* 로그인 */
-header li:first-child a {
+
+header li a {
     font-weight: bold;
     color: #777;
 }
-header li:nth-child(2) a {
-    font-weight: bold;
-    color: #777;
-}
-/* 메뉴 화살표 */
-header li span {
-    margin-bottom: 5px;
-}
+
 /*메뉴*/
 header ul {
-    flex: 0.3;
     list-style: none;
     display: flex;
-    padding-top: 2px;
-    width: 200px;
 }
-header li { flex: 2; position: relative;}
-header span { margin-top: 7px; display: inline-block; }
+
 /*메인메뉴*/
 a.mainMenu {
-    color: #777;
+    width: 160px;
+    color: #000;
+    opacity: 60%;
     font-size: 1rem;
     font-weight: bold;
-    display: block;
-    padding: 6px;
+    display: flex;
     text-align: center;
+    justify-content: center;
     font-family: "IBM Plex Sans KR", sans-serif;
 }
-a.mainMenu:hover, a.mainMenu.act { color: #000; font-weight: bold; }
+
+a.mainMenu:hover, a.mainMenu.act {
+    color: #000;
+    opacity: 100%;
+    font-weight: bold;
+}
+
 /*서브메뉴*/
 header nav {
     background: #f9f9f9;
-    top: 35px;
+    top: 40px;
     position: absolute;
-    width: 100%;
+    width: 160px;
     display: none;
     z-index: 10;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
 }
+
 header nav a {
     display: block;
     padding: 4px;
     text-align: center;
+    border: none;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
+
 header nav a:hover {
     background: #e1e1e1;
     font-weight: bold;
     color: #000000;
 }
-header nav a:last-child {
-    display: none;
+
+.nav-container {
+    padding: 0 20px 0 70px;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu-img {
+    width: 20px;
 }

@@ -9,9 +9,6 @@ body {
     background-color: #f4f4f4;
 }
 
-header{
-    height: 40px;
-}
 
 main {
     display: flex;
@@ -30,7 +27,7 @@ main {
     text-align: center;
 }
 
-h2 {
+main h2 {
     font-size: 24px;
     color: #333;
     margin-bottom: 20px;

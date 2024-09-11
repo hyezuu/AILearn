@@ -99,8 +99,6 @@ document.addEventListener("DOMContentLoaded", async function() {
             </form>
         `;
 
-
-
             container.appendChild(grammarElement);
         });
         gradingGrammarExample();
@@ -170,23 +168,7 @@ document.addEventListener("DOMContentLoaded", async function() {
 
     // 페이지네이션
     function renderPagination() {
-        // const container = document.getElementById('paginationContainer');
-        // container.innerHTML = '';
-        //
-        // const totalPages = Math.ceil(userGrammarExamples / pageSize);
-        //
-        // for (let i = 0; i < totalPages; i++) {
-        //     const pageButton = document.createElement('button');
-        //     pageButton.innerText = i + 1;
-        //     pageButton.addEventListener('click', () => {
-        //         currentPage = i;
-        //         fetchGrammarExamples(currentPage);
-        //     });
-        //     if (i === currentPage) {
-        //         pageButton.disabled = true;
-        //     }
-        //     container.appendChild(pageButton);
-        // }
+
         const container = document.getElementById('paginationContainer');
         container.innerHTML = '';
 
@@ -239,14 +221,6 @@ document.addEventListener("DOMContentLoaded", async function() {
             });
             container.appendChild(lastButton);
         }
-    }
-
-    function showAlert(title, text, icon) {
-        Swal.fire({
-            title: title,
-            text: text,
-            icon: icon
-        });
     }
 
 });
