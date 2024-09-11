@@ -97,4 +97,11 @@ public class TestInfoController {
         return userService.loadUserByUsername(provider.email());
     }
 
+    @ExceptionHandler(BusinessException.class)
+    public String handleBusinessException(BusinessException e, Model model) {
+
+        model.addAttribute("errorMessage", e.getMessage());
+        return "tests/error";
+    }
+
 }

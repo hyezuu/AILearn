@@ -29,6 +29,7 @@ public class AdminService {
     private final PostService postService;
     private final CommentService commentService;
 
+    @Transactional(readOnly = true)
     public Page<UserInfoDto> getAllUserList(Pageable pageable, String nickname) {
 
         // 키워드가 null 이거나 빈 문자열이면 전체 조회, 그렇지 않으면 검색
@@ -39,10 +40,9 @@ public class AdminService {
         }
     }
     public void changeUserStatus(Long userId) {
-
         User normalUser = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
-        if (normalUser.getRole() == Role.ADMIN) throw new BusinessException(ErrorCode.HAS_ADMIN_AUTHORITY);
+        if (normalUser.getRole() == Role.ADMIN)  throw new BusinessException(ErrorCode.HAS_ADMIN_AUTHORITY);
         if (normalUser.getDeletedAt() == null) {
             if (normalUser.isActive()) normalUser.deactivateUser();
             else normalUser.activateUser();
@@ -70,11 +70,13 @@ public class AdminService {
         commentService.deleteCommentByAdmin(postId, commentId);
     }
 
+    @Transactional(readOnly = true)
     public Page<AdminPostListDto> getAllPostList(Pageable pageable, String keyword) {
 
         return postService.getAllPostsByAdmin(pageable, keyword);
     }
 
+    @Transactional(readOnly = true)
     public AdminPostDetailDto getPostById(Long postId) {
 
         return AdminPostDetailDto.toDto(postService.getPostByAdmin(postId),
