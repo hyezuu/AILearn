@@ -58,7 +58,7 @@ class CommentServiceTest {
                 .nickname("testUser")
                 .build();
         Post post = new Post(user, "title", "content");
-        CommentDto commentDto = new CommentDto(null, 1L, "testUser", 1L, "test post title","comment content", LocalDateTime.now());
+        CommentDto commentDto = new CommentDto(null, 1L, "testUser", Grade.A1, 1L, "test post title","comment content", LocalDateTime.now());
 
         when(userService.getUser(provider.id())).thenReturn(user);
         when(postService.getPost(commentDto.getPostId())).thenReturn(post);

@@ -60,8 +60,8 @@ class CommentControllerTest {
     @Test
     void createComment_사용자는_댓글을_작성할_수_있다() throws Exception {
         // Given
-        CommentDto commentDto = new CommentDto(null, 1L, "testUser", 1L, "test post title", "comment content", LocalDateTime.now());
-        CommentDto createdComment = new CommentDto(1L, 1L, "testUser", 1L, "test post title", "comment content", LocalDateTime.now());
+        CommentDto commentDto = new CommentDto(null, 1L, "testUser", Grade.A1, 1L, "test post title", "comment content", LocalDateTime.now());
+        CommentDto createdComment = new CommentDto(1L, 1L, "testUser", Grade.A1, 1L, "test post title", "comment content", LocalDateTime.now());
 
         when(commentService.createComment(any(CommentDto.class), any(Provider.class))).thenReturn(createdComment);
 
@@ -80,7 +80,7 @@ class CommentControllerTest {
     void getComments_게시글의_댓글_목록을_조회할_수_있다() throws Exception {
         // Given
         List<CommentDto> comments = Collections.singletonList(
-                new CommentDto(1L, 1L, "testUser", 1L, "test post title", "comment content", LocalDateTime.now())
+                new CommentDto(1L, 1L, "testUser", Grade.A1, 1L, "test post title", "comment content", LocalDateTime.now())
         );
         when(commentService.getCommentsByPostId(1L)).thenReturn(comments);
 
@@ -108,7 +108,7 @@ class CommentControllerTest {
     void getUserComments_사용자는_자신이_작성한_댓글_목록을_조회할_수_있다() throws Exception {
         // Given
         Page<CommentDto> comments = new PageImpl<>(Collections.singletonList(
-                new CommentDto(1L, 1L, "testUser", 1L, "test post title", "comment content", LocalDateTime.now())
+                new CommentDto(1L, 1L, "testUser", Grade.A1, 1L, "test post title", "comment content", LocalDateTime.now())
         ));
         when(commentService.getCommentsByUserId(0, 12, provider)).thenReturn(comments);
 

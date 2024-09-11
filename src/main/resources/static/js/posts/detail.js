@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
     const postId = window.location.pathname.split("/").pop(); // URL 에서 ID를 추출
     let userId = 0;
-    let userIdByPost = 0;
 
     // 사용자 정보를 요청하여 userId를 가져옴
     fetch("/api/me", {
@@ -185,10 +184,35 @@ document.addEventListener("DOMContentLoaded", function() {
                 display = "none";
             }
 
+            let userGrade = comment.userGrade;
+            switch (comment.userGrade) {
+                case "A1":
+                    userGrade = "/images/bronze.png";
+                    break;
+                case "A2":
+                    userGrade = "/images/silver.png";
+                    break;
+                case "B1":
+                    userGrade = "/images/gold.png";
+                    break;
+                case "B2":
+                    userGrade = "/images/platinum.png";
+                    break;
+                case "C1":
+                    userGrade = "/images/diamond.png";
+                    break;
+                case "C2":
+                    userGrade = "/images/diamond 2.png";
+                    break;
+                default:
+                    userGrade = "";
+                    break;
+            }
+
             commentContainer.innerHTML = `
                 <span class="comment-content">${comment.content}</span>
                 <div class="comment-info">
-                <span><strong>${comment.nickname}</strong></span>
+                <span><img src="${userGrade}" alt="userGrade" class="grade-img"><strong>${comment.nickname}</strong></span>
                 <span>${date}</span>
                 <a class="delete-comment" data-comment-id="${comment.id}" style="display: ${display}">
                     <img src="/images/x-mark.png" alt="댓글삭제버튼">
