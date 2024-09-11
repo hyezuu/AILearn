@@ -187,7 +187,7 @@ class VocabularyListServiceTest {
         );
         Page<VocabularyListVocabulary> vocabularyPage = new PageImpl<>(vocabularyListVocabularies, pageable, 2);
 
-        when(vocabularyListRepository.findByUserIdOrderByCreatedAtDesc(provider.id(), pageable))
+        when(vocabularyListVocabularyRepository.findByUserIdOrderByCreatedAtDesc(provider.id(), pageable))
             .thenReturn(vocabularyPage);
         // when
         Page<MyVocabularyListResponseDto> result = vocabularyListService.getMyVocabularies(provider, pageable);
@@ -197,7 +197,7 @@ class VocabularyListServiceTest {
         assertThat(result.getContent().get(1).word()).isEqualTo("word2");
         assertThat(result.getTotalElements()).isEqualTo(2);
         assertThat(result.getTotalPages()).isEqualTo(1);
-        verify(vocabularyListRepository).findByUserIdOrderByCreatedAtDesc(provider.id(), pageable);
+        verify(vocabularyListVocabularyRepository).findByUserIdOrderByCreatedAtDesc(provider.id(), pageable);
     }
 
     @Test

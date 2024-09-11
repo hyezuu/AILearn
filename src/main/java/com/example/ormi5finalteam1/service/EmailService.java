@@ -3,6 +3,7 @@ package com.example.ormi5finalteam1.service;
 import com.example.ormi5finalteam1.common.exception.BusinessException;
 import com.example.ormi5finalteam1.common.exception.ErrorCode;
 import com.example.ormi5finalteam1.domain.verificationcode.VerificationCode;
+import com.example.ormi5finalteam1.repository.EmailVerificationRepository;
 import com.example.ormi5finalteam1.repository.VerificationCodeRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -29,7 +30,7 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String serviceEmail;
     private static final Integer EXPIRATION_TIME_IN_MINUTES = 5;
-    private final Map<String, Boolean> verifiedEmails = new ConcurrentHashMap<>();
+    private final EmailVerificationRepository emailVerificationRepository;
 
     public void sendVerificationEmail(String to) throws MessagingException {
         String code = generateVerificationCode();
@@ -69,15 +70,15 @@ public class EmailService {
         }
 
         verificationCodeRepository.remove(email);
-        verifiedEmails.put(email, true);
+        emailVerificationRepository.save(email);
     }
 
     public boolean isEmailVerified(String email) {
-        return verifiedEmails.getOrDefault(email, false);
+        return emailVerificationRepository.existByEmail(email);
     }
 
     public void clearVerificationStatus(String email) {
-        verifiedEmails.remove(email);
+        emailVerificationRepository.remove(email);
     }
 
     public void sendTemporaryPasswordEmail(String to, String tempPassword) throws MessagingException {
