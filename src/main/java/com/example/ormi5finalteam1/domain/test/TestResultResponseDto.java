@@ -10,11 +10,13 @@ import lombok.*;
 public class TestResultResponseDto {
     private String status;
     private Grade grade;
+    private int score;
 
-    public static TestResultResponseDto toDto(String status, Grade grade) {
+    public static TestResultResponseDto toDto(String status, Grade grade, int score) {
         return TestResultResponseDto.builder()
                 .status(status)
                 .grade(grade)
+                .score(score)
                 .build();
     }
 }

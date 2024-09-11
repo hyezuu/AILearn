@@ -94,7 +94,7 @@ public class TestService {
     public Grade submitLevelTests(Provider provider, Grade grade, SubmitRequestVo submitRequestVo) {
 
         User user = findUser(provider);
-        int count = markAnswer(submitRequestVo);
+        int count = markAnswer(grade, submitRequestVo);
 
         if ((grade.equals(Grade.A2) && count >= 6) ||
                 ((grade.equals(Grade.B1) || grade.equals(Grade.B2)) && count >= 10) ||
@@ -106,13 +106,13 @@ public class TestService {
 
     public TestResultResponseDto thymeleafSubmitLevelTests(User user, Grade grade, SubmitRequestVo submitRequestVo) {
 
-        int count = markAnswer(submitRequestVo);
+        int score = markAnswer(grade, submitRequestVo);
 
         String status;
         Grade resultGrade;
-        if ((grade.equals(Grade.A2) && count >= 6) ||
-                ((grade.equals(Grade.B1) || grade.equals(Grade.B2)) && count >= 10) ||
-                (grade.equals(Grade.C1) && count >= 16)) {
+        if ((grade.equals(Grade.A2) && score >= 60) ||
+                ((grade.equals(Grade.B1) || grade.equals(Grade.B2)) && score >= 70) ||
+                (grade.equals(Grade.C1) && score >= 80)) {
             status = "success";
             resultGrade = grade;
             changeUserStatus(user, resultGrade);
@@ -121,7 +121,7 @@ public class TestService {
             Grade[] values = Grade.values();
             resultGrade = values[grade.getIndex() - 1];
         }
-        return TestResultResponseDto.toDto(status, resultGrade);
+        return TestResultResponseDto.toDto(status, resultGrade, score);
     }
 
     /**
@@ -137,7 +137,7 @@ public class TestService {
     public Grade submitUpgradeTests(Provider provider, SubmitRequestVo submitRequestVo) {
 
         User user = findUser(provider);
-        int count = markAnswer(submitRequestVo);
+        int count = markAnswer(user.getGrade(), submitRequestVo);
 
         Grade[] values = Grade.values();
         int nowGradeIndex = user.getGrade().getIndex();
@@ -159,7 +159,6 @@ public class TestService {
 
     public TestResultResponseDto renewalSubmitUpgradeTests(User user, SubmitRequestVo submitRequestVo) {
 
-        int count = markAnswer(submitRequestVo);
 
         Grade[] values = Grade.values();
         int nowGradeIndex = user.getGrade().getIndex();
@@ -167,18 +166,19 @@ public class TestService {
 
         String status = "keep";
         Grade result = user.getGrade();
+        int score = markAnswer(nextGrade, submitRequestVo);
         // 승급
-        if ((nextGrade.equals(Grade.A2) && count >= 6) ||
-                ((nextGrade.equals(Grade.B1) || nextGrade.equals(Grade.B2)) && count >= 10) ||
-                ((nextGrade.equals(Grade.C1) || nextGrade.equals(Grade.C2)) && count >= 16)){
+        if ((nextGrade.equals(Grade.A2) && score >= 60) ||
+                ((nextGrade.equals(Grade.B1) || nextGrade.equals(Grade.B2)) && score >= 70) ||
+                ((nextGrade.equals(Grade.C1) || nextGrade.equals(Grade.C2)) && score >= 80)){
             status = "success"; result = nextGrade; }
         // 강등
-        else if (((nextGrade.equals(Grade.B1) || nextGrade.equals(Grade.B2)) && count <= 4) ||
-                ((nextGrade.equals(Grade.C1) || nextGrade.equals(Grade.C2)) && count <= 7)) {
+        else if (((nextGrade.equals(Grade.B1) || nextGrade.equals(Grade.B2)) && score <= 28) ||
+                ((nextGrade.equals(Grade.C1) || nextGrade.equals(Grade.C2)) && score <= 35)) {
             status = "fail"; result = values[nowGradeIndex - 1]; }
 
         changeUserStatus(user, result);
-        return TestResultResponseDto.builder().status(status).grade(result).build();
+        return TestResultResponseDto.toDto(status, result, score);
     }
 
     private User findUser(Provider provider) {
@@ -187,7 +187,7 @@ public class TestService {
         return user;
     }
 
-    private int markAnswer(SubmitRequestVo submitRequestVo) {
+    private int markAnswer(Grade grade, SubmitRequestVo submitRequestVo) {
 
         int count = 0;
 
@@ -197,7 +197,13 @@ public class TestService {
             if (requestDto.getAnswer().equals(test.getAnswer())) count++;
         }
 
-        return count;
+        if (grade == Grade.A1 || grade == Grade.A2) {
+            return count * 10;
+        } else if (grade == Grade.B1 || grade == Grade.B2) {
+            return count * 7;
+        } else {
+            return count * 5;
+        }
     }
 
     public void setA1(User user) {
