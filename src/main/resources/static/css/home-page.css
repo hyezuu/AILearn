@@ -151,21 +151,11 @@ p {
     filter: drop-shadow(0px 0px 5px white);
 }
 
-#sec2 {
-    height: 100vh;
+#sec2 img {
     width: 100vw;
-    background-image: url(../images/home-2.png);
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-attachment: fixed;
+    height: 100%;
 }
-#sec3 {
-    height: 100vh;
+#sec3 img {
     width: 100vw;
-    background-image: url(../images/home-3.png);
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-attachment: fixed;
+    height: 100%;
 }
