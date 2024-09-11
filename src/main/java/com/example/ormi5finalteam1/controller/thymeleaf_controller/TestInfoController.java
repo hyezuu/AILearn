@@ -54,6 +54,7 @@ public class TestInfoController {
     }
 
     @PostMapping("/grade/A1")
+    @ResponseStatus(HttpStatus.OK)
     public void setA1(@AuthenticationPrincipal Provider provider) {
         User user = getUser(provider);
         if (user.getGrade() != null || !user.isReadyForUpgrade()) throw new BusinessException(ErrorCode.CANNOT_TAKE_TEST);

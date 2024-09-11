@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="/css/header.css">
     <script src="/js/tests.js"></script>
     <script src="/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
@@ -35,7 +36,7 @@
                         <p class="level-tier" th:text="${user.grade.getTier()}"></p>
                     </div>
                     <div class="level-chart">
-                        <p class="chart-percentage">상위 62%</p>
+<!--                        <p class="chart-percentage">상위 62%</p>-->
                         <div class="bar-container">
                             <div class="bar"
                                  th:classappend="${user.grade == T(com.example.ormi5finalteam1.domain.Grade).A1} ? 'active' : ''"></div>

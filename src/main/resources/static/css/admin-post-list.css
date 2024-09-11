@@ -147,3 +147,7 @@ tr:not(:last-child) {
     color: #0f246c;
     text-decoration: underline;
 }
+
+.swal2-x-mark {
+    margin: 0;
+}
