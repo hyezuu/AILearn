@@ -25,30 +25,50 @@
             <h2>등급 테스트 결과</h2>
             <div class="main-content">
                 <h3>당신의 현재 레벨은?</h3>
-                <p class="user-result"><strong th:text="${user.nickname}"></strong>님의 테스트 결과는 <strong
-                        th:text="${user.grade}"></strong> 입니다!</p>
+                <p class="result"><strong th:text="${nickname}"></strong>님의 테스트 결과는 <strong
+                        th:text="${grade}"></strong> 입니다!</p>
                 <p class="suggestion">AILEARN과 학습을 통해 실력을 더 키워보세요.</p>
                 <div class="level-display">
                     <div class="level-icon">
-                        <!--                <img src="star-icon.png" alt="Level Icon">-->
-                        <p class="level-name" th:text="${user.grade}"></p>
-                        <p class="level-tier" th:text="${user.grade.getTier()}"></p>
+                        <div id="grade-image">
+                            <img th:with="imageName=${
+                                        grade == 'A1' ? 'Bronze' :
+                                        grade == 'A2' ? 'Silver' :
+                                        grade == 'B1' ? 'Gold' :
+                                        grade == 'B2' ? 'Platinum' :
+                                        grade == 'C1' ? 'Diamond' :
+                                        grade == 'C2' ? 'Diamond 2' : 'Unknown'
+                                    }"
+                                 th:src="@{'/images/' + ${imageName} + '.png'}"
+                                 th:alt="${imageName + ' 등급 이미지'}"
+                                 th:title="${'사용자 등급: ' + grade + ', 이미지: ' + imageName}"/>
+                        </div>
+                        <p class="level-name" th:text="${grade}"></p>
+                        <p class="level-tier" th:text="${tier}"></p>
                     </div>
                     <div class="level-chart">
-<!--                        <p class="chart-percentage">상위 62%</p>-->
+                        <p class="chart-percentage" th:text="${
+                                    grade == 'A1' ? '상위 100%' :
+                                    grade == 'A2' ? '상위 80%' :
+                                    grade == 'B1' ? '상위 60%' :
+                                    grade == 'B2' ? '상위 40%' :
+                                    grade == 'C1' ? '상위 20%' :
+                                    grade == 'C2' ? '상위 10%' :
+                                    '등급 정보 없음'
+                                }"></p>
                         <div class="bar-container">
                             <div class="bar"
-                                 th:classappend="${user.grade == T(com.example.ormi5finalteam1.domain.Grade).A1} ? 'active' : ''"></div>
+                                 th:classappend="${grade == 'A1'} ? 'active' : ''"></div>
                             <div class="bar"
-                                 th:classappend="${user.grade == T(com.example.ormi5finalteam1.domain.Grade).A2} ? 'active' : ''"></div>
+                                 th:classappend="${grade == 'A2'} ? 'active' : ''"></div>
                             <div class="bar"
-                                 th:classappend="${user.grade == T(com.example.ormi5finalteam1.domain.Grade).B1} ? 'active' : ''"></div>
+                                 th:classappend="${grade == 'B1'} ? 'active' : ''"></div>
                             <div class="bar"
-                                 th:classappend="${user.grade == T(com.example.ormi5finalteam1.domain.Grade).B2} ? 'active' : ''"></div>
+                                 th:classappend="${grade == 'B2'} ? 'active' : ''"></div>
                             <div class="bar"
-                                 th:classappend="${user.grade == T(com.example.ormi5finalteam1.domain.Grade).C1} ? 'active' : ''"></div>
+                                 th:classappend="${grade == 'C1'} ? 'active' : ''"></div>
                             <div class="bar"
-                                 th:classappend="${user.grade == T(com.example.ormi5finalteam1.domain.Grade).C2} ? 'active' : ''"></div>
+                                 th:classappend="${grade == 'C2'} ? 'active' : ''"></div>
                         </div>
                         <div class="chart-labels">
                             <span>A1</span><span>A2</span><span>B1</span><span>B2</span><span>C1</span><span>C2</span>
