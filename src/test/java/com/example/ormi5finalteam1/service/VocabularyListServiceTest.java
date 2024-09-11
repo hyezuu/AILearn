@@ -7,7 +7,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import com.example.ormi5finalteam1.common.exception.BusinessException;
@@ -22,8 +24,8 @@ import com.example.ormi5finalteam1.domain.vocabulary.dto.MyVocabularyListRespons
 import com.example.ormi5finalteam1.repository.VocabularyListRepository;
 import com.example.ormi5finalteam1.repository.VocabularyListVocabularyRepository;
 import com.example.ormi5finalteam1.repository.VocabularyRepository;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -116,25 +118,29 @@ class VocabularyListServiceTest {
     }
 
     @Test
-    void addVocabulary_는_새로운_단어를_찾을_수_없는경우_BusinessException을_던진다() {
-        //given
-        User user = mock(User.class);
-        VocabularyList vocabularyList = mock(VocabularyList.class);
-        when(vocabularyListRepository.findByUserId(anyLong())).thenReturn(
-            Optional.of(vocabularyList));
-        when(vocabularyListVocabularyRepository.findMaxVocabularyIdByVocabularyListIdAndGrade(
-            any(), any())).thenReturn(Optional.of(0L));
-        when(vocabularyRepository.findTop10ByGradeAndIdGreaterThanOrderById(any(Grade.class),
-            anyLong())).thenReturn(new ArrayList<>());
-        //when & then
-        assertThatThrownBy(()-> vocabularyListService.addVocabulary(provider))
+    void addVocabulary_새로운_단어를_찾을_수_없는_경우_BusinessException을_던진다() {
+        // given
+        User user = new User(provider.id());
+        user.changeGrade(Grade.A1);
+        VocabularyList vocabularyList = new VocabularyList(user);
+
+        when(userService.getUser(provider.id())).thenReturn(user);
+        when(vocabularyListRepository.findByUserId(provider.id())).thenReturn(Optional.of(vocabularyList));
+        when(vocabularyListVocabularyRepository.findMaxVocabularyIdByVocabularyListIdAndGrade(any(), any()))
+            .thenReturn(Optional.of(0L));
+        when(vocabularyRepository.findTop10ByGradeAndIdGreaterThanOrderById(any(Grade.class), anyLong()))
+            .thenReturn(Collections.emptyList());
+
+        // when & then
+        assertThatThrownBy(() -> vocabularyListService.addVocabulary(provider))
             .isInstanceOf(BusinessException.class)
             .hasFieldOrPropertyWithValue("errorCode", ErrorCode.NEW_VOCABULARIES_NOT_FOUND);
-        verify(userService).getUser(anyLong());
+
+        verify(userService, times(2)).getUser(provider.id());
         verify(vocabularyListRepository).findByUserId(provider.id());
         verify(vocabularyListVocabularyRepository).findMaxVocabularyIdByVocabularyListIdAndGrade(any(), any());
-        verify(vocabularyList, never()).addVocabularies(any());
-        verify(user, never()).addWordToVocabularyPoint();
+        verify(vocabularyRepository).findTop10ByGradeAndIdGreaterThanOrderById(any(Grade.class), anyLong());
+        verifyNoMoreInteractions(userService, vocabularyListRepository, vocabularyRepository);
     }
 
     @Test
