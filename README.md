@@ -54,7 +54,7 @@ AILearn은 AI 기술을 활용한 혁신적인 온라인 영어 학습 플랫폼
 
 | 이름            | 역할                           | 담당 업무 |
 |-----------------|--------------------------------|-----------|
-| **[문순려](https://github.com/Sunryeo)** <br> (팀장) | **DevOps / Backend **      | - CI/CD 파이프라인 구축 및 배포 환경 설정<br> - AlanAI 기능 구현<br>- 문법 예문 API 개발 |
+| **[문순려](https://github.com/Sunryeo)** <br> (팀장) | **DevOps / Backend**      | - CI/CD 파이프라인 구축 및 배포 환경 설정<br> - AlanAI 기능 구현<br>- 문법 예문 API 개발 |
 | **[이상윤](https://github.com/nigoleto)**  <br> (서기)  | **Backend/Frontend**           | - AlanAI 기능 구현<br>- 에세이 작성 및 수정 기능 개발<br>- 게시글, 댓글, 좋아요, 문법 예문 API 연동 및 CSS 작업<br>- 마이페이지 - 회원 정보 페이지 구현<br>- 에세이 도메인 슬라이스 테스트 작성 |
 | **[강혜주](https://github.com/hyezuu)**   | **Backend/Frontend**         | - AlanAI 기능 구현<br>- 단어장 기능 개발<br>- 인증, 인가 및 회원 관리 기능 개발<br>- 단어장 및 유저 도메인 슬라이스 테스트 작성<br>- 로그인, 회원가입, 비밀번호 찾기 페이지 개발 및 API 연동<br>- 통합 시나리오 테스트 작성 |
 | **[안정민](https://github.com/jminiiiz)**       | **Backend/Frontend**          | - 게시글 기능 개발<br>- 댓글 기능 개발<br>- 좋아요 기능 개발<br>- 게시글, 댓글, 좋아요 도메인 슬라이스 테스트 작성<br>- 통합 시나리오 테스트 작성 |
