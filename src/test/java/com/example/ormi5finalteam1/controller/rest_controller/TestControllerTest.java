@@ -206,7 +206,7 @@ public class TestControllerTest {
         SecurityContextHolder.setContext(securityContext);
 
         when(userService.loadUserByUsername("test@example.com")).thenReturn(user);
-        when(testService.renewalSubmitUpgradeTests(any(), any())).thenReturn(new TestResultResponseDto("success", Grade.B2));
+        when(testService.renewalSubmitUpgradeTests(any(), any())).thenReturn(new TestResultResponseDto("success", Grade.B2, 91));
 
         // when & then
         mockMvc.perform(post("/api/upgrade")
@@ -215,7 +215,8 @@ public class TestControllerTest {
                         .content(objectMapper.writeValueAsString(new SubmitRequestVo())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("status").value("success"))
-                .andExpect(jsonPath("grade").value(Grade.B2.name()));
+                .andExpect(jsonPath("grade").value(Grade.B2.name()))
+                .andExpect(jsonPath("score").value(91));
     }
 
     @DisplayName("승급테스트 제출 - 유지")
@@ -231,7 +232,7 @@ public class TestControllerTest {
         SecurityContextHolder.setContext(securityContext);
 
         when(userService.loadUserByUsername("test@example.com")).thenReturn(user);
-        when(testService.renewalSubmitUpgradeTests(any(), any())).thenReturn(new TestResultResponseDto("keep", Grade.B1));
+        when(testService.renewalSubmitUpgradeTests(any(), any())).thenReturn(new TestResultResponseDto("keep", Grade.B1, 55));
 
         // when & then
         mockMvc.perform(post("/api/upgrade")
@@ -240,7 +241,8 @@ public class TestControllerTest {
                         .content(objectMapper.writeValueAsString(new SubmitRequestVo())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("status").value("keep"))
-                .andExpect(jsonPath("grade").value(Grade.B1.name()));
+                .andExpect(jsonPath("grade").value(Grade.B1.name()))
+                .andExpect(jsonPath("score").value(55));
 
         verify(testService).renewalSubmitUpgradeTests(any(), any());
     }
@@ -258,7 +260,7 @@ public class TestControllerTest {
         SecurityContextHolder.setContext(securityContext);
 
         when(userService.loadUserByUsername("test@example.com")).thenReturn(user);
-        when(testService.renewalSubmitUpgradeTests(any(), any())).thenReturn(new TestResultResponseDto("fail", Grade.A2));
+        when(testService.renewalSubmitUpgradeTests(any(), any())).thenReturn(new TestResultResponseDto("fail", Grade.A2, 20));
 
         // when & then
         mockMvc.perform(post("/api/upgrade")
@@ -267,7 +269,8 @@ public class TestControllerTest {
                         .content(objectMapper.writeValueAsString(new SubmitRequestVo())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("status").value("fail"))
-                .andExpect(jsonPath("grade").value(Grade.A2.name()));
+                .andExpect(jsonPath("grade").value(Grade.A2.name()))
+                .andExpect(jsonPath("score").value(20));
 
         verify(testService).renewalSubmitUpgradeTests(any(), any());
     }
