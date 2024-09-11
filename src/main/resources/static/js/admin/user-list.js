@@ -1,4 +1,7 @@
 $(document).ready(function () {
+    const $searchForm = $("#search-form");
+    const $searchInput = $(".search-input");
+
     let currentPage = 0;
     const itemsPerPage = 10;
     let totalPages = 0;
@@ -7,9 +10,15 @@ $(document).ready(function () {
         fetchUsers(currentPage);
     }
 
+    $searchForm.on("submit", function(event) {
+        event.preventDefault();
+        currentPage = 0;
+        fetchUsers(currentPage);
+    });
     function fetchUsers(page) {
+        const searchQuery = $searchInput.val();
         $.ajax({
-            url: `/api/admin/users?page=${page}&size=${itemsPerPage}`,
+            url: `/api/admin/users?page=${page}&size=${itemsPerPage}&nickname=${searchQuery}`,
             method: 'GET',
             success: function (response) {
                 update(response);
@@ -23,7 +32,13 @@ $(document).ready(function () {
     function renderUsers(users) {
         const userList = $('#user-list');
         userList.empty();
-        users.forEach((user) => {
+
+        if (users.length === 0) {
+            userList.append('<tr><td colspan="12">No posts found</td></tr>');
+            return;
+        }
+
+        users.forEach(user => {
             const tr = `
                 <tr data-user-id="${user.userId}">
                 <td>${user.userId}</td>
@@ -48,58 +63,70 @@ $(document).ready(function () {
         });
     }
 
-    function toggleUserStatus(userId, isActive) {
+    async function toggleUserStatus(userId, isActive) {
         const action = isActive ? "정지" : "정지해제";
-        if (confirm(`${action} 하시겠습니까?`)) {
+        const result = await Swal.fire({
+            title: `${action} 하시겠습니까?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '확인',
+            cancelButtonText: '취소'
+        });
+
+        if (result.isConfirmed) {
             $.ajax({
                 url: `/api/admin/users/${userId}`,
                 type: 'PUT',
                 contentType: 'application/x-www-form-urlencoded',
                 success: function(response) {
-                    alert(`${action}되었습니다.`);
-                    // 버튼 텍스트 업데이트
+                    Swal.fire(`${action}되었습니다.`, '', 'success');
+
                     const buttonElement = $('.stop-btn').filter(function() {
                         return $(this).closest('tr').data('user-id') === userId;
                     });
 
                     buttonElement.text(isActive ? "정지해제" : "정지하기");
 
-                    // 상태 셀 업데이트
                     const statusCell = buttonElement.closest('tr').find('td').eq(6);
                     statusCell.text(isActive ? "정지" : "활성");
                 },
                 error: function(xhr) {
-                    alert('오류가 발생했습니다.');
+                    Swal.fire('오류가 발생했습니다.', '', 'error');
                 }
             });
         }
     }
 
-    function deleteUser(userId) {
-        if (confirm(`탈퇴 처리 하시겠습니까?`)) {
+    async function deleteUser(userId) {
+        const result = await Swal.fire({
+            title: '탈퇴 처리 하시겠습니까?',
+            text: '탈퇴는 철회할 수 없습니다.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '확인',
+            cancelButtonText: '취소'
+        });
+
+        if (result.isConfirmed) {
             $.ajax({
                 url: `/api/admin/users/${userId}`,
                 type: 'DELETE',
                 contentType: 'application/x-www-form-urlencoded',
                 success: function(response) {
-                    alert(`탈퇴 처리 되었습니다.`);
+                    Swal.fire('탈퇴 처리 되었습니다.', '', 'success');
 
-                    // 행 요소 찾기
                     const closestTr = $('.delete-btn').filter(function() {
                         return $(this).closest('tr').data('user-id') === userId;
                     }).closest('tr');
 
-                    // 버튼 요소 찾기 및 제거
                     closestTr.find('.delete-btn').remove();
                     closestTr.find('.stop-btn').remove(); // "정지하기" 버튼 제거
 
-                    // 상태 셀 업데이트
                     const deletedCell = closestTr.find('td').eq(9);
                     deletedCell.text(formatDate(response));
-
                 },
                 error: function(xhr) {
-                    alert('오류가 발생했습니다.');
+                    Swal.fire('오류가 발생했습니다.', '', 'error');
                 }
             });
         }
@@ -108,7 +135,6 @@ $(document).ready(function () {
     function formatDate(dateString) {
         if (!dateString) return '';
         const date = new Date(dateString);
-        // 연도, 월, 일, 시간, 분, 초, 밀리초를 포함한 문자열 생성
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');

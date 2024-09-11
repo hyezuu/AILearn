@@ -173,8 +173,7 @@ public class TestService {
                 ((nextGrade.equals(Grade.C1) || nextGrade.equals(Grade.C2)) && count >= 16)){
             status = "success"; result = nextGrade; }
         // 강등
-        else if ((nextGrade.equals(Grade.A2) && count <= 2) ||
-                ((nextGrade.equals(Grade.B1) || nextGrade.equals(Grade.B2)) && count <= 4) ||
+        else if (((nextGrade.equals(Grade.B1) || nextGrade.equals(Grade.B2)) && count <= 4) ||
                 ((nextGrade.equals(Grade.C1) || nextGrade.equals(Grade.C2)) && count <= 7)) {
             status = "fail"; result = values[nowGradeIndex - 1]; }
 
@@ -185,7 +184,6 @@ public class TestService {
     private User findUser(Provider provider) {
         User user = userService.loadUserByUsername(provider.email());
         if (!user.isReadyForUpgrade()) throw new BusinessException(ErrorCode.CANNOT_TAKE_TEST);
-        System.out.println("found User");
         return user;
     }
 
@@ -209,8 +207,6 @@ public class TestService {
     private void changeUserStatus(User user, Grade grade) {
         user.changeGrade(grade);
         user.changeReadyStatus(false);
-        System.out.println("Changer User status");
-        System.out.println(user.getGrade() + " " + user.isReadyForUpgrade());
     }
 
     public void saveTests(List<Test> tests) {

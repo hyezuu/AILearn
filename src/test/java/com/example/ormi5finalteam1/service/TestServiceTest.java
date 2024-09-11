@@ -30,21 +30,11 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * 로직 변경으로 코드 수정 필요한 테스트 다수 발생
- * 추후 수정하도록 하겠습니다
- */
 @ExtendWith(MockitoExtension.class)
 public class TestServiceTest {
 
     @Mock
     private TestRepository testRepository;
-
-    @Mock
-    private UserRepository userRepository;
-
-    @Mock
-    private PasswordEncoder passwordEncoder;
 
     @Mock
     private UserService userService;
@@ -72,7 +62,7 @@ public class TestServiceTest {
         }
 
         provider = new Provider(1L, "test@example.com", "nickname", Role.USER, Grade.C1, 1);
-      //  newProvider = new Provider(2L, "test2@example.com", "nickname2", Role.USER, null, 1);
+        newProvider = new Provider(2L, "test2@example.com", "nickname2", Role.USER, null, 1);
         user = User.builder()
                 .email("test@example.com")
                 .password("encodedPassword")
@@ -80,17 +70,16 @@ public class TestServiceTest {
                 .build();
     }
 
-    /*@DisplayName("레벨테스트 선택 등급 검증 - A1")
+    @DisplayName("레벨테스트 선택 등급 검증 - A1")
     @org.junit.jupiter.api.Test
     void testSelectedGradeOnLevelTests() {
         // given
         Grade testGrade = Grade.A1;
-        when(userService.loadUserByUsername("test2@example.com")).thenReturn(user);
 
         // when & then
         assertThatThrownBy(() -> testService.getLevelTests(testGrade)).isInstanceOf(
                     IndexOutOfBoundsException.class);
-    }*/
+    }
 
     @DisplayName("레벨테스트 선택 등급 검증 - C2")
     @org.junit.jupiter.api.Test
@@ -121,16 +110,16 @@ public class TestServiceTest {
         }
     }
 
-    /*@DisplayName("승급테스트 반환 테스트")
+    @DisplayName("승급테스트 반환 테스트")
     @org.junit.jupiter.api.Test
     void testReturnUpgradeTests() {
         // given
         // Mock 설정
-        when(userService.loadUserByUsername("test@example.com")).thenReturn(user);
+        user.changeGrade(Grade.C1);
         when(testRepository.findByGrade(Grade.C2)).thenReturn(C2List);
 
         // when
-        List<TestQuestionResponseDto> result = testService.getUpgradeTests(provider);
+        List<TestQuestionResponseDto> result = testService.getUpgradeTests(user);
 
         // then
         assertThat(result).isNotNull();
@@ -138,10 +127,9 @@ public class TestServiceTest {
         assertThat(result.get(0).getGrade()).isEqualTo(Grade.C2);
 
         // 메소드 호출 검증
-        verify(userService).loadUserByUsername("test@example.com");
         verify(testRepository).findByGrade(Grade.C2);
 
-    }*/
+    }
 
     @DisplayName("승급테스트 - 승급")
     @org.junit.jupiter.api.Test
@@ -237,7 +225,7 @@ public class TestServiceTest {
 
     }
 
-    /*@DisplayName("레벨테스트 - 통과")
+    @DisplayName("레벨테스트 - 통과")
     @org.junit.jupiter.api.Test
     void testSubmitLevelTests() {
         // given
@@ -257,10 +245,10 @@ public class TestServiceTest {
 
         // then
         assertThat(result).isEqualTo(Grade.A2);
-       assertThat(user.isReadyForUpgrade()).isEqualTo(false);
-    }*/
+        assertThat(user.isReadyForUpgrade()).isEqualTo(false);
+    }
 
-    /*@DisplayName("레벨테스트 - 실패")
+    @DisplayName("레벨테스트 - 실패")
     @org.junit.jupiter.api.Test
     void testFailLevelTests() {
         // given
@@ -277,26 +265,5 @@ public class TestServiceTest {
         // then
         assertThat(result).isEqualTo(null);
         assertThat(user.isReadyForUpgrade()).isEqualTo(true);
-    }*/
-
-
-    /*@DisplayName("사용자 테스트 가능 여부 검증")
-    @org.junit.jupiter.api.Test
-    void testIsReadyForUpgrade() {
-        // given
-        user.changeReadyStatus(false);
-        when(userService.loadUserByUsername("test@example.com")).thenReturn(user);
-
-        // when & then
-        assertThatThrownBy(() -> testService.getUpgradeTests(provider)).isInstanceOf(
-                        BusinessException.class)
-                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.CANNOT_TAKE_TEST);
-        assertThatThrownBy(() -> testService.submitLevelTests(provider, Grade.A2, null)).isInstanceOf(
-                        BusinessException.class)
-                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.CANNOT_TAKE_TEST);
-        assertThatThrownBy(() -> testService.submitUpgradeTests(provider, null)).isInstanceOf(
-                        BusinessException.class)
-                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.CANNOT_TAKE_TEST);
-
-    }*/
+    }
 }

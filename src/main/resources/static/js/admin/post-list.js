@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    const $searchForm = $("#search-container");
+    const $searchForm = $("#search-form");
     const $searchInput = $(".search-input");
     const $postList = $("#post-list");
     const $pagination = $('.pagination');
@@ -8,17 +8,19 @@ $(document).ready(function () {
     const itemsPerPage = 10;
     let totalPages = 0;
 
-    // 페이지 로드 시 초기 에세이 목록 로드
     fetchPosts(currentPage);
 
     $searchForm.on("submit", function(event) {
         event.preventDefault();
+        console.log("submit event occured");
         currentPage = 0;
         fetchPosts(currentPage);
     });
 
     function fetchPosts(page) {
         const searchQuery = $searchInput.val();
+        console.log(searchQuery);
+        console.log($searchInput.value);
         $.ajax({
             url: `/api/admin/posts?page=${page}&size=${itemsPerPage}&keyword=${searchQuery}`,
             method: 'GET',
@@ -26,10 +28,12 @@ $(document).ready(function () {
             xhrFields: {
                 withCredentials: true
             },
-            success: function(response) {
+            success: function (response) {
+                console.log("Success to search")
+                console.log(response)
                 update(response);
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error("Error fetching posts:", error);
             }
         });
@@ -119,25 +123,32 @@ $(document).ready(function () {
         window.location.href = `/admin/posts/${postId}`;
     });
 
-    $(document).on('click', '.delete-btn', function(event) {
+    $(document).on('click', '.delete-btn', async function(event) {
         event.stopPropagation();
         const postId = $(this).closest('tr').find('td:first').text();
-        deletePost(postId);
+        await deletePost(postId);
     });
 
+    async function deletePost(postId) {
+        const result = await Swal.fire({
+            title: '게시글을 삭제하시겠습니까?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '확인',
+            cancelButtonText: '취소'
+        });
 
-    function deletePost(postId) {
-        if (confirm(`게시글을 삭제하시겠습니까?`)) {
+        if (result.isConfirmed) {
             $.ajax({
                 url: `/api/admin/posts/${postId}`,
                 type: 'DELETE',
                 contentType: 'application/x-www-form-urlencoded',
                 success: function(response) {
-                    alert(`삭제되었습니다.`);
+                    Swal.fire('삭제되었습니다.', '', 'success');
                     fetchPosts(currentPage);
                 },
                 error: function(xhr) {
-                    alert('오류가 발생했습니다.');
+                    Swal.fire('오류가 발생했습니다.', '', 'error');
                 }
             });
         }

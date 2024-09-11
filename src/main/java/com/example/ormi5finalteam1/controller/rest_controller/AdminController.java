@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -27,10 +28,11 @@ public class AdminController {
     private final AdminService adminService;
 
     @GetMapping("/users")
-    public Page<UserInfoDto> getAllUserList(@AuthenticationPrincipal Provider provider, Pageable pageable) {
+    public Page<UserInfoDto> getAllUserList(@AuthenticationPrincipal Provider provider,
+                                            Pageable pageable, String nickname) {
 
         if (!provider.role().equals(Role.ADMIN)) throw new BusinessException(ErrorCode.HAS_NO_AUTHORITY);
-        return adminService.getAllUserList(pageable);
+        return adminService.getAllUserList(pageable, nickname);
     }
 
     @PutMapping("/users/{id}")

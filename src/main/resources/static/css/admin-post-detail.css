@@ -209,3 +209,7 @@ textarea {
 #post-deletedAt {
     margin-left: 20px;
 }
+
+.swal2-x-mark {
+    margin: 0;
+}

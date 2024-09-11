@@ -13,6 +13,7 @@ import com.example.ormi5finalteam1.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -54,5 +55,12 @@ public class TestController {
         User user = userservice.loadUserByUsername(provider.email());
         if (user.getGrade() == null || !user.isReadyForUpgrade()) throw new BusinessException(ErrorCode.CANNOT_TAKE_TEST);
         return ResponseEntity.ok(testService.renewalSubmitUpgradeTests(user, submitRequestVo));
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    public String handleBusinessException(BusinessException e, Model model) {
+
+        model.addAttribute("errorMessage", e.getMessage());
+        return "tests/error";
     }
 }
