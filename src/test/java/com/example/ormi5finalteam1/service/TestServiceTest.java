@@ -3,10 +3,7 @@ package com.example.ormi5finalteam1.service;
 import com.example.ormi5finalteam1.common.exception.BusinessException;
 import com.example.ormi5finalteam1.common.exception.ErrorCode;
 import com.example.ormi5finalteam1.domain.Grade;
-import com.example.ormi5finalteam1.domain.test.SubmitRequestDto;
-import com.example.ormi5finalteam1.domain.test.SubmitRequestVo;
-import com.example.ormi5finalteam1.domain.test.Test;
-import com.example.ormi5finalteam1.domain.test.TestQuestionResponseDto;
+import com.example.ormi5finalteam1.domain.test.*;
 import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.domain.user.Role;
 import com.example.ormi5finalteam1.domain.user.User;
@@ -199,7 +196,6 @@ public class TestServiceTest {
 
         // Mock 설정
         user.changeGrade(Grade.C1);
-        when(userService.loadUserByUsername(email)).thenReturn(user);
 
         SubmitRequestVo vo = new SubmitRequestVo();
         for(long i = 1L; i < 9; i++) {
@@ -212,13 +208,14 @@ public class TestServiceTest {
         }
 
         // when
-        Grade result = testService.submitUpgradeTests(provider, vo);
+        TestResultResponseDto result = testService.renewalSubmitUpgradeTests(user, vo);
 
         // then
-        assertThat(result).isEqualTo(Grade.C1);
+        assertThat(result.getGrade()).isEqualTo(Grade.C1);
+        assertThat(result.getStatus()).isEqualTo("keep");
+        assertThat(result.getScore()).isEqualTo(40);
 
         // 메소드 호출 검증
-        verify(userService).loadUserByUsername(email);
         for(long i = 1L; i < 21; i++) {
             verify(testRepository).findById(i);
         }
