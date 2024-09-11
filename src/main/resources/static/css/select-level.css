@@ -54,6 +54,8 @@ p {
     margin: 50px;
 }
 
+/* 카드 내 텍스트가 가운데 정렬되도록 수정된 CSS */
+
 .card {
     background-color: #f9f9f9;
     border: 1px solid #ddd;
@@ -89,13 +91,14 @@ input[type="radio"]:checked + label {
     display: flex;
     flex-direction: column;
     height: 100%;
-    justify-content: space-between;
+    justify-content: center;
 }
 
 .card-header {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: 20px;
 }
 
 .card-body {

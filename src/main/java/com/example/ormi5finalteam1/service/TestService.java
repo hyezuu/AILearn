@@ -200,7 +200,7 @@ public class TestService {
         if (grade == Grade.A1 || grade == Grade.A2) {
             return count * 10;
         } else if (grade == Grade.B1 || grade == Grade.B2) {
-            return count * 7;
+            return Math.min(count * 7, 100);
         } else {
             return count * 5;
         }
