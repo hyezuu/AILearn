@@ -36,10 +36,6 @@ a:hover {
     color: #000;
 }
 
-header h2 {
-    margin-left: 90px;
-}
-
 header {
     display: flex;
     background: white;
@@ -53,7 +49,7 @@ header {
 }
 
 /* 로고 */
-header img {
+h2 img {
     display: block;
 }
 
@@ -75,16 +71,19 @@ header ul {
 /*메인메뉴*/
 a.mainMenu {
     width: 160px;
-    color: #777;
+    color: #000;
+    opacity: 60%;
     font-size: 1rem;
     font-weight: bold;
-    display: block;
+    display: flex;
     text-align: center;
+    justify-content: center;
     font-family: "IBM Plex Sans KR", sans-serif;
 }
 
 a.mainMenu:hover, a.mainMenu.act {
     color: #000;
+    opacity: 100%;
     font-weight: bold;
 }
 
@@ -116,8 +115,13 @@ header nav a:hover {
 }
 
 .nav-container {
+    padding: 0 20px 0 70px;
     display: flex;
     width: 100%;
     justify-content: space-between;
     align-items: center;
+}
+
+.menu-img {
+    width: 20px;
 }
