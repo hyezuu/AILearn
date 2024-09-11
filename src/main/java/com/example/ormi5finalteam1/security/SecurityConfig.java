@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -34,8 +35,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/request-verification", "/api/verify-email",
                     "/api/auth/password").permitAll()
                 .requestMatchers("/*/signup", "/*/login").permitAll()
-                .requestMatchers("/api/me").hasRole("USER")
-                .requestMatchers("/my").hasRole("USER")
+                .requestMatchers("/api/me").hasAnyRole("USER","ADMIN")
+                .requestMatchers("/my").hasAnyRole("USER","ADMIN")
                 .requestMatchers("/tests", "/tests/level-tests", "/level-tests", "/test-result")
                 .authenticated()
                 .anyRequest().hasAnyRole("USER", "ADMIN"))

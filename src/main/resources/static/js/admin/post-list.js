@@ -12,15 +12,12 @@ $(document).ready(function () {
 
     $searchForm.on("submit", function(event) {
         event.preventDefault();
-        console.log("submit event occured");
         currentPage = 0;
         fetchPosts(currentPage);
     });
 
     function fetchPosts(page) {
         const searchQuery = $searchInput.val();
-        console.log(searchQuery);
-        console.log($searchInput.value);
         $.ajax({
             url: `/api/admin/posts?page=${page}&size=${itemsPerPage}&keyword=${searchQuery}`,
             method: 'GET',
@@ -29,8 +26,6 @@ $(document).ready(function () {
                 withCredentials: true
             },
             success: function (response) {
-                console.log("Success to search")
-                console.log(response)
                 update(response);
             },
             error: function (xhr, status, error) {
