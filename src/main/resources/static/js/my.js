@@ -50,6 +50,8 @@ fetch('/api/me')
             imageElement.src = '/images/profile1.png';
         } else if (user.id % 3 === 0) {
             imageElement.src = '/images/profile2.png';
+        } else {
+            imageElement.src = '/images/profile.png';
         }
 
     }

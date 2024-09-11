@@ -104,15 +104,16 @@ public class EssayServiceTest {
     @Test
     void showMyEssays_는_에세이를_페이지_단위로_조회할_수_있다() {
         // given
-        Pageable pageable = PageRequest.of(0, 3);
+        Pageable pageable = PageRequest.of(0, 3, Sort.by("createdAt").descending());
         List<Essay> essays = Arrays.asList(
                 new Essay(1L, user, "Topic 1", "Content 1"),
                 new Essay(2L, user, "Topic 2", "Content 2"),
                 new Essay(3L, user, "Topic 3", "Content 3")
         );
         Page<Essay> essayPage = new PageImpl<>(essays, pageable, essays.size());
-        Provider provider = new Provider(user.getId(), "email@email.com","nickname", Role.ADMIN, Grade.A2, 0);
-        when(essayRepository.findByUserId(user.getId(), pageable)).thenReturn(essayPage);
+        Provider provider = new Provider(user.getId(), "email@email.com", "nickname", Role.ADMIN, Grade.A2, 0);
+
+        when(essayRepository.findByUserIdAndDeletedAtNull(user.getId(), pageable)).thenReturn(essayPage);
 
         // when
         Page<EssayResponseDto> result = essayService.showMyEssays(provider, 0, 3);
@@ -124,14 +125,15 @@ public class EssayServiceTest {
         assertThat(result.getContent().get(0).getTopic()).isEqualTo("Topic 1");
         assertThat(result.getContent().get(1).getTopic()).isEqualTo("Topic 2");
         assertThat(result.getContent().get(2).getTopic()).isEqualTo("Topic 3");
-        verify(essayRepository, times(1)).findByUserId(user.getId(), pageable);
+        verify(essayRepository, times(1)).findByUserIdAndDeletedAtNull(user.getId(), pageable);
+
     }
 
     @Test
     void showMyEssays_페이지네이션이_잘_작동하는지_확인한다() {
         // given
-        Pageable firstPageRequest = PageRequest.of(0, 2);
-        Pageable secondPageRequest = PageRequest.of(1, 2);
+        Pageable firstPageRequest = PageRequest.of(0, 2,  Sort.by("createdAt").descending());
+        Pageable secondPageRequest = PageRequest.of(1, 2,  Sort.by("createdAt").descending());
 
         List<Essay> essaysPage1 = Arrays.asList(
                 new Essay(1L, user, "Topic 1", "Content 1"),
@@ -146,8 +148,8 @@ public class EssayServiceTest {
 
         Provider provider = new Provider(user.getId(), "email@email.com","nickname", Role.ADMIN, Grade.A2, 0);
 
-        when(essayRepository.findByUserId(user.getId(), firstPageRequest)).thenReturn(firstPage);
-        when(essayRepository.findByUserId(user.getId(), secondPageRequest)).thenReturn(secondPage);
+        when(essayRepository.findByUserIdAndDeletedAtNull(user.getId(), firstPageRequest)).thenReturn(firstPage);
+        when(essayRepository.findByUserIdAndDeletedAtNull(user.getId(), secondPageRequest)).thenReturn(secondPage);
 
         // when
         Page<EssayResponseDto> resultPage1 = essayService.showMyEssays(provider, 0, 2);
@@ -170,17 +172,17 @@ public class EssayServiceTest {
         assertThat(resultPage1.getTotalPages()).isEqualTo(2); // 전체 페이지 수는 2가 되어야 함
         assertThat(resultPage2.getTotalPages()).isEqualTo(2);
 
-        verify(essayRepository, times(1)).findByUserId(user.getId(), firstPageRequest);
-        verify(essayRepository, times(1)).findByUserId(user.getId(), secondPageRequest);
+        verify(essayRepository, times(1)).findByUserIdAndDeletedAtNull(user.getId(), firstPageRequest);
+        verify(essayRepository, times(1)).findByUserIdAndDeletedAtNull(user.getId(), secondPageRequest);
     }
 
     @Test
     void showMyEssays_는_에세이가_없으면_빈_페이지를_반환한다() {
         // given
-        Pageable pageable = PageRequest.of(0, 3);
+        Pageable pageable = PageRequest.of(0, 3,  Sort.by("createdAt").descending());
         Page<Essay> emptyPage = new PageImpl<>(Arrays.asList(), pageable, 0);
         Provider provider = new Provider(user.getId(), "email@email.com","nickname", Role.ADMIN, Grade.A2, 0);
-        when(essayRepository.findByUserId(user.getId(), pageable)).thenReturn(emptyPage);
+        when(essayRepository.findByUserIdAndDeletedAtNull(user.getId(), pageable)).thenReturn(emptyPage);
 
         // when
         Page<EssayResponseDto> result = essayService.showMyEssays(provider, 0, 3);
@@ -189,7 +191,7 @@ public class EssayServiceTest {
         assertThat(result).isNotNull();
         assertThat(result.getTotalElements()).isEqualTo(0);
         assertThat(result.getContent()).isEmpty();
-        verify(essayRepository, times(1)).findByUserId(user.getId(), pageable);
+        verify(essayRepository, times(1)).findByUserIdAndDeletedAtNull(user.getId(), pageable);
     }
 
     @Test
