@@ -73,7 +73,7 @@ public class VocabularyListService {
     public Page<MyVocabularyListResponseDto> getMyVocabularies(Provider provider,
         Pageable pageable) {
         Page<VocabularyListVocabulary> vocabularyPage =
-            vocabularyListRepository.findByUserIdOrderByCreatedAtDesc(provider.id(), pageable);
+            vocabularyListVocabularyRepository.findByUserIdOrderByCreatedAtDesc(provider.id(), pageable);
 
         return vocabularyPage.map(MyVocabularyListResponseDto::from);
     }
