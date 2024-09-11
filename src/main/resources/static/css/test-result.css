@@ -93,18 +93,19 @@ main h2 {
     display: flex;
     justify-content: space-between;
     width: 100%;
+    align-items: flex-end;
 }
 
 .bar {
     width: 16%;
-    height: 50px;
+    height: 75px;
     background-color: #e0e0e0;
     transition: background-color 0.3s ease;
 }
 
 .bar.active {
     background-color: #617882;
-    height: 80px; /* 선택된 바의 색상 */
+    height: 110px; /* 선택된 바의 색상 */
 }
 
 .chart-labels {

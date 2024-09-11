@@ -32,12 +32,12 @@
                     <div class="level-icon">
                         <div id="grade-image">
                             <img th:with="imageName=${
-                                        grade == 'A1' ? 'Bronze' :
-                                        grade == 'A2' ? 'Silver' :
-                                        grade == 'B1' ? 'Gold' :
-                                        grade == 'B2' ? 'Platinum' :
-                                        grade == 'C1' ? 'Diamond' :
-                                        grade == 'C2' ? 'Diamond 2' : 'Unknown'
+                                        grade == 'A1' ? 'bronze' :
+                                        grade == 'A2' ? 'silver' :
+                                        grade == 'B1' ? 'gold' :
+                                        grade == 'B2' ? 'platinum' :
+                                        grade == 'C1' ? 'diamond' :
+                                        grade == 'C2' ? 'diamond 2' : 'Unknown'
                                     }"
                                  th:src="@{'/images/' + ${imageName} + '.png'}"
                                  th:alt="${imageName + ' 등급 이미지'}"
