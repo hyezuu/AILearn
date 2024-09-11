@@ -9,6 +9,10 @@ body {
     background-color: #f4f4f4;
 }
 
+header{
+    height: 40px;
+}
+
 main {
     display: flex;
     flex-direction: column;
