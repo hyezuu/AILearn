@@ -1,3 +1,24 @@
+$(document).ready(function () {
+    // 초기에 nav 메뉴를 숨김
+    $('nav').hide()
+    // .mainMenu 클릭 시 토글 기능을 구현
+    $('.mainMenu').click(function (e) {
+        e.preventDefault(); // 기본 링크 동작을 방지
+        $('nav').slideToggle(300); // 300ms 동안 슬라이드 효과로 토글
+        // 메뉴 텍스트를 토글 (선택사항)
+        var menuText = $(this).text();
+        $(this).text(menuText === 'MENU v' ? 'MENU ^' : 'MENU v');
+    })
+    // nav 영역 외부 클릭 시 메뉴를 닫기 (선택사항)
+    $(document).click(function (e) {
+        if (!$(e.target).closest('header').length) {
+            $('nav').slideUp(300);
+            $('.mainMenu').text('MENU v');
+        }
+    });
+});
+
+
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('upgrade-quiz-form') || document.getElementById('quiz-form');
     if (form) {
@@ -33,7 +54,7 @@ async function submitForm() {
                             window.location.href = '/test-result';
                         },
                         error: function (response) {
-                            swal('warning', '오류 발생',  response.message);
+                            swal('warning', '오류 발생', response.message);
                         }
                     });
                 })
@@ -54,11 +75,11 @@ async function submitForm() {
                             if (response) {
                                 window.location.href = `/tests/level-tests?grade=${selectedGrade}`;
                             } else {
-                                swal('warning', '오류 발생',  response.message);
+                                swal('warning', '오류 발생', response.message);
                             }
                         },
                         error: function (xhr) {
-                            swal('warning', '오류 발생',  '서버 오류가 발생했습니다.');
+                            swal('warning', '오류 발생', '서버 오류가 발생했습니다.');
 
                         }
                     });
@@ -69,7 +90,6 @@ async function submitForm() {
         }
     });
 }
-
 
 
 async function submitLevelTests(event) {
@@ -83,10 +103,10 @@ async function submitLevelTests(event) {
     const answers = formData.getAll('answer');
 
     for (let i = 0; i < testIds.length; i++) {
-        submitRequestDto.push({ testId: parseInt(testIds[i]), answer: answers[i] });
+        submitRequestDto.push({testId: parseInt(testIds[i]), answer: answers[i]});
     }
 
-    const submitRequestVo = { dtoList: submitRequestDto };
+    const submitRequestVo = {dtoList: submitRequestDto};
 
     const result = await Swal.fire({
         title: `제출하시겠습니까?`,
@@ -161,10 +181,10 @@ async function submitUpgradeTests(event) {
     const answers = formData.getAll('answer');
 
     for (let i = 0; i < testIds.length; i++) {
-        submitRequestDto.push({ testId: parseInt(testIds[i]), answer: answers[i] });
+        submitRequestDto.push({testId: parseInt(testIds[i]), answer: answers[i]});
     }
 
-    const submitRequestVo = { dtoList: submitRequestDto };
+    const submitRequestVo = {dtoList: submitRequestDto};
 
     const result = await Swal.fire({
         title: '제출하시겠습니까?',

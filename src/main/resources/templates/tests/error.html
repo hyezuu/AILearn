@@ -1,0 +1,36 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/error.css">
+    <script src="/js/tests.js" defer></script>
+    <script src="/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div id="layout">
+    <!-- 메뉴 부분 -->
+    <header th:replace="~{layout/header::header}"></header>
+    <!-- 메뉴 부분 끝 -->
+    <main>
+        <div id="result-container">
+            <h2>오류 발생🥵</h2>
+            <p class="description">오류가 발생하였습니다.</p>
+            <div th:if="${errorMessage}" class="error-message">
+                <span th:text="${errorMessage}"></span>
+            </div>
+                <p>다시 시도해주세요.</p>
+            <a href="/" class="btn">홈으로 돌아가기</a>
+        </div>
+    </main>
+</div>
+</body>
+</html>
