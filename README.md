@@ -55,10 +55,10 @@ AILearn은 AI 기술을 활용한 혁신적인 온라인 영어 학습 플랫폼
 | 이름            | 역할                           | 담당 업무 |
 |-----------------|--------------------------------|-----------|
 | **[문순려](https://github.com/Sunryeo)** <br> (팀장) | **DevOps / Backend**      | - CI/CD 파이프라인 구축 및 배포 환경 설정<br> - AlanAI 기능 구현<br>- 문법 예문 API 개발 |
-| **[이상윤](https://github.com/nigoleto)**  <br> (서기)  | **Backend/Frontend**           | - AlanAI 기능 구현<br>- 에세이 작성 및 수정 기능 개발<br>- 게시글, 댓글, 좋아요, 문법 예문 API 연동 및 CSS 작업<br>- 마이페이지 - 회원 정보 페이지 구현<br>- 에세이 도메인 슬라이스 테스트 작성 |
-| **[강혜주](https://github.com/hyezuu)**   | **Backend/Frontend**         | - AlanAI 기능 구현<br>- 단어장 기능 개발<br>- 인증, 인가 및 회원 관리 기능 개발<br>- 단어장 및 유저 도메인 슬라이스 테스트 작성<br>- 로그인, 회원가입, 비밀번호 찾기 페이지 개발 및 API 연동<br>- 통합 시나리오 테스트 작성 |
-| **[안정민](https://github.com/jminiiiz)**       | **Backend/Frontend**          | - 게시글 기능 개발<br>- 댓글 기능 개발<br>- 좋아요 기능 개발<br>- 게시글, 댓글, 좋아요 도메인 슬라이스 테스트 작성<br>- 통합 시나리오 테스트 작성 |
-| **[유나영](https://github.com/fjeos)**      | **Backend/Frontend**        | - 관리자 기능 개발<br>- 레벨테스트 기능 개발<br>- 레벨테스트 페이지(등급 선택, 문제 출제, 결과 확인) 구현<br>- 관리자 및 레벨테스트 API 연동<br>- 레벨테스트 도메인 슬라이스 테스트 작성 |
+| **[이상윤](https://github.com/nigoleto)**  <br> (서기)  | **Backend / Frontend**           | - AlanAI 기능 구현<br>- 에세이 작성 및 수정 기능 개발<br>- 게시글, 댓글, 좋아요, 문법 예문 API 연동 및 CSS 작업<br>- 마이페이지 - 회원 정보 페이지 구현<br>- 에세이 도메인 슬라이스 테스트 작성 |
+| **[강혜주](https://github.com/hyezuu)**   | **Backend / Frontend**         | - AlanAI 기능 구현<br>- 단어장 기능 개발<br>- 인증, 인가 및 회원 관리 기능 개발<br>- 단어장 및 유저 도메인 슬라이스 테스트 작성<br>- 로그인, 회원가입, 비밀번호 찾기 페이지 개발 및 API 연동<br>- 통합 시나리오 테스트 작성 |
+| **[안정민](https://github.com/jminiiiz)**       | **Backend / Frontend**          | - 게시글 기능 개발<br>- 댓글 기능 개발<br>- 좋아요 기능 개발<br>- 게시글, 댓글, 좋아요 도메인 슬라이스 테스트 작성<br>- 통합 시나리오 테스트 작성 |
+| **[유나영](https://github.com/fjeos)**      | **Backend / Frontend**        | - 관리자 기능 개발<br>- 레벨테스트 기능 개발<br>- 레벨테스트 페이지(등급 선택, 문제 출제, 결과 확인) 구현<br>- 관리자 및 레벨테스트 API 연동<br>- 레벨테스트 도메인 슬라이스 테스트 작성 |
 | **[김성연](https://github.com/ttt0342)**       | **Frontend / Design**          | - Figma 디자인 및 웹 퍼블리싱<br>- 마이페이지(내 게시글, 회원 정보 수정) 페이지 구현<br>- 관리자 페이지(사용자 및 게시글 조회) 구현<br>- 로그인, 회원가입, 비밀번호 찾기 페이지 구현 |
 | **[이소정](https://github.com/dubu77)**       | **Frontend / Design**          | - Figma 디자인 및 웹 퍼블리싱<br>- 홈 페이지 및 자유게시판(게시글 등록, 수정, 조회) 페이지 구현<br>- 내 단어장 및 문법 예문 목록 조회 페이지 구현<br>- 에세이 작성, 수정 및 첨삭 페이지 구현 |
 
