@@ -79,7 +79,9 @@ public class TestInfoController {
     public String showTestResult(@AuthenticationPrincipal Provider provider, Model model) {
 
         User user = getUser(provider);
-        model.addAttribute("user", user);
+        model.addAttribute("nickname", user.getNickname());
+        model.addAttribute("grade", user.getGrade().name());
+        model.addAttribute("tier", user.getGrade().getTier());
         return "tests/test-result";
     }
 
