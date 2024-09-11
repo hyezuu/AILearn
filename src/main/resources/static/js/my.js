@@ -35,11 +35,24 @@ fetch('/api/me')
     })
     .then(user => {
         document.getElementById('logout-button').style.display = 'block';
+        displayProfile(user);
     })
     .catch(error => {
         document.getElementById('login-button').style.display = 'block';
         document.getElementById('signup-button').style.display = 'block';
     });
+
+    function displayProfile(user) {
+        const imageElement = document.getElementById('profile-img');
+
+        console.log(user.id);
+        if(user.id % 3 === 2) {
+            imageElement.src = '/images/profile1.png';
+        } else if (user.id % 3 === 0) {
+            imageElement.src = '/images/profile2.png';
+        }
+
+    }
 };
 
 // 프로필 경험치 바
@@ -58,12 +71,26 @@ progressBar.style.width = progressPercentage + "%";
 // point 값을 progress-bar의 오른쪽 끝 부분에 표시
 pointDisplay.style.left = progressPercentage + "%";
 pointDisplay.textContent = `${point} p`;
+
+
+    // SweetAlert2 라이브러리 추가
+    loadScript('https://cdn.jsdelivr.net/npm/sweetalert2@11', initializeApp);
+
+    function loadScript(url, callback) {
+        let script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = url;
+        script.onload = callback;
+        document.head.appendChild(script);
+    }
+
+    function initializeApp() {
+    }
 });
 
 document.addEventListener("DOMContentLoaded", function () {
     const userGrade = parseInt(document.getElementById("user-grade").textContent);
 
-    console.log(userGrade);
     const userGradeSpan = document.getElementById("user-grade");
     const gradeBox = document.getElementById("user-grade-box")
     const gradeImg = document.getElementById("user-grade-image");
@@ -76,6 +103,10 @@ document.addEventListener("DOMContentLoaded", function () {
         imgElement.style.width = "70px";  // 이미지 크기를 원하는 대로 설정
         gradeImg.appendChild(imgElement);
     }
+
+    const box2 = document.getElementById("user-grade-box4-1");
+    const diaBox = document.createElement("div")
+    diaBox.className = "user-grade-box4-box";
 
     // userGrade에 따라 텍스트와 이미지를 설정
     switch (userGrade) {
@@ -103,11 +134,12 @@ document.addEventListener("DOMContentLoaded", function () {
             userGradeSpan.innerText = "C1";
             addImage("/images/diamond.png");
             gradeBox.classList.replace("user-grade-box", "user-grade-box4");
+            box2.appendChild(diaBox);
             break;
         case 5:
             userGradeSpan.innerText = "C2";
             addImage("/images/diamond 2.png");
-            gradeBox.classList.toggle("user-grade-box", "user-grade-box5");
+            gradeBox.classList.replace("user-grade-box", "user-grade-box5");
             break;
         default:
             userGradeSpan.innerText = "Unknown";
@@ -115,19 +147,32 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
+    const ready = document.getElementById("ready-upgrade").innerText;
+
     // 5단위 레벨에서만 테스트 가능
     document.getElementById("test-button").addEventListener("click", function(event) {
-        event.preventDefault();
 
-        const ready = document.getElementById("ready-upgrade").innerText;
+        event.preventDefault();
 
         if(ready === "true"){
             window.location.href = "/upgrade-tests";
         } else {
-            window.alert("5단위 레벨에서만 테스트를 진행할 수 있습니다.\n(예시: Lv.5, Lv.10, Lv.15 에서만 가능)")
+            // window.alert("5단위 레벨에서만 테스트를 진행할 수 있습니다.\n(예시: Lv.5, Lv.10, Lv.15 에서만 가능)")
+            Swal.fire('다음 5단위 레벨에서 테스트 자격이 주어집니다!', `예시: Lv.5, Lv.10, Lv.15 ... 에서 테스트 자격 획득`, 'warning');
         }
     });
 
+    const check = document.createElement("span");
+    check.innerHTML = `
+        <div class="image-container">
+            <img src="/images/check.png" alt="check Image" class="check-img">
+            <div class="tooltip" id="tooltip">등급 테스트에 도전할 수 있습니다!</div>
+        </div>
+    `;
+
+    if(ready === "true") {
+        document.getElementById("user-info-title").appendChild(check);
+    }
 
     //단어장 생성
     const createVocabularyLink = document.getElementById('createVocabularyLink');

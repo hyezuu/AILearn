@@ -33,11 +33,16 @@
         <div class="my-page">
             <div class="user-info" th:object="${user}">
                 <div class="user-profile-progress">
-                    <img src="/images/profile.png" alt="Profile Image" style="width: 160px">
+                    <img id="profile-img" src="/images/profile.png" alt="Profile Image" style="width: 160px">
                     <div class="user-info-middle">
-                        <div class="user-info-title">
+                        <div class="user-info-title" id="user-info-title">
                             <span th:text="${user.nickname}">user_id</span>
                             <span><span>Lv.</span><span id="user-level" th:text="${user.level}"></span></span>
+
+                            <div class="image-container-lv">
+                                <img src="/images/question-mark.png" alt="question-mark" class="question-mark">
+                                <div class="tooltip-lv" id="tooltip-lv">단어추가, 문법예문풀기, 에세이 첨삭 등 다양한 활동을 통해 포인트를 획득할 수 있습니다!</div>
+                            </div>
                         </div>
                         <div>
                             <div class="progress-container">
@@ -53,6 +58,7 @@
                     </div>
                 </div>
                 <div class="user-info-right">
+                    <div id="user-grade-box4-1">
                     <div class="user-grade-box" id="user-grade-box">
                         <div class="user-grade-text">
                             <span class="user-grade-text">등급:</span>
@@ -60,7 +66,8 @@
                         </div>
                         <div id="user-grade-image"></div>
                     </div>
-                    <a id="test-button" class="href-button" href="/tests"> 등급 테스트 하러 가기 </a>
+                    </div>
+                    <a id="test-button" class="href-button" href="/tests"> 승급 테스트 하러 가기 </a>
                 </div>
             </div>
         </div>

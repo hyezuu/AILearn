@@ -107,20 +107,67 @@ function renderVocabularies(vocabularies) {
 }
 
 function renderPagination(pageData) {
+  // const container = document.getElementById('paginationContainer');
+  // container.innerHTML = '';
+  //
+  // for (let i = 0; i < pageData.totalPages; i++) {
+  //   const pageButton = document.createElement('button');
+  //   pageButton.innerText = i + 1;
+  //   pageButton.addEventListener('click', () => {
+  //     currentPage = i;
+  //     loadVocabularies(currentPage);
+  //   });
+  //   if (i === pageData.number) {
+  //     pageButton.disabled = true;
+  //   }
+  //   container.appendChild(pageButton);
+  // }
   const container = document.getElementById('paginationContainer');
   container.innerHTML = '';
 
-  for (let i = 0; i < pageData.totalPages; i++) {
+  const totalPages = pageData.totalPages;
+  const currentPage = pageData.number;  // 현재 페이지 번호
+  const maxVisiblePages = 5;
+
+  let startPage = Math.max(0, currentPage - Math.floor(maxVisiblePages / 2));
+  let endPage = Math.min(totalPages, startPage + maxVisiblePages);
+
+  // If not enough pages at the end, adjust the start
+  if (endPage - startPage < maxVisiblePages) {
+    startPage = Math.max(0, endPage - maxVisiblePages);
+  }
+
+  // "<<" 버튼 (첫 페이지로 이동)
+  if (currentPage > 0) {
+    const firstButton = document.createElement('button');
+    firstButton.innerText = '<<';
+    firstButton.addEventListener('click', () => {
+      loadVocabularies(0);  // 첫 페이지로 이동
+    });
+    container.appendChild(firstButton);
+  }
+
+  // 페이지 번호 버튼들 (최대 5개 표시)
+  for (let i = startPage; i < endPage; i++) {
     const pageButton = document.createElement('button');
     pageButton.innerText = i + 1;
     pageButton.addEventListener('click', () => {
-      currentPage = i;
-      loadVocabularies(currentPage);
+      loadVocabularies(i);  // 해당 페이지로 이동
     });
-    if (i === pageData.number) {
-      pageButton.disabled = true;
+    if (i === currentPage) {
+      pageButton.disabled = true;  // 현재 페이지는 버튼 비활성화
     }
     container.appendChild(pageButton);
+  }
+
+  // ">>" 버튼 (마지막 페이지로 이동)
+  if (currentPage < totalPages - 1) {
+    const lastButton = document.createElement('button');
+    lastButton.innerText = '>>';
+    lastButton.addEventListener('click', () => {
+      loadVocabularies(totalPages - 1);  // 마지막 페이지로 이동
+    });
+    container.appendChild(lastButton);
   }
 }
 

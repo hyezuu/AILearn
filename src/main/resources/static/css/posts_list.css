@@ -54,7 +54,7 @@ body {
 .search-button {
     padding: 10px 20px;
     font-size: 16px;
-    background-color: #1d62f8;
+    background-color: #103889;
     color: white;
     border: none;
     border-radius: 10px;
@@ -93,10 +93,10 @@ td {
 
 /* 작성하기 버튼 */
 .edit-button {
-    padding: 6px 30px;
-    background-color: #1d62f8;
+    padding: 9px 30px;
     color: white;
-    font-size: 16px;
+    font-size: 15px;
+    background-color: #103889;
     font-weight: 600;
     border: none;
     border-radius: 10px;
@@ -139,4 +139,44 @@ thead tr th:first-child {
 
 tr {
     cursor: pointer;
+}
+
+
+/* 페이지네이션 */
+#paginationContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#paginationContainer button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    background-color: #fff; /* 선택되지 않은 버튼의 배경 */
+    border: 1px solid #103889; /* 선택되지 않은 버튼의 테두리 */
+    color: #103889; /* 선택되지 않은 버튼의 글씨 색 */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s; /* 색상 변화에 대한 애니메이션 */
+}
+
+#paginationContainer button.selected {
+    background-color: #103889; /* 선택된 버튼의 배경 색상 */
+    color: #fff; /* 선택된 버튼의 글씨 색상 */
+}
+
+#paginationContainer button:hover {
+    background-color: #e0e0e0; /* 선택되지 않은 버튼에 대한 hover 효과 */
+}
+
+#paginationContainer button:disabled {
+    background-color: #103889;
+    color: #fff;
+}
+
+#paginationContainer .move-btn:disabled {
+    background-color: #fff; /* 선택되지 않은 버튼의 배경 */
+    border: 1px solid #103889; /* 선택되지 않은 버튼의 테두리 */
+    color: #103889; /* 선택되지 않은 버튼의 글씨 색 */
+    opacity: 40%;
 }

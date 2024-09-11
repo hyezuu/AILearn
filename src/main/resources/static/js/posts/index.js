@@ -2,9 +2,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchForm = document.getElementById("search-container");
     const searchInput = document.getElementById("search-input");
     const postList = document.getElementById("post-list");
-    const paginationInfo = document.getElementById("page-info");
-    const prevPageButton = document.getElementById("prev-page");
-    const nextPageButton = document.getElementById("next-page");
+    // const paginationInfo = document.getElementById("page-info");
+    // const prevPageButton = document.getElementById("prev-page");
+    // const nextPageButton = document.getElementById("next-page");
 
     let currentPage = 0; // 현재 페이지 번호
     const pageSize = 12; // 한 페이지에 표시할 개수
@@ -21,20 +21,6 @@ document.addEventListener("DOMContentLoaded", function () {
         fetchPosts(currentPage, pageSize, searchQuery);
     });
 
-    // 페이지네이션 버튼 클릭 이벤트 처리
-    prevPageButton.addEventListener("click", function() {
-        if (currentPage > 0) {
-            currentPage--;
-            fetchPosts(currentPage, pageSize, searchInput.value);
-        }
-    });
-
-    nextPageButton.addEventListener("click", function() {
-        if (currentPage < totalPages - 1) {
-            currentPage++;
-            fetchPosts(currentPage, pageSize, searchInput.value);
-        }
-    });
 
     // 게시글 목록 및 검색 기능 구현
     function fetchPosts(page, pageSize, searchQuery = "") {
@@ -86,15 +72,82 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // 페이지네이션 정보 업데이트 및 버튼 활성화/비활성화 처리
+    // // 페이지네이션 정보 업데이트 및 버튼 활성화/비활성화 처리
+    // function updatePagination(currentPage, totalPages) {
+    //     paginationInfo.textContent = `Page ${currentPage + 1} of ${totalPages}`;
+    //
+    //     // 첫 페이지일 때 이전 버튼 비활성화
+    //     prevPageButton.disabled = currentPage === 0;
+    //
+    //     // 마지막 페이지일 때 다음 버튼 비활성화
+    //     nextPageButton.disabled = currentPage >= totalPages - 1;
+    // }
+    //
+    // // 페이지네이션 버튼 클릭 이벤트 처리
+    // prevPageButton.addEventListener("click", function() {
+    //     if (currentPage > 0) {
+    //         currentPage--;
+    //         fetchPosts(currentPage, pageSize, searchInput.value);
+    //     }
+    // });
+    //
+    // nextPageButton.addEventListener("click", function() {
+    //     if (currentPage < totalPages - 1) {
+    //         currentPage++;
+    //         fetchPosts(currentPage, pageSize, searchInput.value);
+    //     }
+    // });
+
     function updatePagination(currentPage, totalPages) {
-        paginationInfo.textContent = `Page ${currentPage + 1} of ${totalPages}`;
+        const pageContainer = document.getElementById('paginationContainer');
+        pageContainer.innerHTML = '';  // 기존 버튼 제거
 
-        // 첫 페이지일 때 이전 버튼 비활성화
-        prevPageButton.disabled = currentPage === 0;
+        const maxVisiblePages = 5;
+        let startPage = Math.max(0, currentPage - Math.floor(maxVisiblePages / 2));
+        let endPage = Math.min(totalPages, startPage + maxVisiblePages);
 
-        // 마지막 페이지일 때 다음 버튼 비활성화
-        nextPageButton.disabled = currentPage >= totalPages - 1;
+        if (endPage - startPage < maxVisiblePages) {
+            startPage = Math.max(0, endPage - maxVisiblePages);
+        }
+
+
+        // "<<" 첫 페이지로 이동 버튼
+        const firstButton = document.createElement('button');
+        firstButton.className = "move-btn"
+        firstButton.innerText = '<<';
+        firstButton.disabled = currentPage === 0;  // 첫 페이지에서는 비활성화
+        firstButton.addEventListener('click', function() {
+            if (currentPage > 0) {
+                currentPage = 0;
+                fetchPosts(currentPage, pageSize, searchInput.value);
+            }
+        });
+        pageContainer.appendChild(firstButton);
+
+        // 페이지 번호 버튼들 (최대 5개)
+        for (let i = startPage; i < endPage; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.innerText = i + 1;
+            pageButton.disabled = i === currentPage;  // 현재 페이지는 비활성화
+            pageButton.addEventListener('click', function() {
+                currentPage = i;
+                fetchPosts(currentPage, pageSize, searchInput.value);
+            });
+            pageContainer.appendChild(pageButton);
+        }
+
+        // ">>" 마지막 페이지로 이동 버튼
+        const lastButton = document.createElement('button');
+        lastButton.className = "move-btn"
+        lastButton.innerText = '>>';
+        lastButton.disabled = currentPage >= totalPages - 1;  // 마지막 페이지에서는 비활성화
+        lastButton.addEventListener('click', function() {
+            if (currentPage < totalPages - 1) {
+                currentPage = totalPages - 1;
+                fetchPosts(currentPage, pageSize, searchInput.value);
+            }
+        });
+        pageContainer.appendChild(lastButton);
     }
 
 

@@ -71,11 +71,26 @@ document.addEventListener("DOMContentLoaded", async function() {
         const container = document.getElementById('GrammarContainer');
         container.innerHTML = '';
         GrammerExamples.forEach(grammar => {
+            let src = "";
+            if(grammar.grade === "A1") {
+                src = "/images/bronze.png";
+            } else if(grammar.grade === "A2") {
+                src = "/images/silver.png";
+            } else if(grammar.grade === "B1") {
+                src = "/images/gold.png";
+            } else if(grammar.grade === "B2") {
+                src = "/images/platinum.png";
+            } else if(grammar.grade === "C1") {
+                src = "/images/diamond.png";
+            } else if(grammar.grade === "C2") {
+                src = "/images/diamond 2.png";
+            }
+
             const grammarElement = document.createElement('div');
             grammarElement.className = 'vocabulary';
             grammarElement.innerHTML = `
             <div class="vocabulary-header">
-                <span>${grammar.grade}</span>
+                <img src="${src}" alt="" class="grammar-grade">
             </div>
             <div class="example">${grammar.question}</div>
             <form class="answer-form" data-id="${grammar.id}">
@@ -83,6 +98,8 @@ document.addEventListener("DOMContentLoaded", async function() {
                 <button class="grading-grammar" type="submit"> 채점하기 </button>
             </form>
         `;
+
+
 
             container.appendChild(grammarElement);
         });
@@ -153,22 +170,74 @@ document.addEventListener("DOMContentLoaded", async function() {
 
     // 페이지네이션
     function renderPagination() {
+        // const container = document.getElementById('paginationContainer');
+        // container.innerHTML = '';
+        //
+        // const totalPages = Math.ceil(userGrammarExamples / pageSize);
+        //
+        // for (let i = 0; i < totalPages; i++) {
+        //     const pageButton = document.createElement('button');
+        //     pageButton.innerText = i + 1;
+        //     pageButton.addEventListener('click', () => {
+        //         currentPage = i;
+        //         fetchGrammarExamples(currentPage);
+        //     });
+        //     if (i === currentPage) {
+        //         pageButton.disabled = true;
+        //     }
+        //     container.appendChild(pageButton);
+        // }
         const container = document.getElementById('paginationContainer');
         container.innerHTML = '';
 
         const totalPages = Math.ceil(userGrammarExamples / pageSize);
+        const maxVisiblePages = 5;
 
-        for (let i = 0; i < totalPages; i++) {
+        let startPage = Math.max(0, currentPage - Math.floor(maxVisiblePages / 2));
+        let endPage = Math.min(totalPages, startPage + maxVisiblePages);
+
+        // If not enough pages at the end, adjust the start
+        if (endPage - startPage < maxVisiblePages) {
+            startPage = Math.max(0, endPage - maxVisiblePages);
+        }
+
+        // "<<" 버튼 (첫 페이지로 이동)
+        if (currentPage > 0) {
+            const firstButton = document.createElement('button');
+            firstButton.innerText = '<<';
+            firstButton.addEventListener('click', () => {
+                currentPage = 0;
+                fetchGrammarExamples(currentPage);
+                renderPagination();
+            });
+            container.appendChild(firstButton);
+        }
+
+        // 페이지 번호 버튼들
+        for (let i = startPage; i < endPage; i++) {
             const pageButton = document.createElement('button');
             pageButton.innerText = i + 1;
             pageButton.addEventListener('click', () => {
                 currentPage = i;
                 fetchGrammarExamples(currentPage);
+                renderPagination();
             });
             if (i === currentPage) {
                 pageButton.disabled = true;
             }
             container.appendChild(pageButton);
+        }
+
+        // ">>" 버튼 (마지막 페이지로 이동)
+        if (currentPage < totalPages - 1) {
+            const lastButton = document.createElement('button');
+            lastButton.innerText = '>>';
+            lastButton.addEventListener('click', () => {
+                currentPage = totalPages - 1;
+                fetchGrammarExamples(currentPage);
+                renderPagination();
+            });
+            container.appendChild(lastButton);
         }
     }
 
