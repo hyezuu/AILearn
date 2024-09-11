@@ -50,6 +50,30 @@ document.addEventListener("DOMContentLoaded", function () {
                 : posts.title
 
             const nickname = posts.userName;
+            let userGrade = posts.userGrade;
+            switch (posts.userGrade) {
+                case "A1":
+                    userGrade = "/images/bronze.png";
+                    break;
+                case "A2":
+                    userGrade = "/images/silver.png";
+                    break;
+                case "B1":
+                    userGrade = "/images/gold.png";
+                    break;
+                case "B2":
+                    userGrade = "/images/platinum.png";
+                    break;
+                case "C1":
+                    userGrade = "/images/diamond.png";
+                    break;
+                case "C2":
+                    userGrade = "/images/diamond 2.png";
+                    break;
+                default:
+                    userGrade = "";
+                    break;
+            }
 
             const date = new Date(posts.createdAt).toISOString().slice(2, 16).replace("T"," ");
 
@@ -58,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const row = document.createElement("tr");
             row.innerHTML = `
                 <td>${truncatedTitle}</td>
-                <td>${nickname}</td>
+                <td><img src="${userGrade}" alt="userGrade" class="grade-img">${nickname}</td>
                 <td>${date}</td>
                 <td>${viewCount}</td>
             `;
@@ -70,32 +94,6 @@ document.addEventListener("DOMContentLoaded", function () {
             postList.appendChild(row);
         });
     }
-
-    // // 페이지네이션 정보 업데이트 및 버튼 활성화/비활성화 처리
-    // function updatePagination(currentPage, totalPages) {
-    //     paginationInfo.textContent = `Page ${currentPage + 1} of ${totalPages}`;
-    //
-    //     // 첫 페이지일 때 이전 버튼 비활성화
-    //     prevPageButton.disabled = currentPage === 0;
-    //
-    //     // 마지막 페이지일 때 다음 버튼 비활성화
-    //     nextPageButton.disabled = currentPage >= totalPages - 1;
-    // }
-    //
-    // // 페이지네이션 버튼 클릭 이벤트 처리
-    // prevPageButton.addEventListener("click", function() {
-    //     if (currentPage > 0) {
-    //         currentPage--;
-    //         fetchPosts(currentPage, pageSize, searchInput.value);
-    //     }
-    // });
-    //
-    // nextPageButton.addEventListener("click", function() {
-    //     if (currentPage < totalPages - 1) {
-    //         currentPage++;
-    //         fetchPosts(currentPage, pageSize, searchInput.value);
-    //     }
-    // });
 
     function updatePagination(currentPage, totalPages) {
         const pageContainer = document.getElementById('paginationContainer');

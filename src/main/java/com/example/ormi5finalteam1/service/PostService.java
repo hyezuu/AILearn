@@ -125,6 +125,7 @@ public class PostService {
                 post.getId(),
                 post.getUser().getId(),
                 post.getUser().getNickname(),
+                post.getUser().getGrade(),
                 post.getTitle(),
                 post.getContent(),
                 post.getViewCount(),

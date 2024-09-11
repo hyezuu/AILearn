@@ -61,7 +61,7 @@ class PostControllerTest {
     void getAllPosts_사용자는_게시글_목록을_조회할_수_있다() throws Exception {
         // Given
         Page<PostDto> posts = new PageImpl<>(Collections.singletonList(
-                new PostDto(1L, 1L, "nickname", "title", "content", 0, LocalDateTime.now(), null)));
+                new PostDto(1L, 1L, "nickname", Grade.A1, "title", "content", 0, LocalDateTime.now(), null)));
         when(postService.getAllPosts(0, 12, null)).thenReturn(posts);
 
         // When & Then
@@ -80,7 +80,7 @@ class PostControllerTest {
         // Given
         String keyword = "test";
         Page<PostDto> posts = new PageImpl<>(Collections.singletonList(
-                new PostDto(1L, 1L, "nickname", "testTitle", "content", 0, LocalDateTime.now(), null)));
+                new PostDto(1L, 1L, "nickname", Grade.A1, "testTitle", "content", 0, LocalDateTime.now(), null)));
         when(postService.getAllPosts(0, 12, keyword)).thenReturn(posts);
 
         // When & Then
@@ -98,7 +98,7 @@ class PostControllerTest {
     @Test
     void getPostById_사용자는_단일_게시글_상세_내용을_조회할_수_있다() throws Exception {
         // Given
-        PostDto postDto = new PostDto(1L, 1L, "nickname", "title", "content", 0, LocalDateTime.now(), null);
+        PostDto postDto = new PostDto(1L, 1L, "nickname", Grade.A1, "title", "content", 0, LocalDateTime.now(), null);
         when(postService.getPostById(1L)).thenReturn(postDto);
 
         // When & Then
@@ -113,8 +113,8 @@ class PostControllerTest {
     @Test
     void createPost_사용자는_게시글을_작성할_수_있다() throws Exception {
         // Given
-        PostDto postDto = new PostDto(null, 1L, "nickname", "title", "content", 0, LocalDateTime.now(), null);
-        PostDto createdPost = new PostDto(1L, 1L, "nickname", "title", "content", 0, LocalDateTime.now(), null);
+        PostDto postDto = new PostDto(null, 1L, "nickname", Grade.A1, "title", "content", 0, LocalDateTime.now(), null);
+        PostDto createdPost = new PostDto(1L, 1L, "nickname", Grade.A1, "title", "content", 0, LocalDateTime.now(), null);
 
         when(postService.createPost(any(PostDto.class), any(Provider.class))).thenReturn(createdPost);
 
@@ -132,7 +132,7 @@ class PostControllerTest {
     @Test
     void updatePost_작성자는_게시글을_수정할_수_있다() throws Exception {
         // Given
-        PostDto postDto = new PostDto(1L, 1L, "nickname", "newTitle", "newContent", 0, LocalDateTime.now(), null);
+        PostDto postDto = new PostDto(1L, 1L, "nickname", Grade.A1, "newTitle", "newContent", 0, LocalDateTime.now(), null);
         when(postService.updatePost(eq(1L), any(PostDto.class), any(Provider.class))).thenReturn(postDto);
 
         // When & Then
@@ -161,7 +161,7 @@ class PostControllerTest {
     void getUserPosts_사용자는_자신이_작성한_게시글_목록을_조회할_수_있다() throws Exception {
         // Given
         Page<PostDto> posts = new PageImpl<>(Collections.singletonList(
-                new PostDto(1L, 1L, "nickname", "title", "content", 0, LocalDateTime.now(), null)));
+                new PostDto(1L, 1L, "nickname", Grade.A1, "title", "content", 0, LocalDateTime.now(), null)));
         when(postService.getPostsByUserId(0, 12, provider)).thenReturn(posts);
 
         // When & Then
