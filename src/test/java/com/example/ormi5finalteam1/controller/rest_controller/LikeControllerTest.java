@@ -100,7 +100,7 @@ class LikeControllerTest {
     void getLikedPosts_사용자는_좋아요한_게시글을_조회할_수_있다() throws Exception {
         // Given
         Page<PostDto> likedPosts = new PageImpl<>(Collections.singletonList(
-                new PostDto(1L, provider.id(), "nickname", "title", "content", 0, LocalDateTime.now(), LocalDateTime.now())
+                new PostDto(1L, provider.id(), "nickname", Grade.A1, "title", "content", 0, LocalDateTime.now(), LocalDateTime.now())
         ));
         when(likeService.getLikedPosts(anyInt(), anyInt(), any(Provider.class))).thenReturn(likedPosts);
 

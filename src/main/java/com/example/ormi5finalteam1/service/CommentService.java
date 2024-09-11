@@ -94,6 +94,7 @@ public class CommentService {
                 comment.getId(),
                 comment.getUser().getId(),
                 comment.getUser().getNickname(),
+                comment.getUser().getGrade(),
                 comment.getPost().getId(),
                 comment.getPost().getTitle(),
                 comment.getContent(),

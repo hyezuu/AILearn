@@ -98,11 +98,11 @@ public class Ormi5FinalTeam1ApplicationTests {
         );
 
         // 게시글 DTO 초기화
-        postDto = new PostDto(1L, 1L, "testUser", "Test Title", "Test Content", 0,
+        postDto = new PostDto(1L, 1L, "testUser", Grade.A1, "Test Title", "Test Content", 0,
             LocalDateTime.now(), LocalDateTime.now());
 
         // 댓글 DTO 초기화
-        commentDto = new CommentDto(1L, 1L, "testUser", 1L, "Test Title", "Test Comment",
+        commentDto = new CommentDto(1L, 1L, "testUser", Grade.A1, 1L, "Test Title", "Test Comment",
             LocalDateTime.now());
 
         // 테스트용 세션 생성

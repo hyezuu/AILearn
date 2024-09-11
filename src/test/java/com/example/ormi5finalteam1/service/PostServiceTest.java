@@ -133,7 +133,7 @@ class PostServiceTest {
                 .password("password")
                 .nickname("testUser")
                 .build();
-        PostDto postDto = new PostDto(null, 1L,"nickname", "title", "content", 0, LocalDateTime.now(), null);
+        PostDto postDto = new PostDto(null, 1L,"nickname", Grade.A1, "title", "content", 0, LocalDateTime.now(), null);
         Post post = new Post(user, "title", "content");
 
         when(userService.getUser(provider.id())).thenReturn(user);
@@ -160,7 +160,7 @@ class PostServiceTest {
         ReflectionTestUtils.setField(user, "id", provider.id());
 
         Post post = new Post(user, "oldTitle", "oldContent");
-        PostDto postDto = new PostDto(1L, 1L, "nickname", "newTitle", "newContent", 0, LocalDateTime.now(), null);
+        PostDto postDto = new PostDto(1L, 1L, "nickname", Grade.A1, "newTitle", "newContent", 0, LocalDateTime.now(), null);
 
         when(postRepository.findById(1L)).thenReturn(Optional.of(post));
 
