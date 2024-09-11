@@ -3,6 +3,7 @@ package com.example.ormi5finalteam1.controller.rest_controller;
 import com.example.ormi5finalteam1.domain.Grade;
 import com.example.ormi5finalteam1.domain.test.SubmitRequestVo;
 import com.example.ormi5finalteam1.domain.test.TestQuestionResponseDto;
+import com.example.ormi5finalteam1.domain.test.TestResultResponseDto;
 import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.domain.user.Role;
 import com.example.ormi5finalteam1.domain.user.User;
@@ -204,7 +205,8 @@ public class TestControllerTest {
         securityContext.setAuthentication(auth);
         SecurityContextHolder.setContext(securityContext);
 
-        when(testService.submitUpgradeTests(any(), any())).thenReturn(Grade.B2);
+        when(userService.loadUserByUsername("test@example.com")).thenReturn(user);
+        when(testService.renewalSubmitUpgradeTests(any(), any())).thenReturn(new TestResultResponseDto("success", Grade.B2));
 
         // when & then
         mockMvc.perform(post("/api/upgrade")
@@ -212,9 +214,8 @@ public class TestControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new SubmitRequestVo())))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value(Grade.B2.name()));
-
-        verify(testService).submitUpgradeTests(any(), any());
+                .andExpect(jsonPath("status").value("success"))
+                .andExpect(jsonPath("grade").value(Grade.B2.name()));
     }
 
     @DisplayName("승급테스트 제출 - 유지")
@@ -229,7 +230,8 @@ public class TestControllerTest {
         securityContext.setAuthentication(auth);
         SecurityContextHolder.setContext(securityContext);
 
-        when(testService.submitUpgradeTests(any(), any())).thenReturn(Grade.B1);
+        when(userService.loadUserByUsername("test@example.com")).thenReturn(user);
+        when(testService.renewalSubmitUpgradeTests(any(), any())).thenReturn(new TestResultResponseDto("keep", Grade.B1));
 
         // when & then
         mockMvc.perform(post("/api/upgrade")
@@ -237,9 +239,10 @@ public class TestControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new SubmitRequestVo())))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value(Grade.B1.name()));
+                .andExpect(jsonPath("status").value("keep"))
+                .andExpect(jsonPath("grade").value(Grade.B1.name()));
 
-        verify(testService).submitUpgradeTests(any(), any());
+        verify(testService).renewalSubmitUpgradeTests(any(), any());
     }
 
     @DisplayName("승급테스트 제출 - 강등")
@@ -254,7 +257,8 @@ public class TestControllerTest {
         securityContext.setAuthentication(auth);
         SecurityContextHolder.setContext(securityContext);
 
-        when(testService.submitUpgradeTests(any(), any())).thenReturn(Grade.A2);
+        when(userService.loadUserByUsername("test@example.com")).thenReturn(user);
+        when(testService.renewalSubmitUpgradeTests(any(), any())).thenReturn(new TestResultResponseDto("fail", Grade.A2));
 
         // when & then
         mockMvc.perform(post("/api/upgrade")
@@ -262,9 +266,10 @@ public class TestControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new SubmitRequestVo())))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value(Grade.A2.name()));
+                .andExpect(jsonPath("status").value("fail"))
+                .andExpect(jsonPath("grade").value(Grade.A2.name()));
 
-        verify(testService).submitUpgradeTests(any(), any());
+        verify(testService).renewalSubmitUpgradeTests(any(), any());
     }
 
     @DisplayName("최초 회원 - 승급 테스트 검증")
@@ -278,6 +283,11 @@ public class TestControllerTest {
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
         securityContext.setAuthentication(auth);
         SecurityContextHolder.setContext(securityContext);
+
+        user.changeReadyStatus(true);
+        user.changeGrade(null);
+
+        when(userService.loadUserByUsername("test@example.com")).thenReturn(user);
 
         // when & then
         mockMvc.perform(post("/api/upgrade")

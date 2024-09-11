@@ -29,9 +29,14 @@ public class AdminService {
     private final PostService postService;
     private final CommentService commentService;
 
-    public Page<UserInfoDto> getAllUserList(Pageable pageable) {
+    public Page<UserInfoDto> getAllUserList(Pageable pageable, String nickname) {
 
-        return userRepository.findAllByOrderByRoleAscId(pageable).map(UserInfoDto::toDto);
+        // 키워드가 null 이거나 빈 문자열이면 전체 조회, 그렇지 않으면 검색
+        if (nickname == null || nickname.trim().isEmpty()) {
+            return userRepository.findAllByOrderByRoleAscId(pageable).map(UserInfoDto::toDto);
+        } else {
+            return userRepository.findByNicknameContaining(nickname, pageable).map(UserInfoDto::toDto);
+        }
     }
     public void changeUserStatus(Long userId) {
 

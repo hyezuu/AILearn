@@ -15,7 +15,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/js/admin/post-list.js"></script>
     <script src="/js/main.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 </head>
 <body>
 <!-- 메뉴 부분 -->
@@ -24,11 +24,11 @@
 
 <div class="container">
     <h2>게시글 리스트</h2>
-    <!--</div>-->
-    <div class="search-container">
+    
+    <form class="search-container" id="search-form">
         <input type="text" class="search-input" placeholder="search">
         <button type="submit" class="search-button">search</button>
-    </div>
+    </form>
 
     <table class="table">
         <tr class="header">

@@ -27,10 +27,11 @@ public class AdminController {
     private final AdminService adminService;
 
     @GetMapping("/users")
-    public Page<UserInfoDto> getAllUserList(@AuthenticationPrincipal Provider provider, Pageable pageable) {
+    public Page<UserInfoDto> getAllUserList(@AuthenticationPrincipal Provider provider,
+                                            Pageable pageable, String nickname) {
 
         if (!provider.role().equals(Role.ADMIN)) throw new BusinessException(ErrorCode.HAS_NO_AUTHORITY);
-        return adminService.getAllUserList(pageable);
+        return adminService.getAllUserList(pageable, nickname);
     }
 
     @PutMapping("/users/{id}")

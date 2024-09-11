@@ -161,8 +161,10 @@ public class TestService {
 
         int count = markAnswer(submitRequestVo);
 
+        System.out.println("count :" + count);
         Grade[] values = Grade.values();
         int nowGradeIndex = user.getGrade().getIndex();
+        System.out.println("user grade: " + user.getGrade());
         Grade nextGrade = values[nowGradeIndex + 1];
 
         String status = "keep";
@@ -185,7 +187,6 @@ public class TestService {
     private User findUser(Provider provider) {
         User user = userService.loadUserByUsername(provider.email());
         if (!user.isReadyForUpgrade()) throw new BusinessException(ErrorCode.CANNOT_TAKE_TEST);
-        System.out.println("found User");
         return user;
     }
 
@@ -209,8 +210,6 @@ public class TestService {
     private void changeUserStatus(User user, Grade grade) {
         user.changeGrade(grade);
         user.changeReadyStatus(false);
-        System.out.println("Changer User status");
-        System.out.println(user.getGrade() + " " + user.isReadyForUpgrade());
     }
 
     public void saveTests(List<Test> tests) {

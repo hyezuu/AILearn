@@ -15,4 +15,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
   Boolean existsByNickname(String nickname);
 
   Page<User> findAllByOrderByRoleAscId(Pageable pageable);
+
+  Page<User> findByNicknameContaining(String nickname, Pageable pageable);
 }

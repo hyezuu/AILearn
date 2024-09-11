@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 var data = JSON.parse(xhr.responseText);
                 displayPostDetails(data);
             } else if (xhr.readyState === 4) {
-                alert('오류가 발생했습니다.');
+                Swal.fire('오류가 발생했습니다.', '', 'error');
                 console.error('Error fetching post details:', xhr.status);
             }
         };
@@ -54,19 +54,29 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // 게시글 삭제
-    document.getElementById("delete-post").addEventListener("click", function (e) {
+    document.getElementById("delete-post").addEventListener("click", async function (e) {
         e.preventDefault();
-        const result = confirm("게시글을 삭제하시겠습니까?");
-        if (result) {
+
+        const result = await Swal.fire({
+            title: '게시글을 삭제하시겠습니까?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '삭제',
+            cancelButtonText: '취소'
+        });
+
+        if (result.isConfirmed) {
             var xhr = new XMLHttpRequest();
             xhr.open("DELETE", `/api/admin/posts/${postId}`, true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.withCredentials = true;
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 200) {
-                    window.location.href = "/admin/posts";
+                    Swal.fire('게시글이 삭제되었습니다.', '', 'success').then(() => {
+                        window.location.href = "/admin/posts";
+                    });
                 } else if (xhr.readyState === 4) {
-                    alert('오류가 발생했습니다.');
+                    Swal.fire('오류가 발생했습니다.', '', 'error');
                     console.error('Error deleting post:', xhr.status);
                 }
             };
@@ -93,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.getElementById("input-comment-value").value = "";
                 window.location.reload();
             } else if (xhr.readyState === 4) {
-                alert('오류가 발생했습니다.');
+                Swal.fire('오류가 발생했습니다.', '', 'error');
                 console.error('Error creating comment:', xhr.status);
             }
         };
@@ -110,7 +120,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const date = new Date(comment.createdAt).toISOString().slice(2, 16).replace("T", " ");
 
-            // 댓글 삭제 버튼을 모든 댓글에 대해 표시
             commentContainer.innerHTML = `
             <span class="comment-content">${comment.content}</span>
             <div class="comment-info">
@@ -128,27 +137,35 @@ document.addEventListener("DOMContentLoaded", function () {
         // 모든 삭제 버튼에 이벤트 리스너 추가
         const deleteButtons = document.querySelectorAll(".delete-comment");
         deleteButtons.forEach(button => {
-            button.addEventListener("click", function () {
+            button.addEventListener("click", async function () {
                 const commentId = this.getAttribute("data-comment-id");
-                deleteComment(commentId);
+                await deleteComment(commentId);
             });
         });
     }
 
-
     // 댓글 삭제
-    function deleteComment(commentId) {
-        const result = confirm("댓글을 삭제하시겠습니까?");
-        if (result) {
+    async function deleteComment(commentId) {
+        const result = await Swal.fire({
+            title: '댓글을 삭제하시겠습니까?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '삭제',
+            cancelButtonText: '취소'
+        });
+
+        if (result.isConfirmed) {
             var xhr = new XMLHttpRequest();
             xhr.open("DELETE", `/api/admin/posts/${postId}/comments/${commentId}`, true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.withCredentials = true;
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 200) {
-                    window.location.reload();
+                    Swal.fire('댓글이 삭제되었습니다.', '', 'success').then(() => {
+                        window.location.reload();
+                    });
                 } else if (xhr.readyState === 4) {
-                    alert('오류가 발생했습니다.');
+                    Swal.fire('오류가 발생했습니다.', '', 'error');
                     console.error('Error deleting comment:', xhr.status);
                 }
             };
