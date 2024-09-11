@@ -48,8 +48,8 @@ async function submitForm() {
 
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: `/level-tests?grade=${selectedGrade}`,
-                        method: 'POST',
+                        url: `/tests/level-tests?grade=${selectedGrade}`,
+                        method: 'GET',
                         success: function (response) {
                             if (response) {
                                 window.location.href = `/tests/level-tests?grade=${selectedGrade}`;
@@ -58,6 +58,7 @@ async function submitForm() {
                             }
                         },
                         error: function (xhr) {
+                            console.log(xhr.responseJSON.message);
                             swal('warning', '오류 발생', '서버 오류가 발생했습니다.');
 
                         }
@@ -103,13 +104,17 @@ async function submitLevelTests(event) {
             data: JSON.stringify(submitRequestVo),
             success: function (data) {
                 if (data.status === 'success') {
-                    window.location.href = '/test-result';
+                    Swal.fire({
+                        icon: 'success',
+                        title: '테스트 통과',
+                        html: '점수: ' + data.score + '<br>테스트에 통과했습니다.',
+                    }).then(() => { window.location.href = '/test-result'; })
                 } else if (data.status === 'fail') {
                     if (data.grade === 'A1') {
                         Swal.fire({
                             icon: 'warning',
                             title: '테스트 실패',
-                            text: '테스트를 통과하지 못했습니다.'
+                            html: '점수: ' + data.score + '<br>테스트를 통과하지 못했습니다.',
                         }).then(() => {
                             $.ajax({
                                 url: '/grade/A1',
@@ -123,11 +128,11 @@ async function submitLevelTests(event) {
                         Swal.fire({
                             icon: 'warning',
                             title: '레벨 테스트 실패',
-                            text: `${data.grade} 등급 테스트를 시작합니다.`
+                            html: '점수: ' + data.score + `<br>${data.grade} 등급 테스트를 시작합니다.`,
                         }).then(() => {
                             $.ajax({
-                                url: `/level-tests?grade=${encodeURIComponent(data.grade)}`,
-                                method: 'POST',
+                                url: `/tests/level-tests?grade=${encodeURIComponent(data.grade)}`,
+                                method: 'GET',
                                 success: function (response) {
                                     window.location.href = `/tests/level-tests?grade=${data.grade}`;
                                 },
@@ -184,7 +189,7 @@ async function submitUpgradeTests(event) {
                     Swal.fire({
                         icon: 'success',
                         title: '승급',
-                        text: '다음 등급으로 올라갑니다.'
+                        html: '점수: ' + data.score + '<br>다음 등급으로 올라갑니다.',
                     }).then(() => {
                         window.location.href = '/test-result';
                     });
@@ -192,7 +197,7 @@ async function submitUpgradeTests(event) {
                     Swal.fire({
                         icon: 'info',
                         title: '등급 유지',
-                        text: '현재 등급이 유지됩니다.'
+                        html: '점수: ' + data.score + '<br>현재 등급이 유지됩니다.',
                     }).then(() => {
                         window.location.href = '/test-result';
                     });
@@ -200,7 +205,7 @@ async function submitUpgradeTests(event) {
                     Swal.fire({
                         icon: 'warning',
                         title: '강등',
-                        text: '등급이 하향되었습니다.'
+                        html: '점수: ' + data.score + '<br>등급이 하향되었습니다.',
                     }).then(() => {
                         window.location.href = '/test-result';
                     });

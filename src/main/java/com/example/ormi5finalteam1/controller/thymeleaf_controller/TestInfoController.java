@@ -46,10 +46,13 @@ public class TestInfoController {
     }
 
     @GetMapping("/tests/level-tests")
-    public String showLevelTests(@RequestParam("grade") Grade selectedGrade, Model model) {
+    public String showLevelTests(@AuthenticationPrincipal Provider provider,
+                                 @RequestParam("grade") Grade selectedGrade, Model model) {
 
-            model.addAttribute("testQuestionResponseDtoList", testService.getLevelTests(selectedGrade));
-            model.addAttribute("grade", selectedGrade);
+        User user = getUser(provider);
+        if (user.getGrade() != null || !user.isReadyForUpgrade()) throw new BusinessException(ErrorCode.CANNOT_TAKE_TEST);
+        model.addAttribute("testQuestionResponseDtoList", testService.getLevelTests(selectedGrade));
+        model.addAttribute("grade", selectedGrade);
         return "tests/level-test";
     }
 
