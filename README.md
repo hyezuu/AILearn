@@ -13,6 +13,23 @@
 # AILearn - 온라인 영어 학습 서비스
 <img width="1320" alt="스크린샷 2024-09-09 오후 1 58 59" src="https://github.com/user-attachments/assets/e61d757f-faba-46cb-9365-f3af51d3ff25">
 
+# AILearn - 온라인 영어 학습 서비스
+
+## 목차
+- [프로젝트 소개](#-프로젝트-소개)
+- [프로젝트 개요](#-프로젝트-개요)
+- [주요 기능](#-주요-기능)
+- [팀 구성 및 역할](#-팀-구성-및-역할)
+- [기술 스택](#-기술-스택)
+- [아키텍처](#-아키텍처)
+- [ERD](#-erd)
+- [요구사항 정의서](#-요구사항-정의서)
+- [화면 구성](#-화면-구성)
+- [API 명세서](#-api-명세서)
+
+---
+
+
 ## 📌 프로젝트 소개
 
 AILearn은 AI 기술을 활용한 혁신적인 온라인 영어 학습 플랫폼입니다. 
@@ -73,6 +90,14 @@ Alan AI를 통해 개인화된 학습 경험을 제공하며, 사용자의 영�
 <img width="907" alt="2024-09-10_2 39 08" src="https://github.com/user-attachments/assets/03134fde-e6c2-4a27-838e-bc2020c883ce">
 
 ---
+## 🔗 ERD
+
+[ERD 링크✨](https://www.erdcloud.com/d/qFMGccKdh5hDqxP79)
+
+<img width="1278" alt="스크린샷 2024-09-09 오후 1 51 36" src="https://github.com/user-attachments/assets/d727e542-9607-4ab2-b256-2822476baac0">
+
+---
+<br>
 
 ## 📋 요구사항 정의서
 
@@ -227,10 +252,9 @@ Alan AI를 통해 개인화된 학습 경험을 제공하며, 사용자의 영�
 | :---: | :---: |
 | ![사용자 계정 정지](https://github.com/user-attachments/assets/6db67378-c488-4832-9091-ff712a0ed098) | ![사용자 계정 탈퇴](https://github.com/user-attachments/assets/12916a0f-766d-46ed-b863-939438869ff3) |
 
+---
+<br>
 
-## 🔗 ERD
-
-<img width="1278" alt="스크린샷 2024-09-09 오후 1 51 36" src="https://github.com/user-attachments/assets/d727e542-9607-4ab2-b256-2822476baac0">
 
 
 ## 📜 API 명세서
