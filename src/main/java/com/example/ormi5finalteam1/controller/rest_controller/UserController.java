@@ -62,11 +62,6 @@ public class UserController {
         return vocabularyListService.getMyVocabularies(provider, pageable);
     }
 
-    @GetMapping("/me/vocabulary-list/status")
-    public Boolean getUserVocabularyListStatus(@AuthenticationPrincipal Provider provider) {
-        return vocabularyListService.isVocabularyExist(provider);
-    }
-
     @DeleteMapping("/withdrawal")
     public ResponseEntity<Void> withdrawal(@AuthenticationPrincipal Provider provider) {
         userService.delete(provider);
