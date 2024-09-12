@@ -36,15 +36,6 @@ public class TestInfoController {
         return "tests/select-level";
     }
 
-    @PostMapping("/level-tests")
-    public String selectTestLevel(@AuthenticationPrincipal Provider provider,
-                                  @RequestParam("grade") Grade selectedGrade) {
-
-        User user = getUser(provider);
-        if (user.getGrade() != null || !user.isReadyForUpgrade()) throw new BusinessException(ErrorCode.CANNOT_TAKE_TEST);
-        return "redirect:/tests/level-tests?grade=" + selectedGrade;
-    }
-
     @GetMapping("/tests/level-tests")
     public String showLevelTests(@AuthenticationPrincipal Provider provider,
                                  @RequestParam("grade") Grade selectedGrade, Model model) {
