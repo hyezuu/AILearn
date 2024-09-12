@@ -184,21 +184,24 @@ document.addEventListener("DOMContentLoaded", async function() {
         }
 
         // "<<" 버튼 (첫 페이지로 이동)
-        if (currentPage > 0) {
-            const firstButton = document.createElement('button');
-            firstButton.innerText = '<<';
-            firstButton.addEventListener('click', () => {
+        const firstButton = document.createElement('button');
+        firstButton.className = "move-btn"
+        firstButton.innerText = '<<';
+        firstButton.disabled = currentPage === 0;
+        firstButton.addEventListener('click', () => {
+            if(currentPage > 0) {
                 currentPage = 0;
                 fetchGrammarExamples(currentPage);
                 renderPagination();
-            });
-            container.appendChild(firstButton);
-        }
+            }
+        });
+        container.appendChild(firstButton);
 
         // 페이지 번호 버튼들
         for (let i = startPage; i < endPage; i++) {
             const pageButton = document.createElement('button');
             pageButton.innerText = i + 1;
+            pageButton.disabled = i === currentPage;  // 현재 페이지는 비활성화
             pageButton.addEventListener('click', () => {
                 currentPage = i;
                 fetchGrammarExamples(currentPage);
@@ -211,16 +214,16 @@ document.addEventListener("DOMContentLoaded", async function() {
         }
 
         // ">>" 버튼 (마지막 페이지로 이동)
-        if (currentPage < totalPages - 1) {
-            const lastButton = document.createElement('button');
-            lastButton.innerText = '>>';
-            lastButton.addEventListener('click', () => {
-                currentPage = totalPages - 1;
-                fetchGrammarExamples(currentPage);
-                renderPagination();
-            });
-            container.appendChild(lastButton);
-        }
+        const lastButton = document.createElement('button');
+        lastButton.innerText = '>>';
+        lastButton.innerText = '>>';
+        lastButton.disabled = currentPage >= totalPages - 1;
+        lastButton.addEventListener('click', () => {
+            currentPage = totalPages - 1;
+            fetchGrammarExamples(currentPage);
+            renderPagination();
+        });
+        container.appendChild(lastButton);
     }
 
 });

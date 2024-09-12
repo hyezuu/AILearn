@@ -24,7 +24,7 @@ h1 {
 }
 /* 게시글 폼 */
 form {
-    margin: 70px;
+    margin: 70px auto;
     max-width: 800px;
     display: flex;
     flex-direction: column;
@@ -104,5 +104,5 @@ textarea {
     border-radius: 10px;
 }
 .edit-button:hover {
-    background-color: #173db9;
+    background-color: #0a1c59;
 }

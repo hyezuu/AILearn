@@ -133,6 +133,13 @@ button {
     color: #fff;
 }
 
+#paginationContainer .move-btn:disabled {
+    background-color: #fff; /* 선택되지 않은 버튼의 배경 */
+    border: 1px solid #103889; /* 선택되지 않은 버튼의 테두리 */
+    color: #103889; /* 선택되지 않은 버튼의 글씨 색 */
+    opacity: 40%;
+}
+
 .my-list {
     width: 95%;
     display: flex;
@@ -152,6 +159,10 @@ button {
     border-radius: 10px;
     cursor: pointer;
     font-weight: 600;
+}
+
+button:hover {
+    background-color: #0a1c59;
 }
 
 .my-list div {

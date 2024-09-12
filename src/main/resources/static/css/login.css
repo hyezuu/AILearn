@@ -76,7 +76,7 @@ button {
     width: 100%;
     padding: 10px;
     margin-top: 10px;
-    background-color: #1d62f8;
+    background-color: #103889;
     color: white;
     border: none;
     border-radius: 10px;
@@ -85,7 +85,7 @@ button {
 }
 
 button:hover {
-    background-color: #173db9;
+    background-color: #0a1c59;
 }
 
 .validation-message {

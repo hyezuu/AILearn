@@ -36,7 +36,7 @@ body {
 .search-button {
     padding: 10px 20px;
     cursor: pointer;
-    background-color: #1d62f8;
+    background-color: #103889;
     color: white;
     font-size: 1.1rem;
     border: none;
@@ -45,8 +45,8 @@ body {
 
 }
 .search-button:hover {
-    background-color: #173db9;
-    border-color: #173db9;
+    background-color: #0a1c59;
+    border-color: #0a1c59;
     color: white;
 }
 
@@ -103,7 +103,7 @@ tr:not(:last-child) {
 }
 
 .pagination button.active {
-    background-color: #007bff;
+    background-color: #103889;
     color: white;
     font-weight: bold;
     cursor: default;

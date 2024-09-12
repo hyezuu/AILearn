@@ -162,6 +162,13 @@ hr {
     color: #fff;
 }
 
+#paginationContainer .move-btn:disabled {
+    background-color: #fff; /* 선택되지 않은 버튼의 배경 */
+    border: 1px solid #103889; /* 선택되지 않은 버튼의 테두리 */
+    color: #103889; /* 선택되지 않은 버튼의 글씨 색 */
+    opacity: 40%;
+}
+
 
 /* 문법 */
 #GrammarContainer {
@@ -255,4 +262,8 @@ button {
 
 .grammar-grade {
     width: 20px;
+}
+
+button {
+    background-color: #0a1c59;
 }
