@@ -87,7 +87,7 @@ AILearn은 AI 기술을 활용한 혁신적인 온라인 영어 학습 플랫폼
 <img src="https://img.shields.io/badge/amazonaws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white"> <img src="https://img.shields.io/badge/AWS RDS-527FFF?style=for-the-badge&logo=AmazonRDS&logoColor=white"> <img src="https://img.shields.io/badge/AWS EC2-FF9900?style=for-the-badge&logo=AmazonEC2&logoColor=white"> <img src="https://img.shields.io/badge/githubactions-2088ff?style=for-the-badge&logo=githubactions&logoColor=white"> <img src="https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white"> 
 
 ## 🌐 아키텍처
-<img width="907" alt="2024-09-10_2 39 08" src="https://github.com/user-attachments/assets/03134fde-e6c2-4a27-838e-bc2020c883ce">
+<img width="944" alt="스크린샷 2024-09-12 오후 2 34 25" src="https://github.com/user-attachments/assets/3b9e089d-3d17-40d7-af97-3917dad26e2a">
 
 ---
 ## 🔗 ERD
