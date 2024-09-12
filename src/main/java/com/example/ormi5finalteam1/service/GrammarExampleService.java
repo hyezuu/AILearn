@@ -59,7 +59,7 @@ public class GrammarExampleService {
         grammarExampleRepository
             .findById(id)
             .map(GrammarExampleService::convertToDto)
-            .orElseThrow(() -> new IllegalArgumentException()); // todo: exception 교체
+            .orElseThrow(() -> new IllegalArgumentException());
 
     if (!grammarExampleDto.getAnswer().equals(answer)) {
       grammarExampleGradingDto.setCorrect(false);
