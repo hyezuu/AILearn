@@ -119,3 +119,24 @@ main h2 {
     width: 30px;
     text-align: center;
 }
+
+.button-container {
+    position: relative;
+    left: 160px;
+    top: 15px;
+}
+
+.my-page-button {
+    display: inline-block;
+    background-color: #2e5dbd;
+    color: white;
+    padding: 10px 12px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 13px;
+}
+
+.my-page-button:hover {
+    color: white;
+    background-color: #007bff;
+}
