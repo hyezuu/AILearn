@@ -278,7 +278,7 @@ AILearn은 AI 기술을 활용한 혁신적인 온라인 영어 학습 플랫폼
 
 | 기능            | 메소드  | 엔드포인트                              |
 |-----------------|---------|----------------------------------------|
-| 게시글 작성     | POST    | `/api/post`                            |
+| 게시글 작성     | POST    | `/api/posts`                            |
 | 게시글 목록 조회 | GET     | `/api/posts`                           |
 | 게시글 단일 조회 | GET     | `/api/posts/{id}`                      |
 | 게시글 수정     | PUT     | `/api/posts/{id}`                      |
@@ -289,18 +289,18 @@ AILearn은 AI 기술을 활용한 혁신적인 온라인 영어 학습 플랫폼
 
 | 기능              | 메소드  | 엔드포인트                              |
 |-------------------|---------|----------------------------------------|
-| 좋아요 생성       | POST    | `/api/posts/{id}/like`                 |
-| 좋아요 취소       | DELETE  | `/api/posts/{id}/like`                 |
-| 좋아요 조회       | GET     | `/api/posts/{id}/like`                 |
+| 좋아요 생성       | POST    | `/api/posts/{postId}/like`                 |
+| 좋아요 취소       | DELETE  | `/api/posts/{postId}/like`                 |
+| 좋아요 조회       | GET     | `/api/posts/{postId}/like`                 |
 | 좋아요 누른 게시글 목록 조회 | GET     | `/api/me/likes`                        |
 
 ### 댓글
 
 | 기능              | 메소드  | 엔드포인트                              |
 |-------------------|---------|----------------------------------------|
-| 댓글 목록 조회    | GET     | `/api/posts/{id}/comments`             |
-| 댓글 작성        | POST    | `/api/posts/{id}/comments`             |
-| 댓글 삭제        | DELETE  | `/api/posts/{id}/comments/{id}`        |
+| 댓글 목록 조회    | GET     | `/api/posts/{postId}/comments`             |
+| 댓글 작성        | POST    | `/api/posts/{postId}/comments`             |
+| 댓글 삭제        | DELETE  | `/api/posts/{postId}/comments/{id}`        |
 | 내 댓글 목록 조회 | GET     | `/api/me/comments`                     |
 
 ### 단어장
