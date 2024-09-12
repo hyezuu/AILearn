@@ -76,7 +76,7 @@ public class EssayController {
     }
 
     /** 에세이 삭제 */
-    @DeleteMapping("/essays/{id}/delete")
+    @DeleteMapping("/essays/{id}")
     public ResponseEntity<Void> deleteEssay(@PathVariable Long id, @AuthenticationPrincipal Provider provider) {
         essayService.deleteEssay(id, provider);
         return new ResponseEntity<>(HttpStatusCode.valueOf(200));

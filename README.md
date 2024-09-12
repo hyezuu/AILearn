@@ -270,15 +270,15 @@ AILearn은 AI 기술을 활용한 혁신적인 온라인 영어 학습 플랫폼
 
 | 기능            | 메소드  | 엔드포인트                              |
 |-----------------|---------|----------------------------------------|
-| 로그인          | POST    | `/api/auth/login`                      |
-| 로그아웃        | GET     | `/api/auth/logout`                     |
+| 로그인          | POST    | `/login`                      |
+| 로그아웃        | GET     | `/logout`                     |
 | 비밀번호 찾기   | GET     | `/api/auth/password`                   |
 
 ### 게시글
 
 | 기능            | 메소드  | 엔드포인트                              |
 |-----------------|---------|----------------------------------------|
-| 게시글 작성     | POST    | `/api/post`                            |
+| 게시글 작성     | POST    | `/api/posts`                            |
 | 게시글 목록 조회 | GET     | `/api/posts`                           |
 | 게시글 단일 조회 | GET     | `/api/posts/{id}`                      |
 | 게시글 수정     | PUT     | `/api/posts/{id}`                      |
@@ -289,18 +289,18 @@ AILearn은 AI 기술을 활용한 혁신적인 온라인 영어 학습 플랫폼
 
 | 기능              | 메소드  | 엔드포인트                              |
 |-------------------|---------|----------------------------------------|
-| 좋아요 생성       | POST    | `/api/posts/{id}/like`                 |
-| 좋아요 취소       | DELETE  | `/api/posts/{id}/like`                 |
-| 좋아요 조회       | GET     | `/api/posts/{id}/like`                 |
+| 좋아요 생성       | POST    | `/api/posts/{postId}/like`                 |
+| 좋아요 취소       | DELETE  | `/api/posts/{postId}/like`                 |
+| 좋아요 조회       | GET     | `/api/posts/{postId}/like`                 |
 | 좋아요 누른 게시글 목록 조회 | GET     | `/api/me/likes`                        |
 
 ### 댓글
 
 | 기능              | 메소드  | 엔드포인트                              |
 |-------------------|---------|----------------------------------------|
-| 댓글 목록 조회    | GET     | `/api/posts/{id}/comments`             |
-| 댓글 작성        | POST    | `/api/posts/{id}/comments`             |
-| 댓글 삭제        | DELETE  | `/api/posts/{id}/comments/{id}`        |
+| 댓글 목록 조회    | GET     | `/api/posts/{postId}/comments`             |
+| 댓글 작성        | POST    | `/api/posts/{postId}/comments`             |
+| 댓글 삭제        | DELETE  | `/api/posts/{postId}/comments/{id}`        |
 | 내 댓글 목록 조회 | GET     | `/api/me/comments`                     |
 
 ### 단어장
@@ -316,9 +316,11 @@ AILearn은 AI 기술을 활용한 혁신적인 온라인 영어 학습 플랫폼
 
 | 기능              | 메소드  | 엔드포인트                              |
 |-------------------|---------|----------------------------------------|
-| 레벨테스트 조회   | GET     | `/api/tests`                           |
-| 레벨테스트 정답 제출 | POST    | `/api/grade`                           |
-| 승급테스트 정답 제출 | POST    | `/api/upgrade`                         |
+| 레벨테스트 문제 조회   | GET     | `/tests/level-tests?grade={grade}`     |
+| 레벨테스트 정답 제출   | POST    | `/grade`                               |
+| 승급테스트 문제 조회   | GET     | `/upgrade-tests`                       |
+| 승급테스트 정답 제출   | POST    | `/api/upgrade`                         |
+| 사용자 등급 A1으로 지정 | POST    | `/grade/A1`                           |
 
 ### 문법예문
 
@@ -346,10 +348,10 @@ AILearn은 AI 기술을 활용한 혁신적인 온라인 영어 학습 플랫폼
 
 | 기능              | 메소드  | 엔드포인트                              |
 |-------------------|---------|----------------------------------------|
-| 전체 사용자 조회  | GET     | `/api/admin/users`                     |
-| 사용자 계정 상태 변경 | PUT     | `/api/admin/users/{id}`                |
+| 전체 사용자 조회  | GET     | `/api/admin/users?nickname={nickname}`  |
+| 사용자 계정 상태 변경 | PUT     | `/api/admin/users/{id}`              |
 | 사용자 계정 삭제  | DELETE  | `/api/admin/users/{id}`                |
-| 전체 게시글 조회  | GET     | `/api/admin/posts`                     |
+| 전체 게시글 조회  | GET     | `/api/admin/posts?keyword={keyword}`   |
 | 게시글 단일 조회  | GET     | `/api/admin/posts/{id}`                |
 | 게시글 삭제       | DELETE  | `/api/admin/posts/{id}`                |
 | 특정 게시글의 특정 댓글 삭제 | DELETE  | `/api/admin/posts/{id}/comments/{id}` |
@@ -368,8 +370,9 @@ AILearn은 AI 기술을 활용한 혁신적인 온라인 영어 학습 플랫폼
 | 마이페이지 - 내 게시글 목록 | GET     | `/my/posts`                                          |
 | 마이페이지 - 회원정보 변경  | GET     | `/my/edit`                                           |
 | 레벨테스트 - 등급 선택     | GET     | `/tests`                                             |
-| 레벨테스트 - 문제          | GET     | `/tests?grade={B1}`                                  |
-| 레벨테스트 - 결과          | GET     | `/tests/result`                                      |
+| 레벨테스트 - 문제          | GET     | `/tests/level-test?grade={grade}`                    |
+| 승급테스트 - 문제          | GET     | `/tests/upgrade-test`                               |
+| 테스트 - 결과              | GET     | `/test-result`                                      |
 | 자유게시판 - 게시글 등록   | GET     | `/posts/new`                                         |
 | 자유게시판 - 게시글 수정   | GET     | `/posts/{id}/edit`                                   |
 | 자유게시판 - 게시글 목록 조회 | GET     | `/posts`                                             |
@@ -382,6 +385,6 @@ AILearn은 AI 기술을 활용한 혁신적인 온라인 영어 학습 플랫폼
 | 에세이 - 수정페이지        | GET     | `/essays/{id}/edit`                                  |
 | 에세이 - 첨삭              | GET     | `/essays/review`                                     |
 | 에세이 - 작성 가이드 조회  | GET     | `/essays/guide`                                      |
-| 관리자 - 전체 사용자 조회  | GET     | `/admin/users`                                       |
-| 관리자 - 전체 게시글 조회  | GET     | `/admin/posts`                                       |
-| 관리자 - 게시글 단일 조회  | GET     | `/admin/posts/{id}`                                  |
+| 관리자 - 전체 사용자 조회  | GET     | `/admin/users`                                        |
+| 관리자 - 전체 게시글 조회  | GET     | `/admin/posts`                                        |
+| 관리자 - 게시글 단일 조회  | GET     | `/admin/posts/{id}`                                   |
