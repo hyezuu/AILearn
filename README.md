@@ -335,7 +335,7 @@ AILearn은 AI 기술을 활용한 혁신적인 온라인 영어 학습 플랫폼
 |-------------------|---------|----------------------------------------|
 | 에세이 생성       | POST    | `/api/essays`                          |
 | 에세이 수정       | PUT     | `/api/essays/{id}`                     |
-| 에세이 삭제       | DELETE  | `/api/essays/{id}/delete`              |
+| 에세이 삭제       | DELETE  | `/api/essays/{id}`                     |
 | 에세이 검색       | GET     | `/api/essays/search`                   |
 | 에세이 첨삭       | POST    | `/api/essays/{id}/review`              |
 | 에세이 작성 가이드 조회 | GET     | `/api/essay-guides`               |
