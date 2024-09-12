@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("essay-delete").addEventListener("click", function (event){
         event.preventDefault();
 
-        fetch(`/api/essays/${essayId}/delete`, {
+        fetch(`/api/essays/${essayId}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json"
