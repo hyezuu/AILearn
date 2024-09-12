@@ -45,7 +45,7 @@ body {
 
 }
 .search-button:hover {
-    background-color: #0f246c;
+    background-color: #0a1c59;
     filter: drop-shadow(0px 0px 2px #0f246c );
     border-color: #0f246c;
     color: white;
@@ -111,7 +111,7 @@ tr:not(:last-child) {
 }
 
 .pagination button.active {
-    background-color: #007bff;
+    background-color: #103889;
     color: white;
     font-weight: bold;
     cursor: default;

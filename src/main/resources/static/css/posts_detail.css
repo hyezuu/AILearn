@@ -181,7 +181,7 @@ textarea {
     text-orientation: mixed; /* 텍스트 방향을 기본값으로 설정 */
     white-space: nowrap; /* 텍스트가 한 줄로 표시되도록 설정 */
     padding: 6px 30px;
-    background-color: #2e5dbd;
+    background-color: #103889;
     color: white;
     font-size: 1.1rem;
     font-weight: 600;
@@ -191,7 +191,7 @@ textarea {
 }
 
 .comment-form button:hover {
-    background-color: #103889;
+    background-color: #0a1c59;
 }
 
 
