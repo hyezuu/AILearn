@@ -20,7 +20,6 @@ a:hover {
 /* 로그인, 로그아웃, 회원가입 버튼  */
 #login-button, #logout-button, #signup-button {
     font-family: "IBM Plex Sans KR", sans-serif;
-    font-weight: bold;
     color: #777;
 }
 
@@ -58,7 +57,6 @@ header li {
 }
 
 header li a {
-    font-weight: bold;
     color: #777;
 }
 
@@ -104,8 +102,6 @@ header nav a {
     padding: 4px;
     text-align: center;
     border: none;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
 }
 
 header nav a:hover {
@@ -124,4 +120,18 @@ header nav a:hover {
 
 .menu-img {
     width: 20px;
+}
+
+#login-button {
+    margin-right: 45px;
+    font-weight: bold;
+}
+
+#signup-button {
+    font-weight: bold;
+}
+
+#logout-button {
+    margin-right: 50px;
+    color: #777;
 }
