@@ -132,6 +132,8 @@ header nav a:hover {
 }
 
 #logout-button {
+    padding-top: 10px;
+    padding-bottom: 6px;
     margin-right: 50px;
     color: #777;
 }

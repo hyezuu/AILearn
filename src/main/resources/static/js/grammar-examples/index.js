@@ -139,11 +139,38 @@ document.addEventListener("DOMContentLoaded", async function() {
         });
     }
 
-    // 문법예문 추가하기 (비동기 처리)
-    // function addSubmitEventListeners() {
-        document.getElementById("addGrammarExampleButton").addEventListener("click", async function (event) {
-            event.preventDefault();
+    const addGrammarExampleButton = document.getElementById('addGrammarExampleButton');
+    const hasGrade = addGrammarExampleButton.getAttribute('data-has-grade') === 'true';
 
+    addGrammarExampleButton.addEventListener('click', function(event) {
+        event.preventDefault();
+
+        if (hasGrade) {
+            addSubmitEventListeners();
+        } else {
+            showGradeTestModal();
+        }
+    });
+
+    function showGradeTestModal() {
+        Swal.fire({
+            title: '등급이 없습니다',
+            text: "아직 등급이 없습니다. 테스트를 먼저 보시겠습니까?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '예, 테스트 보러 가기',
+            cancelButtonText: '아니오'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '/tests';
+            }
+        });
+    }
+
+    // 문법예문 추가하기 (비동기 처리)
+    async function addSubmitEventListeners() {
             try {
                 const response = await fetch("/api/grammar-examples/more", {
                     method: "POST",
@@ -163,8 +190,8 @@ document.addEventListener("DOMContentLoaded", async function() {
             } catch (error) {
                 console.error('Error adding grammar example:', error);
             }
-        });
-    // }
+        ;
+    }
 
     // 페이지네이션
     function renderPagination() {
