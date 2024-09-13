@@ -28,13 +28,6 @@ public class AlanAIService {
     // 응답 파싱
     String rawQuery = contentParser.parseGrammarExamplesQueryResponse(response.getContent());
 
-    // 결과 출력
-    if (rawQuery != null) {
-      // todo: 예외처리
-    } else {
-      // todo: 예외처리
-    }
-
     // grammar_examples 테이블에 raw query 날려서 데이터 생성
     grammarExampleRepository.insertGrammarExampleWithRawQuery(rawQuery);
   }
