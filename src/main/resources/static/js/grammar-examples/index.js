@@ -172,13 +172,13 @@ document.addEventListener("DOMContentLoaded", async function() {
         const container = document.getElementById('paginationContainer');
         container.innerHTML = '';
 
+        console.log(userGrammarExamples);
         const totalPages = Math.ceil(userGrammarExamples / pageSize);
         const maxVisiblePages = 5;
 
         let startPage = Math.max(0, currentPage - Math.floor(maxVisiblePages / 2));
         let endPage = Math.min(totalPages, startPage + maxVisiblePages);
 
-        // If not enough pages at the end, adjust the start
         if (endPage - startPage < maxVisiblePages) {
             startPage = Math.max(0, endPage - maxVisiblePages);
         }
@@ -192,7 +192,6 @@ document.addEventListener("DOMContentLoaded", async function() {
             if(currentPage > 0) {
                 currentPage = 0;
                 fetchGrammarExamples(currentPage);
-                renderPagination();
             }
         });
         container.appendChild(firstButton);
@@ -205,7 +204,6 @@ document.addEventListener("DOMContentLoaded", async function() {
             pageButton.addEventListener('click', () => {
                 currentPage = i;
                 fetchGrammarExamples(currentPage);
-                renderPagination();
             });
             if (i === currentPage) {
                 pageButton.disabled = true;
@@ -215,15 +213,13 @@ document.addEventListener("DOMContentLoaded", async function() {
 
         // ">>" 버튼 (마지막 페이지로 이동)
         const lastButton = document.createElement('button');
-        lastButton.innerText = '>>';
+        lastButton.className = "move-btn"
         lastButton.innerText = '>>';
         lastButton.disabled = currentPage >= totalPages - 1;
         lastButton.addEventListener('click', () => {
             currentPage = totalPages - 1;
             fetchGrammarExamples(currentPage);
-            renderPagination();
         });
         container.appendChild(lastButton);
     }
-
 });

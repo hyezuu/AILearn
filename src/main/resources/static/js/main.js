@@ -1,22 +1,3 @@
-// $(document).ready(function() {
-//     // 초기에 nav 메뉴를 숨김
-//     $('nav').hide()
-//     // .mainMenu 클릭 시 토글 기능을 구현
-//     $('.mainMenu').click(function (e) {
-//         e.preventDefault(); // 기본 링크 동작을 방지
-//         $('nav').slideToggle(300); // 300ms 동안 슬라이드 효과로 토글
-//         // 메뉴 텍스트를 토글 (선택사항)
-//         var menuText = $(this).text();
-//         $(this).text(menuText === 'MENU v' ? 'MENU ^' : 'MENU v');
-//     })
-//     // nav 영역 외부 클릭 시 메뉴를 닫기 (선택사항)
-//     $(document).click(function (e) {
-//         if (!$(e.target).closest('header').length) {
-//             $('nav').slideUp(300);
-//             $('.mainMenu').text('MENU v');
-//         }
-//     });
-// });
 $(document).ready(function() {
     // 초기에 nav 메뉴를 숨김
     $('nav').hide();
@@ -24,6 +5,7 @@ $(document).ready(function() {
     // .mainMenu 클릭 시 토글 기능을 구현
     $('.mainMenu').click(function (e) {
         e.preventDefault(); // 기본 링크 동작을 방지
+        console.log("toggle")
         $('nav').slideToggle(300); // 300ms 동안 슬라이드 효과로 토글
 
         // 이미지 소스를 토글
@@ -54,8 +36,18 @@ async function getUserId() {
         });
         const data = await response.json();
 
+        let isMainPage = document.getElementById("main-btn");
+        if(isMainPage) {
+            isMainPage.innerHTML = `
+            <a href="/my"><button>내 등급 확인하고 공부하러가기!</button></a>
+        `;
+        }
+
+        document.getElementById("nickname-button").innerHTML = `
+            <a href="/my"><strong>${data.nickname}</strong> 님</a>
+        `;
+        document.getElementById("nickname-button").style.display = 'block';
         document.getElementById('logout-button').style.display = 'block';
-        document.getElementById('logout-button').style.color = '#777';
 
     } catch (error) {
         // console.error('Error fetching user data:', error);

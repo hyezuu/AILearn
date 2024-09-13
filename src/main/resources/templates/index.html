@@ -22,7 +22,7 @@
     <section id="sec1"> <!-- 홈 화면1 -->
         <div>
             <h1><i><b>AILEARN</b></i> 에<br>오신 것을 환영합니다.</h1>
-            <a href="/signup"><button>회원가입하고 내 실력 알아보기</button></a>
+            <div class="main-btn" id="main-btn"><a href="/signup"><button>회원가입하고 내 실력 알아보기</button></a></div>
             <!-- AILEARN 설명-->
             <p>AILEARN은 AI + LEARN의 합성어로 AI(Alan)를 이용한 학습에 도움을 주는 서비스 입니다.</p>
         </div>
@@ -54,11 +54,6 @@
                 }
             })
             .then(user => {
-                // 사용자 정보를 HTML에 렌더링
-                // const userInfoDiv = document.getElementById('user-info');
-                // userInfoDiv.innerHTML = `<p>ID: ${user.id}</p>
-                //                              <p>Username: ${user.username}</p>
-                //                              <p>Email: ${user.email}</p>`;
                 console.log()
                 document.getElementById('logout-button').style.display = 'block';
             })
