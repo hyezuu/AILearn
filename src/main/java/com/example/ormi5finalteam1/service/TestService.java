@@ -33,7 +33,7 @@ public class TestService {
      */
     public List<TestQuestionResponseDto> getLevelTests(Grade selectedGrade) {
 
-        if (selectedGrade.equals(Grade.C2))
+        if (selectedGrade.equals(Grade.A1) || selectedGrade.equals(Grade.C2))
             throw new BusinessException(ErrorCode.CANNOT_TAKE_TEST);
 
         List<Test> gradeTestQuestions = getTests(selectedGrade);

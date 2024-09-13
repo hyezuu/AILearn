@@ -87,7 +87,7 @@ AILearn은 AI 기술을 활용한 혁신적인 온라인 영어 학습 플랫폼
 <img src="https://img.shields.io/badge/amazonaws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white"> <img src="https://img.shields.io/badge/AWS RDS-527FFF?style=for-the-badge&logo=AmazonRDS&logoColor=white"> <img src="https://img.shields.io/badge/AWS EC2-FF9900?style=for-the-badge&logo=AmazonEC2&logoColor=white"> <img src="https://img.shields.io/badge/githubactions-2088ff?style=for-the-badge&logo=githubactions&logoColor=white"> <img src="https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white"> 
 
 ## 🌐 아키텍처
-<img width="907" alt="2024-09-10_2 39 08" src="https://github.com/user-attachments/assets/03134fde-e6c2-4a27-838e-bc2020c883ce">
+<img width="944" alt="스크린샷 2024-09-12 오후 2 34 25" src="https://github.com/user-attachments/assets/3b9e089d-3d17-40d7-af97-3917dad26e2a">
 
 ---
 ## 🔗 ERD
@@ -162,6 +162,11 @@ AILearn은 AI 기술을 활용한 혁신적인 온라인 영어 학습 플랫폼
 6.1 단어장 관리
   - 사용자는 단어장을 생성, 조회, 수정, 삭제할 수 있다.
   - 단어 추가 및 삭제 기능을 통해 단어장을 업데이트할 수 있다.
+  - 시스템은 스케줄러와 Alan API를 활용하여 자동으로 단어를 수집하고 단어장에 추가할 수 있다.
+     - 스케줄러는 정기적으로 단어 수집 작업을 실행한다.
+     - Alan API를 통해 새로운 단어와 관련 정보를 가져온다.
+     - 수집된 단어는 사용자의 승인을 거쳐 추가될 수 있다.
+     - 시스템은 중복 단어 체크를 통해 이미 존재하는 단어의 중복 추가를 방지한다.
 
 ### 7. 레벨테스트
 
@@ -175,6 +180,10 @@ AILearn은 AI 기술을 활용한 혁신적인 온라인 영어 학습 플랫폼
 
 8.1 문법 예문 관리
   - 사용자는 문법 예문을 작성, 조회, 추가할 수 있으며, 예문에 대한 채점 기능이 제공된다.
+  - 시스템은 스케줄러와 Alan API를 활용하여 자동으로 문법 예문을 수집할 수 있다.
+     - 스케줄러는 정기적으로 예문 수집 작업을 실행한다.
+     - Alan API를 통해 새로운 예문과 설명을 가져온다.
+    
 
 ### 9. 에세이
 
@@ -316,7 +325,7 @@ AILearn은 AI 기술을 활용한 혁신적인 온라인 영어 학습 플랫폼
 
 | 기능              | 메소드  | 엔드포인트                              |
 |-------------------|---------|----------------------------------------|
-| 레벨테스트 문제 조회   | GET     | `/tests/level-tests`                   |
+| 레벨테스트 문제 조회   | GET     | `/tests/level-tests?grade={grade}`     |
 | 레벨테스트 정답 제출   | POST    | `/grade`                               |
 | 승급테스트 문제 조회   | GET     | `/upgrade-tests`                       |
 | 승급테스트 정답 제출   | POST    | `/api/upgrade`                         |
@@ -348,10 +357,10 @@ AILearn은 AI 기술을 활용한 혁신적인 온라인 영어 학습 플랫폼
 
 | 기능              | 메소드  | 엔드포인트                              |
 |-------------------|---------|----------------------------------------|
-| 전체 사용자 조회  | GET     | `/api/admin/users`                     |
-| 사용자 계정 상태 변경 | PUT     | `/api/admin/users/{id}`                |
+| 전체 사용자 조회  | GET     | `/api/admin/users?nickname={nickname}`  |
+| 사용자 계정 상태 변경 | PUT     | `/api/admin/users/{id}`              |
 | 사용자 계정 삭제  | DELETE  | `/api/admin/users/{id}`                |
-| 전체 게시글 조회  | GET     | `/api/admin/posts`                     |
+| 전체 게시글 조회  | GET     | `/api/admin/posts?keyword={keyword}`   |
 | 게시글 단일 조회  | GET     | `/api/admin/posts/{id}`                |
 | 게시글 삭제       | DELETE  | `/api/admin/posts/{id}`                |
 | 특정 게시글의 특정 댓글 삭제 | DELETE  | `/api/admin/posts/{id}/comments/{id}` |
@@ -370,8 +379,9 @@ AILearn은 AI 기술을 활용한 혁신적인 온라인 영어 학습 플랫폼
 | 마이페이지 - 내 게시글 목록 | GET     | `/my/posts`                                          |
 | 마이페이지 - 회원정보 변경  | GET     | `/my/edit`                                           |
 | 레벨테스트 - 등급 선택     | GET     | `/tests`                                             |
-| 레벨테스트 - 문제          | GET     | `/tests?grade={B1}`                                  |
-| 레벨테스트 - 결과          | GET     | `/tests/result`                                      |
+| 레벨테스트 - 문제          | GET     | `/tests/level-test?grade={grade}`                    |
+| 승급테스트 - 문제          | GET     | `/tests/upgrade-test`                               |
+| 테스트 - 결과              | GET     | `/test-result`                                      |
 | 자유게시판 - 게시글 등록   | GET     | `/posts/new`                                         |
 | 자유게시판 - 게시글 수정   | GET     | `/posts/{id}/edit`                                   |
 | 자유게시판 - 게시글 목록 조회 | GET     | `/posts`                                             |
@@ -384,6 +394,6 @@ AILearn은 AI 기술을 활용한 혁신적인 온라인 영어 학습 플랫폼
 | 에세이 - 수정페이지        | GET     | `/essays/{id}/edit`                                  |
 | 에세이 - 첨삭              | GET     | `/essays/review`                                     |
 | 에세이 - 작성 가이드 조회  | GET     | `/essays/guide`                                      |
-| 관리자 - 전체 사용자 조회  | GET     | `/admin/users`                                       |
-| 관리자 - 전체 게시글 조회  | GET     | `/admin/posts`                                       |
-| 관리자 - 게시글 단일 조회  | GET     | `/admin/posts/{id}`                                  |
+| 관리자 - 전체 사용자 조회  | GET     | `/admin/users`                                        |
+| 관리자 - 전체 게시글 조회  | GET     | `/admin/posts`                                        |
+| 관리자 - 게시글 단일 조회  | GET     | `/admin/posts/{id}`                                   |
