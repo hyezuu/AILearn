@@ -60,13 +60,6 @@ public class AlanAIClient {
       log.info("Response: {}", response);
       return response;
 
-      // GET 요청 보내고 응답 받기(getForEntity 방식)
-      //      ResponseEntity<BaseResponse> responseEntity = restTemplate.getForEntity(uri,
-      // BaseResponse
-      //      .class);
-      //
-      //      return responseEntity.getBody();
-
     } catch (HttpClientErrorException e) {
       log.info(e.getResponseBodyAsString());
       // 오류 처리
