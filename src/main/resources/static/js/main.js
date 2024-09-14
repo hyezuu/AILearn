@@ -36,11 +36,16 @@ async function getUserId() {
         });
         const data = await response.json();
 
+        // 홈화면에서 로그인한 유저는 마이페이지로 보내기
         let isMainPage = document.getElementById("main-btn");
         if(isMainPage) {
             isMainPage.innerHTML = `
             <a href="/my"><button>내 등급 확인하고 공부하러가기!</button></a>
         `;
+        }
+        // user.grade가 없는 유저는 헤더에 메뉴와 마이페이지 리스트 제거
+        if(data.grade === null) {
+
         }
 
         document.getElementById("nickname-button").innerHTML = `
