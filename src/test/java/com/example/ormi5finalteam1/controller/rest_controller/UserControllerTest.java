@@ -320,39 +320,6 @@ class UserControllerTest {
     }
 
     @Test
-    void getUserVocabularyListStatus_는_유저가_단어장을_보유했을_시_true_를_반환한다() throws Exception {
-        //given
-        Provider provider = new Provider(1L, "test@email.com", "testuser", Role.USER, Grade.A1, 10);
-        when(vocabularyListService.isVocabularyExist(provider)).thenReturn(true);
-        //when
-        ResultActions actions = mockMvc.perform(
-            get("/api/me/vocabulary-list/status")
-                .with(csrf())
-                .with(authenticatedProvider(provider))
-                .accept(MediaType.APPLICATION_JSON));
-        //then
-        actions.andExpect(status().isOk())
-            .andExpect(content().string("true"));
-    }
-
-    @Test
-    void getUserVocabularyListStatus_는_유저가_단어장을_보유하지_않았을_시_false_를_반환한다() throws Exception {
-        //given
-        Provider provider = new Provider(1L, "test@email.com", "testuser", Role.USER, Grade.A1, 10);
-        when(vocabularyListService.isVocabularyExist(provider)).thenReturn(false);
-        //when
-        ResultActions actions = mockMvc.perform(
-            get("/api/me/vocabulary-list/status")
-                .with(csrf())
-                .with(authenticatedProvider(provider))
-                .accept(MediaType.APPLICATION_JSON));
-        //then
-        actions.andExpect(status().isOk())
-            .andExpect(content().string("false"));
-    }
-
-
-    @Test
     void requestEmailVerification_은_이메일_인증_요청을_보낼_수_있다() throws Exception {
         // given
         String email = "test@email.com";

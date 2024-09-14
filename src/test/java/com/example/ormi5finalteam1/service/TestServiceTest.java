@@ -75,7 +75,7 @@ public class TestServiceTest {
 
         // when & then
         assertThatThrownBy(() -> testService.getLevelTests(testGrade)).isInstanceOf(
-                    IndexOutOfBoundsException.class);
+                    BusinessException.class);
     }
 
     @DisplayName("레벨테스트 선택 등급 검증 - C2")
