@@ -58,9 +58,6 @@ public class SchedulerService {
     for (String gradeStr : Grade.getGrades()) {
       try {
         alanAIService.getGrammarExamplesQuery(gradeStr);
-
-        log.info("Processed {} save success");
-
       } catch (Exception e) {
         log.error("Error processing grade {}: ", gradeStr, e);
       }
