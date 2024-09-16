@@ -13,16 +13,19 @@
       font-family: "IBM Plex Sans KR", sans-serif;
       background-color: #f4f5fa;
     }
+    .container {
+      display: flex;
+      max-width: 1200px;
+      margin: 100px auto;
+      padding: 20px;
+    }
     #game-container {
-      max-width: 880px;
-      margin: 80px auto 20px;
+      flex: 1;
       background: white;
       padding: 30px;
       border-radius: 10px;
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-      min-height: calc(100vh - 180px);
-      display: flex;
-      flex-direction: column;
+      margin-right: 20px;
     }
     #game-area {
       width: 100%;
@@ -32,7 +35,6 @@
       position: relative;
       overflow: hidden;
       margin-bottom: 20px;
-      flex-grow: 1;
       background-color: #f8f9fa;
     }
     .word {
@@ -95,24 +97,55 @@
     #start-button:hover {
       background-color: #2ecc71;
     }
+    #rankings {
+      width: 250px;
+      background-color: #f1f3f5;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    #rankings h2 {
+      text-align: center;
+      color: #0a2357;
+      margin-top: 0;
+    }
+    #rankings-list {
+      list-style-type: none;
+      padding: 0;
+    }
+    #rankings-list li {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding: 5px;
+      background-color: #ffffff;
+      border-radius: 5px;
+    }
   </style>
 </head>
 <body>
 <div th:replace="~{layout/header::header}"></div>
 
-<div id="game-container">
-  <h1 style="text-align: center; color: #0a2357;">단어 게임</h1>
-  <button id="start-button">게임 시작</button>
-  <div id="game-info" style="display: none;">
-    <div>라운드: <span id="round">1</span></div>
-    <div>점수: <span id="score">0</span></div>
-    <div id="missed-words">놓친 단어: <span id="missed">0</span>/5</div>
+<div class="container">
+  <div id="game-container">
+    <h1 style="text-align: center; color: #0a2357;">단어 게임</h1>
+    <button id="start-button">게임 시작</button>
+    <div id="game-info" style="display: none;">
+      <div>라운드: <span id="round">1</span></div>
+      <div>점수: <span id="score">0</span></div>
+      <div id="missed-words">놓친 단어: <span id="missed">0</span>/5</div>
+    </div>
+    <div id="game-area"></div>
+    <form id="input-form" style="display: none;">
+      <input type="text" id="word-input" placeholder="영단어를 입력하세요">
+      <button type="submit" id="submit-button">제출</button>
+    </form>
   </div>
-  <div id="game-area"></div>
-  <form id="input-form" style="display: none;">
-    <input type="text" id="word-input" placeholder="영단어를 입력하세요">
-    <button type="submit" id="submit-button">제출</button>
-  </form>
+
+  <div id="rankings">
+    <h2>Top 5 랭킹</h2>
+    <ul id="rankings-list"></ul>
+  </div>
 </div>
 
 <script>
@@ -121,7 +154,7 @@
   let round = 1;
   let missedWords = 0;
   let gameInterval;
-  let wordSpeed = 1;
+  let wordSpeed = 0.5;
   let pointsPerWord = 10;
   let isGameActive = false;
   let activeAnimations = [];
@@ -158,6 +191,7 @@
         startGameplay();
       },
       error: function(xhr, status, error) {
+        console.error("Error fetching words:", error);
       }
     });
   }
@@ -237,7 +271,7 @@
     if (score >= round * 50) {
       round++;
       document.getElementById('round').textContent = round;
-      wordSpeed += 0.5;
+      wordSpeed += 0.1;
       pointsPerWord += 5;
       clearInterval(gameInterval);
       gameInterval = setInterval(createWord, 2000 / round);
@@ -262,6 +296,7 @@
       startButton.style.display = 'block';
       gameInfo.style.display = 'none';
       inputForm.style.display = 'none';
+      getRankings(); // 게임 종료 후 랭킹 업데이트
     }, 100);
   }
 
@@ -271,10 +306,36 @@
       method: 'POST',
       data: JSON.stringify({ score: score }),
       contentType: 'application/json',
-      success: function(response) {
+      success: function() {
+        console.log("Score saved successfully");
+        getRankings(); // 점수 저장 후 랭킹 업데이트
       },
       error: function(xhr, status, error) {
+        console.error("Error saving score:", error);
       }
+    });
+  }
+
+  function getRankings() {
+    $.ajax({
+      url: '/api/game/rankings',
+      method: 'GET',
+      success: function(rankings) {
+        displayRankings(rankings);
+      },
+      error: function(xhr, status, error) {
+        console.error("Error fetching rankings:", error);
+      }
+    });
+  }
+
+  function displayRankings(rankings) {
+    const rankingsList = document.getElementById('rankings-list');
+    rankingsList.innerHTML = '';
+    rankings.forEach((ranking, index) => {
+      const li = document.createElement('li');
+      li.innerHTML = `<span>${index + 1}. ${ranking.nickname}</span> <span>${ranking.highScore}점</span>`;
+      rankingsList.appendChild(li);
     });
   }
 
@@ -306,6 +367,7 @@
 
   window.addEventListener('load', function() {
     wordInput.focus();
+    getRankings(); // 페이지 로드 시 초기 랭킹 표시
   });
 </script>
 </body>
