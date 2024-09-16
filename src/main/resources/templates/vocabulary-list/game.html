@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>단어 게임</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: "IBM Plex Sans KR", sans-serif;
+      background-color: #f4f5fa;
+    }
+    .container {
+      display: flex;
+      max-width: 1200px;
+      margin: 100px auto;
+      padding: 20px;
+    }
+    #game-container {
+      flex: 1;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      margin-right: 20px;
+    }
+    #game-area {
+      width: 100%;
+      height: 60vh;
+      border: 2px solid #dfe4ea;
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 20px;
+      background-color: #f8f9fa;
+    }
+    .word {
+      position: absolute;
+      font-size: 18px;
+      color: #0a2357;
+      padding: 5px 10px;
+      border-radius: 15px;
+      background-color: #e9ecef;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    #input-form {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    #word-input {
+      width: 300px;
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #dfe4ea;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      background-color: #0a2357;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #05173c;
+    }
+    #game-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      background-color: #f1f3f5;
+      padding: 15px;
+      border-radius: 8px;
+    }
+    #game-info div {
+      font-size: 18px;
+      font-weight: bold;
+    }
+    #missed-words {
+      color: #e74c3c;
+    }
+    #start-button {
+      display: block;
+      width: 200px;
+      margin: 20px auto;
+      font-size: 18px;
+      padding: 15px 30px;
+      background-color: #27ae60;
+    }
+    #start-button:hover {
+      background-color: #2ecc71;
+    }
+    #rankings {
+      width: 250px;
+      background-color: #f1f3f5;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    #rankings h2 {
+      text-align: center;
+      color: #0a2357;
+      margin-top: 0;
+    }
+    #rankings-list {
+      list-style-type: none;
+      padding: 0;
+    }
+    #rankings-list li {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding: 5px;
+      background-color: #ffffff;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+<div th:replace="~{layout/header::header}"></div>
+
+<div class="container">
+  <div id="game-container">
+    <h1 style="text-align: center; color: #0a2357;">단어 게임</h1>
+    <button id="start-button">게임 시작</button>
+    <div id="game-info" style="display: none;">
+      <div>라운드: <span id="round">1</span></div>
+      <div>점수: <span id="score">0</span></div>
+      <div id="missed-words">놓친 단어: <span id="missed">0</span>/5</div>
+    </div>
+    <div id="game-area"></div>
+    <form id="input-form" style="display: none;">
+      <input type="text" id="word-input" placeholder="영단어를 입력하세요">
+      <button type="submit" id="submit-button">제출</button>
+    </form>
+  </div>
+
+  <div id="rankings">
+    <h2>Top 5 랭킹</h2>
+    <ul id="rankings-list"></ul>
+  </div>
+</div>
+
+<script>
+  let words = [];
+  let score = 0;
+  let round = 1;
+  let missedWords = 0;
+  let gameInterval;
+  let wordSpeed = 0.5;
+  let pointsPerWord = 10;
+  let isGameActive = false;
+  let activeAnimations = [];
+  const gameArea = document.getElementById('game-area');
+  const startButton = document.getElementById('start-button');
+  const gameInfo = document.getElementById('game-info');
+  const inputForm = document.getElementById('input-form');
+  const wordInput = document.getElementById('word-input');
+  const submitButton = document.getElementById('submit-button');
+
+  function initGame() {
+    words = [];
+    score = 0;
+    round = 1;
+    missedWords = 0;
+    wordSpeed = 0.5;
+    pointsPerWord = 10;
+    isGameActive = true;
+    activeAnimations = [];
+    updateScore();
+    updateMissedWords();
+    document.getElementById('round').textContent = round;
+    gameArea.innerHTML = '';
+    wordInput.value = '';
+  }
+
+  function getNewWords() {
+    $.ajax({
+      url: '/api/game/words',
+      method: 'GET',
+      data: { count: 20 },
+      success: function(newWords) {
+        words = newWords;
+        startGameplay();
+      },
+      error: function(xhr, status, error) {
+        console.error("Error fetching words:", error);
+      }
+    });
+  }
+
+  function startGameplay() {
+    startButton.style.display = 'none';
+    gameInfo.style.display = 'flex';
+    inputForm.style.display = 'block';
+    clearInterval(gameInterval);
+    gameInterval = setInterval(createWord, 2000 / round);
+    wordInput.focus();
+  }
+
+  function createWord() {
+    if (words.length > 0 && isGameActive) {
+      const word = words.pop();
+      const wordElement = document.createElement('div');
+      wordElement.className = 'word';
+      wordElement.textContent = word.word;
+      wordElement.style.left = `${Math.random() * (gameArea.offsetWidth - 100)}px`;
+      wordElement.style.top = '0px';
+      gameArea.appendChild(wordElement);
+
+      animateWord(wordElement);
+    }
+  }
+
+  function animateWord(wordElement) {
+    let position = 0;
+    const animation = setInterval(() => {
+      if (!isGameActive) {
+        clearInterval(animation);
+        return;
+      }
+      position += wordSpeed;
+      wordElement.style.top = `${position}px`;
+      if (position > gameArea.offsetHeight) {
+        clearInterval(animation);
+        if (gameArea.contains(wordElement)) {
+          gameArea.removeChild(wordElement);
+          missedWords++;
+          updateMissedWords();
+          checkGameOver();
+        }
+      }
+    }, 20);
+    activeAnimations.push(animation);
+    wordElement.dataset.animation = activeAnimations.length - 1;
+  }
+
+  function checkWord() {
+    if (!isGameActive) return;
+    const input = wordInput.value.trim().toLowerCase();
+    const words = document.getElementsByClassName('word');
+    for (let word of words) {
+      if (word.textContent.toLowerCase() === input) {
+        gameArea.removeChild(word);
+        clearInterval(activeAnimations[word.dataset.animation]);
+        score += pointsPerWord;
+        updateScore();
+        wordInput.value = '';
+        checkRoundProgress();
+        return;
+      }
+    }
+  }
+
+  function updateScore() {
+    document.getElementById('score').textContent = score;
+  }
+
+  function updateMissedWords() {
+    document.getElementById('missed').textContent = missedWords;
+  }
+
+  function checkRoundProgress() {
+    if (score >= round * 50) {
+      round++;
+      document.getElementById('round').textContent = round;
+      wordSpeed += 0.1;
+      pointsPerWord += 5;
+      clearInterval(gameInterval);
+      gameInterval = setInterval(createWord, 2000 / round);
+    }
+  }
+
+  function checkGameOver() {
+    if (missedWords >= 5) {
+      endGame();
+    }
+  }
+
+  function endGame() {
+    isGameActive = false;
+    clearInterval(gameInterval);
+    activeAnimations.forEach(clearInterval);
+    activeAnimations = [];
+    setTimeout(() => {
+      alert(`게임 오버! 최종 점수: ${score}, 최종 라운드: ${round}`);
+      saveScore(score);
+      startButton.textContent = '재시작';
+      startButton.style.display = 'block';
+      gameInfo.style.display = 'none';
+      inputForm.style.display = 'none';
+      getRankings(); // 게임 종료 후 랭킹 업데이트
+    }, 100);
+  }
+
+  function saveScore(score) {
+    $.ajax({
+      url: '/api/game/score',
+      method: 'POST',
+      data: JSON.stringify({ score: score }),
+      contentType: 'application/json',
+      success: function() {
+        console.log("Score saved successfully");
+        getRankings(); // 점수 저장 후 랭킹 업데이트
+      },
+      error: function(xhr, status, error) {
+        console.error("Error saving score:", error);
+      }
+    });
+  }
+
+  function getRankings() {
+    $.ajax({
+      url: '/api/game/rankings',
+      method: 'GET',
+      success: function(rankings) {
+        displayRankings(rankings);
+      },
+      error: function(xhr, status, error) {
+        console.error("Error fetching rankings:", error);
+      }
+    });
+  }
+
+  function displayRankings(rankings) {
+    const rankingsList = document.getElementById('rankings-list');
+    rankingsList.innerHTML = '';
+    rankings.forEach((ranking, index) => {
+      const li = document.createElement('li');
+      li.innerHTML = `<span>${index + 1}. ${ranking.nickname}</span> <span>${ranking.highScore}점</span>`;
+      rankingsList.appendChild(li);
+    });
+  }
+
+  startButton.addEventListener('click', function() {
+    initGame();
+    getNewWords();
+  });
+
+  inputForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+    if (isGameActive) {
+      checkWord();
+    }
+  });
+
+  wordInput.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter' && isGameActive) {
+      event.preventDefault();
+      checkWord();
+    }
+  });
+
+  submitButton.addEventListener('click', function(event) {
+    event.preventDefault();
+    if (isGameActive) {
+      checkWord();
+    }
+  });
+
+  window.addEventListener('load', function() {
+    wordInput.focus();
+    getRankings(); // 페이지 로드 시 초기 랭킹 표시
+  });
+</script>
+</body>
+</html>

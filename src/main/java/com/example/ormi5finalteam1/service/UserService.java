@@ -5,11 +5,13 @@ import com.example.ormi5finalteam1.common.exception.ErrorCode;
 import com.example.ormi5finalteam1.domain.user.Provider;
 import com.example.ormi5finalteam1.domain.user.User;
 import com.example.ormi5finalteam1.domain.user.dto.CreateUserRequestDto;
+import com.example.ormi5finalteam1.domain.user.dto.GetTop5UserByScore;
 import com.example.ormi5finalteam1.domain.user.dto.UpdateUserRequestDto;
 import com.example.ormi5finalteam1.repository.UserRepository;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import java.security.SecureRandom;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,6 +26,7 @@ public class UserService implements UserDetailsService {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final UserRepository userRepository;
 
     @Transactional
     public void createUser(CreateUserRequestDto requestDto) {
@@ -69,7 +72,7 @@ public class UserService implements UserDetailsService {
 
     @Transactional(readOnly = true)
     public User getUser(long id) {
-        return  repository.findById(id)
+        return repository.findById(id)
             .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
     }
 
@@ -126,5 +129,10 @@ public class UserService implements UserDetailsService {
         if (requestDto.password() != null && !requestDto.password().isEmpty()) {
             user.updatePassword(passwordEncoder.encode(requestDto.password()));
         }
+    }
+
+    public List<GetTop5UserByScore> getTop5UserByScore() {
+        return userRepository.findTop5ByOrderByHighScoreDesc()
+            .stream().map(GetTop5UserByScore::from).toList();
     }
 }
