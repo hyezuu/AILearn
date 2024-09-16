@@ -5,19 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>단어 게임</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="/js/main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
   <style>
     body, html {
       margin: 0;
       padding: 0;
-      height: 100%;
       font-family: "IBM Plex Sans KR", sans-serif;
       background-color: #f4f5fa;
     }
     .container {
+      max-height: 100vh;
       display: flex;
       max-width: 1200px;
       margin: 100px auto;
       padding: 20px;
+      justify-content: center;
     }
     #game-container {
       flex: 1;
@@ -103,6 +106,7 @@
       padding: 15px;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      height: fit-content;
     }
     #rankings h2 {
       text-align: center;
@@ -124,7 +128,7 @@
   </style>
 </head>
 <body>
-<div th:replace="~{layout/header::header}"></div>
+<header th:replace="~{layout/header::header}"></header>
 
 <div class="container">
   <div id="game-container">
@@ -263,8 +267,8 @@
         checkRoundProgress();
         return;
       }
-      else wordInput.value = '';
     }
+    wordInput.value = '';
   }
 
   function updateScore() {
@@ -291,24 +295,34 @@
 
   function checkGameOver() {
     if (missedWords >= 5) {
-      endGame();
+      endGame("5개 이상의 단어를 놓쳤습니다!");
     }
   }
 
-  function endGame() {
+  function endGame(message) {
     isGameActive = false;
     clearInterval(gameInterval);
     activeAnimations.forEach(clearInterval);
     activeAnimations = [];
-    setTimeout(() => {
-      alert(`게임 오버! 최종 점수: ${score}, 최종 라운드: ${round}`);
-      saveScore(score);
-      startButton.textContent = '재시작';
-      startButton.style.display = 'block';
-      gameInfo.style.display = 'none';
-      inputForm.style.display = 'none';
-      getRankings(); // 게임 종료 후 랭킹 업데이트
-    }, 100);
+
+    Swal.fire({
+      title: '게임 오버!',
+      html: `${message}<br>최종 점수: ${score}<br>최종 라운드: ${round}`,
+      icon: 'info',
+      confirmButtonText: '확인',
+      allowEnterKey: false,
+      allowEscapeKey: false,
+      allowOutsideClick: false
+    }).then((result) => {
+      if (result.isConfirmed) {
+        saveScore(score);
+        startButton.textContent = '재시작';
+        startButton.style.display = 'block';
+        gameInfo.style.display = 'none';
+        inputForm.style.display = 'none';
+        getRankings(); // 게임 종료 후 랭킹 업데이트
+      }
+    });
   }
 
   function saveScore(score) {
@@ -320,9 +334,21 @@
       success: function() {
         console.log("Score saved successfully");
         getRankings(); // 점수 저장 후 랭킹 업데이트
+        Swal.fire({
+          title: '점수 저장 완료',
+          text: '새로운 점수가 저장되었습니다!',
+          icon: 'success',
+          confirmButtonText: '확인'
+        });
       },
       error: function(xhr, status, error) {
         console.error("Error saving score:", error);
+        Swal.fire({
+          title: '오류',
+          text: '점수 저장 중 오류가 발생했습니다.',
+          icon: 'error',
+          confirmButtonText: '확인'
+        });
       }
     });
   }
