@@ -48,6 +48,8 @@ public class User extends BaseEntity implements UserDetails {
     @Column(nullable = false)
     private Role role = Role.USER;
 
+    private int highScore = 0;
+
     @Column(nullable = false)
     private boolean isActive = true;
 
@@ -70,6 +72,8 @@ public class User extends BaseEntity implements UserDetails {
     private VocabularyList vocabularyList;
 
     private LocalDateTime lastLoginedAt;
+
+    private LocalDateTime lastPlayedAt;
 
     public User(Long id) {
         this.id = id;
@@ -128,9 +132,15 @@ public class User extends BaseEntity implements UserDetails {
         }
     }
 
+    public void updateHighScore(int newScore) {
+        this.highScore = Math.max(this.highScore, newScore);
+        this.lastPlayedAt = LocalDateTime.now();
+    }
+
     public void checkAndAddAttendancePoint() {
         LocalDate today = LocalDate.now();
-        if (this.getLastLoginedAt() == null || !today.equals(this.getLastLoginedAt().toLocalDate())) {
+        if (this.getLastLoginedAt() == null || !today.equals(
+            this.getLastLoginedAt().toLocalDate())) {
             this.addAttendancePoint();
         }
     }
@@ -166,7 +176,9 @@ public class User extends BaseEntity implements UserDetails {
     }
 
 
-    /** 비즈니스 메서드: 승급 가능 상태 변경*/
+    /**
+     * 비즈니스 메서드: 승급 가능 상태 변경
+     */
     public void changeReadyStatus(boolean b) {
         this.isReadyForUpgrade = b;
     }
