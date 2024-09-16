@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import java.security.SecureRandom;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -132,7 +133,8 @@ public class UserService implements UserDetailsService {
     }
 
     public List<GetTop5UserByScore> getTop5UserByScore() {
-        return userRepository.findTop5ByOrderByHighScoreDesc()
+        return userRepository
+            .findTop5ByOrderByHighScoreDescPlayedAtAsc(PageRequest.of(0, 5))
             .stream().map(GetTop5UserByScore::from).toList();
     }
 }

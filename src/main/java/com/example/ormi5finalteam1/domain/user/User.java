@@ -133,8 +133,10 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     public void updateHighScore(int newScore) {
-        this.highScore = Math.max(this.highScore, newScore);
-        this.lastPlayedAt = LocalDateTime.now();
+        if(newScore > highScore) {
+            this.highScore = newScore;
+            this.lastPlayedAt = LocalDateTime.now();
+        }
     }
 
     public void checkAndAddAttendancePoint() {
