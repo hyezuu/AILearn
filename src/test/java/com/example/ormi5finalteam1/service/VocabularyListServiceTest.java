@@ -21,23 +21,31 @@ import com.example.ormi5finalteam1.domain.vocabulary.Vocabulary;
 import com.example.ormi5finalteam1.domain.vocabulary.VocabularyList;
 import com.example.ormi5finalteam1.domain.vocabulary.VocabularyListVocabulary;
 import com.example.ormi5finalteam1.domain.vocabulary.dto.MyVocabularyListResponseDto;
+import com.example.ormi5finalteam1.repository.UserRepository;
 import com.example.ormi5finalteam1.repository.VocabularyListRepository;
 import com.example.ormi5finalteam1.repository.VocabularyListVocabularyRepository;
 import com.example.ormi5finalteam1.repository.VocabularyRepository;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.transaction.Transactional;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import org.hibernate.internal.SessionFactoryImpl;
+import org.hibernate.stat.Statistics;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+
 
 @ExtendWith(MockitoExtension.class)
 class VocabularyListServiceTest {
@@ -56,6 +64,9 @@ class VocabularyListServiceTest {
 
     @InjectMocks
     private VocabularyListService vocabularyListService;
+
+    @Autowired
+    private EntityManagerFactory entityManagerFactory;
 
     private Provider provider;
     private VocabularyList vocabularyList;
@@ -230,5 +241,4 @@ class VocabularyListServiceTest {
             .hasFieldOrPropertyWithValue("errorCode", ErrorCode.VOCABULARY_NOT_FOUND);
         verify(vocabularyListVocabularyRepository).findByIdAndVocabularyListUserId(anyLong(), anyLong());
     }
-
 }

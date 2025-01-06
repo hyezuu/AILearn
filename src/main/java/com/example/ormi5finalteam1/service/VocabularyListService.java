@@ -74,16 +74,43 @@ public class VocabularyListService {
     public Page<MyVocabularyListResponseDto> getMyVocabularies(Provider provider,
         Pageable pageable) {
         Page<VocabularyListVocabulary> vocabularyPage =
-            vocabularyListVocabularyRepository.findByUserIdOrderByCreatedAtDesc(provider.id(), pageable);
+            vocabularyListVocabularyRepository.findByUserIdOrderByCreatedAtDesc(provider.id(),
+                pageable);
 
         return vocabularyPage.map(MyVocabularyListResponseDto::from);
     }
+
+    @Transactional(readOnly = true)
+    public Page<MyVocabularyListResponseDto> getMyVocabulariesBasic(Long providerId,
+        Pageable pageable) {
+        Page<VocabularyListVocabulary> vocabularyPage =
+            vocabularyListVocabularyRepository.findByVocabularyListUserIdAndDeletedAtIsNullOrderByCreatedAtDesc(
+            providerId, pageable);
+
+        return vocabularyPage.map(MyVocabularyListResponseDto::from);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<MyVocabularyListResponseDto> getMyVocabulariesJoinFetch(Long providerId,
+        Pageable pageable) {
+        Page<VocabularyListVocabulary> vocabularyPage =
+            vocabularyListVocabularyRepository.findByUserIdOrderByCreatedAtDesc(providerId, pageable);
+
+        return vocabularyPage.map(MyVocabularyListResponseDto::from);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<MyVocabularyListResponseDto> getMyVocabulariesDtoProjection(Long providerId,
+        Pageable pageable) {
+        return vocabularyListVocabularyRepository.findMyVocabularyList(providerId, pageable);
+    }
+
 
     @Transactional
     public void delete(Provider provider, long id) {
         VocabularyListVocabulary vlv =
             vocabularyListVocabularyRepository.findByIdAndVocabularyListUserId(provider.id(), id)
-                .orElseThrow(()-> new BusinessException(ErrorCode.VOCABULARY_NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(ErrorCode.VOCABULARY_NOT_FOUND));
         vlv.delete();
     }
 }

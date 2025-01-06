@@ -47,4 +47,6 @@ class VocabularyListRepositoryTest {
         assertThat(result).isPresent();
         assertThat(result.get().getUser().getId()).isEqualTo(userId);
     }
+
+
 }

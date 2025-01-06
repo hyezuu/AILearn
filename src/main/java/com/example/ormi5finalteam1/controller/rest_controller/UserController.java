@@ -59,7 +59,7 @@ public class UserController {
     public Page<MyVocabularyListResponseDto> getUserVocabularies(
         @AuthenticationPrincipal Provider provider,
         Pageable pageable) {
-        return vocabularyListService.getMyVocabularies(provider, pageable);
+        return vocabularyListService.getMyVocabulariesDtoProjection(provider.id(),pageable);
     }
 
     @DeleteMapping("/withdrawal")
