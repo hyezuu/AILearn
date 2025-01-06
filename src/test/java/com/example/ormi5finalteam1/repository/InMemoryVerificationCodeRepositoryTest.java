@@ -33,26 +33,25 @@ class InMemoryVerificationCodeRepositoryTest {
         // given
         VerificationCode newCode = new VerificationCode("111111", "new@example.com", 5);
         // when
-        VerificationCode savedCode = verificationCodeRepository.save(newCode);
+        verificationCodeRepository.save(newCode);
         // then
-        assertThat(savedCode).isEqualTo(newCode);
         assertThat(verificationCodeRepository.findByEmail("new@example.com")).isPresent();
     }
 
     @Test
     void findByEmail_은_존재하는_이메일에_대해_인증코드를_반환한다() {
         // when
-        Optional<VerificationCode> result = verificationCodeRepository.findByEmail(
+        Optional<String> result = verificationCodeRepository.findByEmail(
             "test@example.com");
         // then
         assertThat(result).isPresent();
-        assertThat(result.get().getCode()).isEqualTo("123456");
+        assertThat(result.get()).isEqualTo("123456");
     }
 
     @Test
     void findByEmail_은_존재하지_않는_이메일에_대해_빈_Optional을_반환한다() {
         // when
-        Optional<VerificationCode> result = verificationCodeRepository.findByEmail(
+        Optional<String> result = verificationCodeRepository.findByEmail(
             "nonexistent@example.com");
         // then
         assertThat(result).isEmpty();
@@ -106,9 +105,8 @@ class InMemoryVerificationCodeRepositoryTest {
         VerificationCode updatedCode = new VerificationCode("654321", email, 10);
         verificationCodeRepository.save(updatedCode);
         // then
-        Optional<VerificationCode> result = verificationCodeRepository.findByEmail(email);
+        Optional<String> result = verificationCodeRepository.findByEmail(email);
         assertThat(result).isPresent();
-        assertThat(result.get().getCode()).isEqualTo("654321");
-        assertThat(result.get().getExpirationTimeInMinutes()).isEqualTo(10);
+        assertThat(result.get()).isEqualTo("654321");
     }
 }

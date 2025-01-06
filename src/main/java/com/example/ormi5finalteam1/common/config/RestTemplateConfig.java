@@ -1,4 +1,4 @@
-package com.example.ormi5finalteam1.external.config;
+package com.example.ormi5finalteam1.common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

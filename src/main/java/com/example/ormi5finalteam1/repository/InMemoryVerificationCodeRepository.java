@@ -12,14 +12,14 @@ public class InMemoryVerificationCodeRepository implements VerificationCodeRepos
     private final Map<String, VerificationCode> repository = new ConcurrentHashMap<>();
 
     @Override
-    public VerificationCode save(VerificationCode verificationCode) {
+    public void save(VerificationCode verificationCode) {
         repository.put(verificationCode.getEmail(), verificationCode);
-        return verificationCode;
     }
 
     @Override
-    public Optional<VerificationCode> findByEmail(String email) {
-        return Optional.ofNullable(repository.get(email));
+    public Optional<String> findByEmail(String email) {
+        return Optional.ofNullable(repository.get(email))
+            .map(VerificationCode::getCode);
     }
 
     @Override

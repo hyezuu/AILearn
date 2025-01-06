@@ -58,15 +58,11 @@ public class EmailService {
     }
 
     public void verifyCode(String email, String code) {
-        VerificationCode verificationCode = verificationCodeRepository.findByEmail(email)
+        String value  = verificationCodeRepository.findByEmail(email)
             .orElseThrow(() -> new BusinessException(ErrorCode.VERIFICATION_CODE_NOT_FOUND));
 
-        if (!verificationCode.getCode().equals(code)) {
+        if (!value.equals(code)) {
             throw new BusinessException(ErrorCode.VERIFICATION_CODE_EMAIL_MISMATCH);
-        }
-
-        if (verificationCode.isExpired(LocalDateTime.now())) {
-            throw new BusinessException(ErrorCode.VERIFICATION_CODE_EXPIRED);
         }
 
         verificationCodeRepository.remove(email);
